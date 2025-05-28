@@ -29,4 +29,4 @@ ex) <img src="https://img.shields.io/badge/Swift-FA7343?style=flat&logo=Swift&lo
 
 ## :people_hugging: Authors
 
-@username, @username, @username, @username, @username, @username
+@Ken, @Sana, @Nyx, @Hama, @Three, @Elena
