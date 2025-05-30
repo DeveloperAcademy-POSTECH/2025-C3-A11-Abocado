@@ -1,8 +1,9 @@
-# :iphone: [2025-C3-A11-Abocado/App Name]
-[Logo/Cover Image]
+# :iphone: [2025-C3-A11-Abocado/Rulebox]
+###[Logo/Cover Image]
 
-[App statement]
-"이 앱은 [희원씨]의 [보드게임 룰을 이해→설명하는 부담]을 [인원수와 버전으로 필터링된 설명가이드]로 해결하도록 돕는다"
+###[App statement] 
+
+이 앱은 [희원씨]의 [보드게임 룰을 이해하고 설명하는 부담]을 [인원수와 버전으로 필터링된 설명가이드]로 해결하도록 돕는다"
 
 ## :fireworks: Screenshots
 
