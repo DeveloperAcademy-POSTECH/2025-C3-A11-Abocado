@@ -31,7 +31,7 @@ struct GameSelectView: View {
                 Button(action: {
                     
                 }) {
-                    Text("게임 2")
+                    Text("게임 2 하마의 첫 작업")
                 }
             }.navigationTitle("설명서 선택")
         }
