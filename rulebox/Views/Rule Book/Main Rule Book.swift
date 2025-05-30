@@ -66,16 +66,16 @@ struct MainRuleBook: View {
                     }
                     Button(action: {}) {
                         RoundedRectangle(cornerRadius: 16).frame(height: 92)
-                    }
+                    }.foregroundColor(.grayNeutral05)
                     Button(action: {}) {
                         RoundedRectangle(cornerRadius: 16).frame(height: 92)
-                    }
+                    }.foregroundColor(.grayNeutral20)
                     Button(action: {}) {
                         RoundedRectangle(cornerRadius: 16).frame(height: 92)
-                    }
+                    }.foregroundColor(.primaryStrong)
                     Button(action: {}) {
                         RoundedRectangle(cornerRadius: 16).frame(height: 92)
-                    }
+                    }.foregroundColor(.grayNeutral20)
                     Button(action: {}) {
                         RoundedRectangle(cornerRadius: 16).frame(height: 92)
                     }
