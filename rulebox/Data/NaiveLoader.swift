@@ -4,6 +4,9 @@
 //
 //  Created by POS on 6/2/25.
 //
+//  JSON Loader,Parser 구현실패에 따른 극단적인 선택.
+//  새 데이터를 추가해야 할 때 마다 '기존 데이터를 완전히 지우고 재설치'
+//  시간 여유 있을 때 반드시 고칠게.. DB야 미안해ㅠ
 
 import Foundation
 import SwiftData
