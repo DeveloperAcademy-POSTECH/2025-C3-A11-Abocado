@@ -5,23 +5,25 @@
 //  Created by POS on 6/1/25.
 //
 
+import Foundation
 import SwiftData
 
 @Model
 class Content {
-  var name: String
-  var text: String
-  var subCat: SubCat
-  var filterTags: [FilterTag] = []
-  //var imageData: Data? 이미지
-  
-  init(name: String, text: String, subCat: SubCat, filterTags: [FilterTag] = [],
-       //imageData: Data? = nil // image 데이터 처리 고려해봐야함
-  ) {
-    self.name = name
-    self.text = text
-    self.subCat = subCat
-    self.filterTags = filterTags
-    //self.imageData = imageData
-  }
+    @Attribute(.unique) var id: UUID
+    var name: String
+    var text: String
+    var image: Data?
+
+    @Relationship var gameName: GameName
+    @Relationship var majorCat: MajorCat
+
+    init(id: UUID = UUID(), name: String, text: String, image: Data? = nil, gameName: GameName, majorCat: MajorCat) {
+        self.id = id
+        self.name = name
+        self.text = text
+        self.image = image
+        self.gameName = gameName
+        self.majorCat = majorCat
+    }
 }
