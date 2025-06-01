@@ -4,6 +4,7 @@
 //
 //  Created by POS on 6/1/25.
 //
+// image처리 어떻게 할지 고려해봐야함
 
 import Foundation
 import SwiftData
@@ -17,6 +18,7 @@ class Content {
 
     @Relationship var gameName: GameName
     @Relationship var majorCat: MajorCat
+    @Relationship var filterTables: [FilterTable] = []
 
     init(id: UUID = UUID(), name: String, text: String, image: Data? = nil, gameName: GameName, majorCat: MajorCat) {
         self.id = id
