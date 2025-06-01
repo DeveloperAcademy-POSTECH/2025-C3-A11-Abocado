@@ -25,6 +25,8 @@ struct MainRuleBook: View {
     @State private var selectedParty: String? = nil
     @State private var selectedExtension: String? = nil
     @State private var expandedMajorCats: Set<UUID> = []
+    
+    @Environment(\.dismiss) private var dismiss
 
     var body: some View {
         NavigationStack {
@@ -61,7 +63,7 @@ struct MainRuleBook: View {
                         }
                     }
                     
-                    // MARK: - MajorCat 섹션
+                    // MajorCat List
                     ForEach(majorCats) { cat in
                         DisclosureGroup(isExpanded: Binding(
                             get: { expandedMajorCats.contains(cat.id) },
@@ -73,7 +75,7 @@ struct MainRuleBook: View {
                                 }
                             })
                         ) {
-                            // 필터를 적용한 content 리스트
+                            // filterd content List
                             let filteredContents = contents.filter { content in
                                 content.majorCat.id == cat.id &&
                                 (selectedParty == nil || contentHasFilter(content, type: "party", value: selectedParty!)) &&
@@ -98,7 +100,9 @@ struct MainRuleBook: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
-                    NavigationLink(destination: GameSelectView()) {
+                    Button(action: {
+                        dismiss()
+                    }) {
                         Image(systemName: "house")
                     }
                 }
@@ -113,6 +117,7 @@ struct MainRuleBook: View {
                     }
                 }
             }
+            .navigationBarBackButtonHidden() 
         }
     }
 

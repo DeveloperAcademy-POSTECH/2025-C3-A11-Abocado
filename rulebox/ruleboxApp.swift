@@ -50,9 +50,8 @@ struct ruleboxApp: App {
         do {
             sharedModelContainer = try ModelContainer(for: schema)
             
-            // load JSON data at init
+            // load data at init
             let context = sharedModelContainer.mainContext
-            
             // load data if DB empty
             let fetchRequest = FetchDescriptor<GameName>()
             let games = try context.fetch(fetchRequest)
