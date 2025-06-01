@@ -61,12 +61,12 @@ struct ruleboxApp: App {
                    let jsonData = try? Data(contentsOf: url) {
                     try NLoader.loadGameRule(from: jsonData, context: context)
                     try context.save()
-                    print("기본 룰북 JSON 데이터 로딩 완료")
+                    print("complete loading JSON data...")
                 } else {
                     print("Error: file not found")
                 }
             } else {
-                print("Error: data already exist")
+                print("data already exist. passing loading process...")
             }
             
         } catch {
