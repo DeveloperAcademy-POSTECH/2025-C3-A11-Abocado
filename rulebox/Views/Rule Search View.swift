@@ -48,62 +48,64 @@ struct SearchView: View {
 
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack {
-                        Button(action: {}) {
-                            Text("타일").padding(.horizontal, 8)
-                        }
-                        Button(action: {}) {
-                            Image(systemName: "multiply")  // TODO: 아이콘 변경해야함
-                        }
-                    }.padding()
-                        .overlay(Capsule().stroke(.gray, lineWidth: 1))  //TODO: 색변경 필요
-                }
+                        SearchedCapsule(title: "타일")
+                        SearchedCapsule(title: "성")
+                        SearchedCapsule(title: "제목")
+                        SearchedCapsule(title: "타일")
+                    }
+                }.frame(height: 40)
 
                 // 자주 찾는 페이지
                 Text(
                     "자주 찾는 페이지"
                 ).font(.lgSemiBold).padding()
 
-                HStack {
-                    Text("1").font(.lgRegular).padding()
+                MostVisitedPage(
+                    number: 1,
+                    title: "도로 점수 계산하기",
+                    subtitle: "게임 진행 - 도로",
+                    onTap: {}
+                )
+                MostVisitedPage(
+                    number: 2,
+                    title: "성 점수 계산하기",
+                    subtitle: "게임 진행 - 성",
+                    onTap: {}
+                )
+                MostVisitedPage(
+                    number: 3,
+                    title: "도로 점수 계산하기",
+                    subtitle: "게임 진행 - 도로",
+                    onTap: {}
+                )
+                MostVisitedPage(
+                    number: 4,
+                    title: "도로 점수 계산하기",
+                    subtitle: "게임 진행 - 도로",
+                    onTap: {}
+                )
+                MostVisitedPage(
+                    number: 5,
+                    title: "도로 점수 계산하기",
+                    subtitle: "게임 진행 - 도로",
+                    onTap: {}
+                )
 
-                    VStack(alignment: .leading) {
-                        Text("게임 진행 - 도로")
-                            .font(.mdRegular)
-                            .foregroundColor(.gray)  //TODO: 칼라 변경 필요
-                        Text("도로 점수 계산하기")
-                            .font(.lgMedium)
-                    }
-                    Spacer()
-                    //                    Image(systemName: "chevron.right")
-                    //                        .foregroundColor(.gray)
-                }
-                .contentShape(Rectangle())  // To make entire row tappable
-                .onTapGesture {
-                    // Handle tap
-                }
-
-                HStack {
-                    Text("2").font(.lgRegular).padding()
-
-                    VStack(alignment: .leading) {
-                        Text("게임 진행 - 성")
-                            .font(.mdRegular)
-                            .foregroundColor(.gray)
-                        Text("성 점수 계산하기")
-                            .font(.lgMedium)
-                    }
-                    Spacer()
-                    //                    Image(systemName: "chevron.right")
-                    //                        .foregroundColor(.gray)
-                }
-                .contentShape(Rectangle())  // To make entire row tappable
-                .onTapGesture {
-                    // Handle tap
-                }
                 Spacer()
             }.padding()
         }.navigationTitle("설명서 검색")
+            .navigationBarBackButtonHidden(true)
             .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button(action: {
+                        dismiss()
+                    }) {
+                        Image(systemName: "chevron.left")
+                            .foregroundColor(.blue)
+                    }
+                }
+            }
 
     }
 }
@@ -111,4 +113,28 @@ struct SearchView: View {
 #Preview {
     SearchView()
         .modelContainer(for: Item.self, inMemory: true)
+}
+
+struct MostVisitedPage: View {
+    let number: Int
+    let title: String
+    let subtitle: String
+    let onTap: () -> Void
+    var body: some View {
+        HStack {
+            Text(number.formatted()).font(.lgRegular).padding()
+            VStack(alignment: .leading) {
+                Text(subtitle)
+                    .font(.mdRegular)
+                    .foregroundColor(.gray)  //TODO: 칼라 변경 필요
+                Text(title)
+                    .font(.lgMedium)
+            }
+            Spacer()
+        }
+        .contentShape(Rectangle())  // To make entire row tappable
+        .onTapGesture {
+            onTap()
+        }
+    }
 }
