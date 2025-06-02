@@ -19,7 +19,7 @@ struct GameSelectView: View {
                 NavigationLink(destination: SearchView()) {
                     Text("검색 페이지")
                 }
-                Button(action: {}) {
+                NavigationLink(destination: BookmarkView()) {
                     Text("책갈피")
                 }
                 Button(action: {}) {
