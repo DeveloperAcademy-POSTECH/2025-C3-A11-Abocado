@@ -76,7 +76,7 @@ struct MainRuleBook: View {
                 ToolbarItem(placement: .topBarTrailing) {
                     NavigationLink(destination: SearchView()) {
                         Image(systemName: "magnifyingglass")
-                    }
+                    
                 }
                 ToolbarItem(placement: .topBarTrailing) {
                     NavigationLink(destination: BookmarkView()) {
@@ -87,6 +87,7 @@ struct MainRuleBook: View {
             .navigationBarBackButtonHidden()
         }
     }
+
 
     // MARK: - Subviews
 
