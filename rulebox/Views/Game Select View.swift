@@ -40,10 +40,11 @@ struct GameSelectView: View {
             Spacer()
             
             // Page Body part
-            TabView { // 생긴거 전면수정해주세요
+            TabView { // 생긴거 전면수정해주세요. 옆에 살짝 다음카드 보이게하려면 horizontal scrollview?
                 ForEach(games) { game in
                     NavigationLink(destination: MainRuleBook(game: game)) {
                         VStack {
+                            // 가나다순 이슈로 카르카손 카드가 뒤에 생기는건 일단 넘어가죠
                             Text(game.name)
                                 .foregroundColor(.white)
                         }
@@ -55,7 +56,7 @@ struct GameSelectView: View {
                 }
             }
             .frame(height: 520)
-            .tabViewStyle(PageTabViewStyle(indexDisplayMode: .automatic))
+            .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
             
             Spacer()
         }
