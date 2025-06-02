@@ -1,0 +1,63 @@
+{
+    "gameName": "바퀴벌레포커",
+    "genres": [
+        "카드게임",
+        "파티게임"
+    ],
+    "contents": [
+        {
+            "majorCat": "게임 구성",
+            "name": "구성물",
+            "texts": [
+                "카드는 총 64장으로, 8종류의 벌레 카드가 각각 8장씩 들어있습니다.",
+                "각 플레이어에게 카드를 균등하게 나누어 줍니다."
+            ],
+            "images": [
+                ""
+            ],
+            "filterTags": [
+                { "type": "party", "value": "2" },
+                { "type": "party", "value": "3" },
+                { "type": "party", "value": "4" },
+                { "type": "party", "value": "5" },
+                { "type": "extension", "value": "basic" }
+            ]
+        },
+        {
+            "majorCat": "게임 진행",
+            "name": "턴 진행",
+            "texts": [
+                "플레이어는 자신이 가진 카드 중 하나를 선택해 상대에게 뒤집어서 보여주지 않고 벌레 이름을 말합니다.",
+                "상대는 그 말이 진실인지 거짓인지 맞춰야 합니다."
+            ],
+            "images": [
+                ""
+            ],
+            "filterTags": [
+                { "type": "party", "value": "2" },
+                { "type": "party", "value": "3" },
+                { "type": "party", "value": "4" },
+                { "type": "party", "value": "5" },
+                { "type": "extension", "value": "basic" }
+            ]
+        },
+        {
+            "majorCat": "게임 종료",
+            "name": "패배 조건",
+            "texts": [
+                "누군가가 거짓말을 들키면 그 사람은 카드를 받게 됩니다.",
+                "모든 카드가 한 플레이어에게 모이면 그 플레이어가 패배합니다."
+            ],
+            "images": [
+                ""
+            ],
+            "filterTags": [
+                { "type": "party", "value": "2" },
+                { "type": "party", "value": "3" },
+                { "type": "party", "value": "4" },
+                { "type": "party", "value": "5" },
+                { "type": "extension", "value": "basic" }
+            ]
+        }
+    ]
+}

@@ -1,116 +1,124 @@
 //
-//  Main Rule Book.swift
+//  MainRuleBook.swift
 //  rulebox
 //
 //  Created by Ken on 5/29/25.
 //
 
 import SwiftUI
+import SwiftData
 
 struct MainRuleBook: View {
-    @State private var isExpanded = false
+    @Query var majorCats: [MajorCat]
+    @Query var contents: [Content]
+    @Query var filterTags: [FilterTag]
+
+    @StateObject private var vm = MainRuleBookVM()
+    @Environment(\.dismiss) private var dismiss
+
     var body: some View {
         NavigationStack {
-
             ScrollView {
-                VStack(spacing: 20) {
+                VStack(alignment: .leading, spacing: 20) {
                     HStack {
-                        Text("기본판")
-                            .font(.title)
-                        Spacer()
-                        Text("2명")
-                            .font(.title)
+                        let partyValues = vm.partyValues(from: filterTags)
+                        let extensionValues = vm.extensionValues(from: filterTags)
+
+                        DisclosureGroup("인원수 필터") {
+                            ForEach(partyValues, id: \.self) { value in
+                                Button(action: { vm.selectedParty = value }) {
+                                    HStack {
+                                        Text(value)
+                                        if vm.selectedParty == value {
+                                            Image(systemName: "checkmark")
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        DisclosureGroup("확장판 필터") {
+                            ForEach(extensionValues, id: \.self) { value in
+                                Button(action: { vm.selectedExtension = value }) {
+                                    HStack {
+                                        Text(value)
+                                        if vm.selectedExtension == value {
+                                            Image(systemName: "checkmark")
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     }
 
-                    DisclosureGroup(isExpanded: $isExpanded) {
-                        VStack(alignment: .leading, spacing: 10) {
-                            NavigationLink(destination: SearchView()) {
-                                HStack {
-                                    Text("게임 준비")
-                                    Spacer()
-                                    Image(systemName: "chevron.right")
-                                }.frame(height: 25).padding()
-                            }
-                            NavigationLink(destination: SearchView()) {
-                                HStack {
-                                    Text("타일 놓기")
-                                    Spacer()
-                                    Image(systemName: "chevron.right")
-                                }.frame(height: 25).padding()
-                            }
-                            NavigationLink(destination: SearchView()) {
-                                HStack {
-                                    Text("점수 계산")
-                                    Spacer()
-                                    Image(systemName: "chevron.right")
-                                }.frame(height: 25).padding()
-                            }
+                    ForEach(majorCats) { cat in
+                        DisclosureGroup {
+                            contentList(for: cat)
+                        } label: {
+                            Text(cat.name)
+                                .font(.headline)
+                                .padding(.vertical, 8)
                         }
-                    } label: {
-                        ZStack {
-                            RoundedRectangle(cornerRadius: 16)
-                                .frame(height: 92)
-                                .foregroundColor(.clear)
-                            HStack {
-                                Text("게임 진행")
-                                Spacer()
-                            }
-                            .padding()
-                        }
-                    }
-                    Button(action: {}) {
-                        RoundedRectangle(cornerRadius: 16).frame(height: 92)
-                    }
-                    Button(action: {}) {
-                        RoundedRectangle(cornerRadius: 16).frame(height: 92)
-                    }
-                    Button(action: {}) {
-                        RoundedRectangle(cornerRadius: 16).frame(height: 92)
-                    }
-                    Button(action: {}) {
-                        RoundedRectangle(cornerRadius: 16).frame(height: 92)
-                    }
-                    Button(action: {}) {
-                        RoundedRectangle(cornerRadius: 16).frame(height: 92)
-                    }
-                    Button(action: {}) {
-                        RoundedRectangle(cornerRadius: 16).frame(height: 92)
-                    }
-                    Button(action: {}) {
-                        RoundedRectangle(cornerRadius: 16).frame(height: 92)
                     }
                 }
+                .padding()
             }
-            .padding().toolbar {
+            .navigationTitle("카르카손")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
-                    NavigationLink(
-                        destination: GameSelectView()
-                    ) {
+                    Button(action: { dismiss() }) {
                         Image(systemName: "house")
                     }
                 }
                 ToolbarItem(placement: .topBarTrailing) {
-                    NavigationLink(
-                        destination: SearchView()
-                    ) {
+                    NavigationLink(destination: SearchView()) {
                         Image(systemName: "magnifyingglass")
                     }
                 }
                 ToolbarItem(placement: .topBarTrailing) {
-                    NavigationLink(
-                        destination: BookmarkView()
-                    ) {
+                    NavigationLink(destination: BookmarkView()) {
                         Image(systemName: "bookmark")
                     }
                 }
             }
-            .navigationTitle("카르카손").navigationBarTitleDisplayMode(.inline)
-        }.navigationBarBackButtonHidden(true)
+            .navigationBarBackButtonHidden()
+        }
+    }
 
+    // MARK: - Subviews
+
+    private func contentList(for cat: MajorCat) -> some View {
+        let filtered = vm.filteredContents(for: cat, from: contents)
+        return ForEach(filtered, id: \.id) { content in
+            NavigationLink(destination: contentDetailView(content)) {
+                Text(content.name)
+            }
+            .padding(.vertical, 4)
+        }
+    }
+
+    private func contentDetailView(_ content: Content) -> some View {
+        ScrollView {
+            VStack(alignment: .leading, spacing: 12) {
+                ForEach(content.texts, id: \.self) { text in
+                    Text(text)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                }
+            }
+            .padding()
+        }
+        .navigationTitle(content.name)
     }
 }
 
 #Preview {
     MainRuleBook()
-        .modelContainer(for: Item.self, inMemory: true)
+        .modelContainer(for: [
+            Content.self,
+            MajorCat.self,
+            GameName.self,
+            FilterTag.self,
+            FilterTable.self
+        ], inMemory: true)
 }
