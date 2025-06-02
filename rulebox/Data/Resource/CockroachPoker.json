@@ -16,10 +16,7 @@
                 ""
             ],
             "filterTags": [
-                { "type": "party", "value": "2" },
-                { "type": "party", "value": "3" },
-                { "type": "party", "value": "4" },
-                { "type": "party", "value": "5" },
+                { "type": "party", "value": "9" },
                 { "type": "extension", "value": "basic" }
             ]
         },
@@ -34,10 +31,8 @@
                 ""
             ],
             "filterTags": [
-                { "type": "party", "value": "2" },
-                { "type": "party", "value": "3" },
-                { "type": "party", "value": "4" },
-                { "type": "party", "value": "5" },
+                { "type": "party", "value": "99" },
+                { "type": "party", "value": "9" },
                 { "type": "extension", "value": "basic" }
             ]
         },
@@ -52,11 +47,8 @@
                 ""
             ],
             "filterTags": [
-                { "type": "party", "value": "2" },
-                { "type": "party", "value": "3" },
-                { "type": "party", "value": "4" },
-                { "type": "party", "value": "5" },
-                { "type": "extension", "value": "basic" }
+                { "type": "party", "value": "999" },
+                { "type": "extension", "value": "대재앙 확장팩" }
             ]
         }
     ]

@@ -36,6 +36,7 @@ struct GameSelectView: View {
                 }
             }
             .padding()
+            // genre filter 만들어야댐
             
             Spacer()
             
