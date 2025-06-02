@@ -5,28 +5,59 @@
 //  Created by Ken on 5/29/25.
 //
 
+
 import SwiftUI
 import SwiftData
 
 @main
 struct ruleboxApp: App {
-    var sharedModelContainer: ModelContainer = {
+    let sharedModelContainer: ModelContainer
+
+    init() {
         let schema = Schema([
-            Item.self,
+            GameName.self,
+            MajorCat.self,
+            Content.self,
+            FilterTag.self,
+            FilterTable.self
         ])
-        let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
 
         do {
-            return try ModelContainer(for: schema, configurations: [modelConfiguration])
+            sharedModelContainer = try ModelContainer(for: schema)
+            
+            let context = sharedModelContainer.mainContext
+            
+            // scan all json file in bundle
+            let jsonFileNames = [   "Carcassonne", "CockroachPoker"    ]
+            
+            for fileName in jsonFileNames {
+                if let url = Bundle.main.url(forResource: fileName, withExtension: "json"),
+                   let jsonData = try? Data(contentsOf: url) {
+                    do {
+                        try JSONParser.loadGameRule(from: jsonData, context: context)
+                        print("Loaded \(fileName).json")
+                    } catch {
+                        print("Failed to load \(fileName).json: \(error)")
+                    }
+                } else {
+                    print("File \(fileName).json not found")
+                }
+            }
+            
+            try context.save()
+            print("--- All JSON files loaded and saved ---")
+
         } catch {
-            fatalError("Could not create ModelContainer: \(error)")
+            fatalError("Error: can't complete ModelContainer creation: \(error)")
         }
-    }()
+    }
 
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .environment(\.modelContext, sharedModelContainer.mainContext)
         }
         .modelContainer(sharedModelContainer)
     }
 }
+
