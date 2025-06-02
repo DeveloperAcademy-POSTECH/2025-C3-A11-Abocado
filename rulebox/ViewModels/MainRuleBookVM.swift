@@ -27,7 +27,7 @@ class MainRuleBookVM: ObservableObject {
             content.majorCat.id == cat.id &&
             (selectedParty == nil || contentHasFilter(content, type: "party", value: selectedParty!)) &&
             (selectedExtension == nil || contentHasFilter(content, type: "extension", value: selectedExtension!))
-        }
+        }.sorted { $0.name < $1.name }
     }
 
     private func contentHasFilter(_ content: Content, type: String, value: String) -> Bool {
