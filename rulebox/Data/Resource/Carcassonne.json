@@ -23,6 +23,40 @@
             ]
         },
         {
+            "majorCat": "목표",
+            "name": "목표",
+            "texts": [
+                "목표일걸 아마도"
+            ],
+            "images": [
+                ""
+            ],
+            "filterTags": [
+                {   "type": "party", "value": "2"   },
+                {   "type": "party", "value": "3"   },
+                {   "type": "party", "value": "4"   },
+                {   "type": "party", "value": "5"   },
+                {   "type": "extension", "value": "basic"   }
+            ]
+        },
+        {
+            "majorCat": "목표",
+            "name": "목표",
+            "texts": [
+                "이건 새로운 목표!"
+            ],
+            "images": [
+                ""
+            ],
+            "filterTags": [
+                {   "type": "party", "value": "2"   },
+                {   "type": "party", "value": "3"   },
+                {   "type": "party", "value": "4"   },
+                {   "type": "party", "value": "5"   },
+                {   "type": "extension", "value": "extension"   }
+            ]
+        },
+        {
             "majorCat": "게임 진행 - 도로",
             "name": "1. 도로 타일 놓기",
             "texts": [
