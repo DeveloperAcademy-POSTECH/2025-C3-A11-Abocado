@@ -1,0 +1,113 @@
+{
+    "gameName": "카르카손",
+    "genres": [
+        "전략게임"
+    ],
+    "contents": [
+        {
+            "majorCat": "구성물과 준비",
+            "name": "구성물과 준비",
+            "texts": [
+                "타일은 뒷면이 밝은 타일과 어두운 타일이 있어요. 기본판 게임에서는 시작 타일을 제외하고, 뒷면이 어두운 타일(강 타일)은 사용하지 않아요. 기본판 게임에는 도로, 성, 수도원이 그려진 72개의 지형 타일이 있어요. 도로, 성, 수도원 외의 다른 그림들(집, 사람, 동물 등)은 게임에 영향을 주지 않아요.",
+                "모든 플레이어는 자신의 색깔에 맞는 일반 미플을 8개씩 가져가요. 그중 일반 미플 하나는 점수판의 0점 칸에 놓아요. 기본판에서는 일반 미플만 사용하고, 나머지 미플들은 사용하지 않아요. 뒷면이 어두운 “시작 타일”을 테이블 가운데에 놓아요. 남은 타일들은 잘 섞어서 뒷면으로 쌓아둬요. 점수판은 테이블 한쪽에 놓아요."
+            ],
+            "images": [
+                ""
+            ],
+            "filterTags": [
+                {   "type": "party", "value": "2"   },
+                {   "type": "party", "value": "3"   },
+                {   "type": "party", "value": "4"   },
+                {   "type": "party", "value": "5"   },
+                {   "type": "extension", "value": "basic"   }
+            ]
+        },
+        {
+            "majorCat": "목표",
+            "name": "목표",
+            "texts": [
+                "목표일걸 아마도"
+            ],
+            "images": [
+                ""
+            ],
+            "filterTags": [
+                {   "type": "party", "value": "2"   },
+                {   "type": "party", "value": "3"   },
+                {   "type": "party", "value": "4"   },
+                {   "type": "party", "value": "5"   },
+                {   "type": "extension", "value": "basic"   }
+            ]
+        },
+        {
+            "majorCat": "목표",
+            "name": "목표",
+            "texts": [
+                "이건 새로운 목표!"
+            ],
+            "images": [
+                ""
+            ],
+            "filterTags": [
+                {   "type": "party", "value": "2"   },
+                {   "type": "party", "value": "3"   },
+                {   "type": "party", "value": "4"   },
+                {   "type": "party", "value": "5"   },
+                {   "type": "extension", "value": "extension"   }
+            ]
+        },
+        {
+            "majorCat": "게임 진행 - 도로",
+            "name": "1. 도로 타일 놓기",
+            "texts": [
+                "빨강이 도로가 그려진 타일을 뽑았어요. 타일을 이미 놓여져 있는 타일과 자연스럽게 연결되도록 놓아요."
+            ],
+            "images": [
+                ""
+            ],
+            "filterTags": [
+                {   "type": "party", "value": "2"   },
+                {   "type": "party", "value": "3"   },
+                {   "type": "party", "value": "4"   },
+                {   "type": "party", "value": "5"   },
+                {   "type": "extension", "value": "basic"   }
+            ]
+        },
+        {
+            "majorCat": "게임 진행 - 도로",
+            "name": "2. 도로 위에 미플 놓기",
+            "texts": [
+                "빨강은 원한다면, 방금 놓은 타일에 있는 도로 중 하나에 자신의 미플을 놓을 수 있어요. 그러나 이미 다른 색의 미플이 놓여 있는 도로에는 놓을 수 없어요. ",
+                "노랑이 해당 도로에 이어지도록 타일을 놓았어요. 그러나 빨간 미플이 이미 도로 위에 있기 때문에 도로에는 미플을 놓지 못해요. 그래서 노랑은 성 안에 미플을 놓기로 해요."
+            ],
+            "images": [
+                ""
+            ],
+            "filterTags": [
+                {   "type": "party", "value": "2"   },
+                {   "type": "party", "value": "3"   },
+                {   "type": "party", "value": "4"   },
+                {   "type": "party", "value": "5"   },
+                {   "type": "extension", "value": "basic"   }
+            ]
+        },
+        {
+            "majorCat": "게임 진행 확장 - 고속도로",
+            "name": "세계일주 기획",
+            "texts": [
+                "이건 첫 번째 ellemetnt",
+                "이건 두번째"
+            ],
+            "images": [
+                ""
+            ],
+            "filterTags": [
+                {   "type": "party", "value": "2"   },
+                {   "type": "party", "value": "3"   },
+                {   "type": "party", "value": "4"   },
+                {   "type": "party", "value": "5"   },
+                {   "type": "extension", "value": "extension"   }
+            ]
+        }
+    ]
+}

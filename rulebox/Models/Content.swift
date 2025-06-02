@@ -13,19 +13,28 @@ import SwiftData
 class Content {
     @Attribute(.unique) var id: UUID
     var name: String
-    var text: String
-    var image: Data?
+    var texts: [String]
+    var images: [Data]?
 
     @Relationship var gameName: GameName
     @Relationship var majorCat: MajorCat
-    @Relationship var filterTables: [FilterTable] = []
+    @Relationship var filterTable: FilterTable?
 
-    init(id: UUID = UUID(), name: String, text: String, image: Data? = nil, gameName: GameName, majorCat: MajorCat) {
+    init(
+        id: UUID = UUID(),
+        name: String,
+        texts: [String],
+        images: [Data]? = nil,
+        gameName: GameName,
+        majorCat: MajorCat,
+        filterTable: FilterTable? = nil
+    ) {
         self.id = id
         self.name = name
-        self.text = text
-        self.image = image
+        self.texts = texts
+        self.images = images
         self.gameName = gameName
         self.majorCat = majorCat
+        self.filterTable = filterTable
     }
 }

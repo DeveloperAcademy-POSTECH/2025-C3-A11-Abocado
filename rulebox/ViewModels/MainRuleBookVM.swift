@@ -27,14 +27,12 @@ class MainRuleBookVM: ObservableObject {
             content.majorCat.id == cat.id &&
             (selectedParty == nil || contentHasFilter(content, type: "party", value: selectedParty!)) &&
             (selectedExtension == nil || contentHasFilter(content, type: "extension", value: selectedExtension!))
-        }
+        }.sorted { $0.name < $1.name }
     }
 
     private func contentHasFilter(_ content: Content, type: String, value: String) -> Bool {
-        for table in content.filterTables {
-            if table.filtertags.contains(where: { $0.type == type && $0.value == value }) {
-                return true
-            }
+        if let table = content.filterTable {
+            return table.filtertags.contains { $0.type == type && $0.value == value }
         }
         return false
     }

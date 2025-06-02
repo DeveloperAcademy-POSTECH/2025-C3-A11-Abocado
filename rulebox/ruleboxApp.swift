@@ -5,31 +5,6 @@
 //  Created by Ken on 5/29/25.
 //
 
-//import SwiftUI
-//import SwiftData
-//
-//@main
-//struct ruleboxApp: App {
-//    var sharedModelContainer: ModelContainer = {
-//        let schema = Schema([
-//            Item.self,
-//        ])
-//        let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
-//
-//        do {
-//            return try ModelContainer(for: schema, configurations: [modelConfiguration])
-//        } catch {
-//            fatalError("Could not create ModelContainer: \(error)")
-//        }
-//    }()
-//
-//    var body: some Scene {
-//        WindowGroup {
-//            ContentView()
-//        }
-//        .modelContainer(sharedModelContainer)
-//    }
-//}
 
 import SwiftUI
 import SwiftData
@@ -37,7 +12,7 @@ import SwiftData
 @main
 struct ruleboxApp: App {
     let sharedModelContainer: ModelContainer
-    
+
     init() {
         let schema = Schema([
             GameName.self,
@@ -46,34 +21,37 @@ struct ruleboxApp: App {
             FilterTag.self,
             FilterTable.self
         ])
-        
+
         do {
             sharedModelContainer = try ModelContainer(for: schema)
             
-            // load data at init
             let context = sharedModelContainer.mainContext
-            // load data if DB empty
-            let fetchRequest = FetchDescriptor<GameName>()
-            let games = try context.fetch(fetchRequest)
             
-            if games.isEmpty {
-                if let url = Bundle.main.url(forResource: "basicRule", withExtension: "json"),
+            // scan all json file in bundle
+            let jsonFileNames = [   "Carcassonne", "CockroachPoker"    ]
+            
+            for fileName in jsonFileNames {
+                if let url = Bundle.main.url(forResource: fileName, withExtension: "json"),
                    let jsonData = try? Data(contentsOf: url) {
-                    try NLoader.loadGameRule(from: jsonData, context: context)
-                    try context.save()
-                    print("complete loading JSON data...")
+                    do {
+                        try JSONParser.loadGameRule(from: jsonData, context: context)
+                        print("Loaded \(fileName).json")
+                    } catch {
+                        print("Failed to load \(fileName).json: \(error)")
+                    }
                 } else {
-                    print("Error: file not found")
+                    print("File \(fileName).json not found")
                 }
-            } else {
-                print("data already exist. passing loading process...")
             }
             
+            try context.save()
+            print("--- All JSON files loaded and saved ---")
+
         } catch {
             fatalError("Error: can't complete ModelContainer creation: \(error)")
         }
     }
-    
+
     var body: some Scene {
         WindowGroup {
             ContentView()
@@ -82,3 +60,4 @@ struct ruleboxApp: App {
         .modelContainer(sharedModelContainer)
     }
 }
+

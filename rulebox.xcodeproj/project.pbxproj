@@ -35,20 +35,6 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		26460EDD2DEC6E4700364E17 /* Exceptions for "rulebox" folder in "ruleboxTests" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				Data/Loader.swift,
-			);
-			target = BEB4D5142DE86BED006B74A0 /* ruleboxTests */;
-		};
-		26460EDE2DEC6E4700364E17 /* Exceptions for "rulebox" folder in "ruleboxUITests" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				Data/Loader.swift,
-			);
-			target = BEB4D51E2DE86BED006B74A0 /* ruleboxUITests */;
-		};
 		BE889F612DE887950004A67A /* Exceptions for "rulebox" folder in "rulebox" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
@@ -75,8 +61,6 @@
 			exceptions = (
 				BE889F612DE887950004A67A /* Exceptions for "rulebox" folder in "rulebox" target */,
 				BE889F622DE887950004A67A /* Exceptions for "rulebox" folder in "Compile Sources" phase from "rulebox" target */,
-				26460EDD2DEC6E4700364E17 /* Exceptions for "rulebox" folder in "ruleboxTests" target */,
-				26460EDE2DEC6E4700364E17 /* Exceptions for "rulebox" folder in "ruleboxUITests" target */,
 			);
 			path = rulebox;
 			sourceTree = "<group>";
