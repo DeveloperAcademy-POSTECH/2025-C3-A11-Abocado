@@ -8,89 +8,70 @@
 //import Foundation
 //import SwiftData
 //
-//struct BasicRule: Decodable {
-//    let gameName: String
-//    let genre: String
-//    let contents: [ContentItem]
-//}
-//
-//struct ContentItem: Decodable {
-//    let majorCat: String
+//struct ContentDTO: Codable {
+//    let id: UUID
 //    let name: String
-//    let text: String
-//    let image: String?
-//    let filterTags: [FilterTagItem]
+//    let text: [String]
+//    let gameName: GameNameDTO
+//    let majorCat: MajorCatDTO
+//    let filterTables: [FilterTableDTO]?
 //}
 //
-//struct FilterTagItem: Decodable {
-//    let type: String
+//struct GameNameDTO: Codable {
+//    let id: UUID
+//    let name: String
+//    let genre: String
+//}
+//
+//struct MajorCatDTO: Codable {
+//    let id: UUID
+//    let name: String
+//}
+//
+//struct FilterTableDTO: Codable {
+//    let id: UUID
+//    let targetID: UUID
+//    let filtertags: [FilterTagDTO]
+//}
+//
+//struct FilterTagDTO: Codable {
+//    let id: UUID
 //    let value: String
+//    let type: String
 //}
 //
-//struct Parser {
-//    static func parseBasicRule(from data: Data, context: ModelContext) throws {
-//        let decoder = JSONDecoder()
-//        let basicRule = try decoder.decode(BasicRule.self, from: data)
+//func parseRulebookData(from data: Data, context: ModelContext) {
+//    let decoder = JSONDecoder()
+//    
+//    do {
+//        let decodedContents = try decoder.decode([ContentDTO].self, from: data)
 //
-//        // GameName 중복 생성 방지
-//        let fetchRequest = FetchDescriptor<GameName>(
-//            predicate: #Predicate<GameName> {
-//                $0.name == basicRule.gameName
-//            }
-//        )
+//        for dto in decodedContents {
+//            // 중복 체크
+//            guard context.fetch(Content.self).first(where: { $0.id == dto.id }) == nil else { continue }
 //
-//        let existingGames = try context.fetch(fetchRequest)
-//        let game: GameName
-//        if let existing = existingGames.first {
-//            game = existing
-//        } else {
-//            game = GameName(name: basicRule.gameName, genre: basicRule.genre)
-//            context.insert(game)
-//        }
+//            let game = GameName(id: dto.gameName.id, name: dto.gameName.name, genre: dto.gameName.genre)
+//            let major = MajorCat(id: dto.majorCat.id, name: dto.majorCat.name)
+//            let content = Content(id: dto.id, name: dto.name, text: dto.text, image: nil, gameName: game, majorCat: major)
 //
-//        // MajorCat 중복 생성 방지
-//        var majorCatCache: [String: MajorCat] = [:]
-//
-//        for contentItem in basicRule.contents {
-//            let majorFetch = FetchDescriptor<MajorCat>(
-//                predicate: #Predicate<MajorCat> {
-//                    $0.name == contentItem.majorCat
+//            // 필터 테이블
+//            if let filterTableDTOs = dto.filterTables {
+//                for ftDTO in filterTableDTOs {
+//                    let tags = ftDTO.filtertags.map {
+//                        FilterTag(id: $0.id, value: $0.value, type: $0.type)
+//                    }
+//                    let ft = FilterTable(id: ftDTO.id, targetID: ftDTO.targetID, filtertags: tags)
+//                    content.filterTables.append(ft)
 //                }
-//            )
-//            let existingMajorCats = try context.fetch(majorFetch)
-//
-//            let majorCat: MajorCat
-//            if let existingMajor = existingMajorCats.first {
-//                majorCat = existingMajor
-//            } else if let cachedMajor = majorCatCache[contentItem.majorCat] {
-//                majorCat = cachedMajor
-//            } else {
-//                majorCat = MajorCat(name: contentItem.majorCat)
-//                context.insert(majorCat)
-//                majorCatCache[contentItem.majorCat] = majorCat
 //            }
 //
-//            let tags = contentItem.filterTags.map { tagItem -> FilterTag in
-//                let tag = FilterTag(value: tagItem.value, type: tagItem.type)
-//                context.insert(tag)
-//                return tag
-//            }
-//
-//            // 일단 UUID() 임시 할당
-//            let filterTable = FilterTable(targetID: UUID(), filtertags: tags)
-//            context.insert(filterTable)
-//
-//            let content = Content(
-//                name: contentItem.name,
-//                text: contentItem.text,
-//                image: nil,
-//                gameName: game,
-//                majorCat: majorCat
-//            )
-//            content.filterTables.append(filterTable)
 //            context.insert(content)
-//
-//            filterTable.targetID = content.id
 //        }
+//
+//        try context.save()
+//        print("--- parsing success ---")
+//
+//    } catch {
+//        print("Parser Error:: can't parse json data: \(error)")
 //    }
 //}

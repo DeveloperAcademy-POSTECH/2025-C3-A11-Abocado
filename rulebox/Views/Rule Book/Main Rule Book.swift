@@ -1,5 +1,5 @@
 //
-//  Main Rule Book.swift
+//  MainRuleBook.swift
 //  rulebox
 //
 //  Created by Ken on 5/29/25.
@@ -51,15 +51,9 @@ struct MainRuleBook: View {
                         }
                     }
 
-                    // Listing Section
                     ForEach(majorCats) { cat in
                         DisclosureGroup {
-                            let filtered = vm.filteredContents(for: cat, from: contents)
-                            ForEach(filtered, id: \.id) { content in
-                                NavigationLink(destination: Text(content.text)) {
-                                    Text(content.name)
-                                }.padding(.vertical, 4)
-                            }
+                            contentList(for: cat)
                         } label: {
                             Text(cat.name)
                                 .font(.headline)
@@ -91,9 +85,40 @@ struct MainRuleBook: View {
             .navigationBarBackButtonHidden()
         }
     }
+
+    // MARK: - Subviews
+
+    private func contentList(for cat: MajorCat) -> some View {
+        let filtered = vm.filteredContents(for: cat, from: contents)
+        return ForEach(filtered, id: \.id) { content in
+            NavigationLink(destination: contentDetailView(content)) {
+                Text(content.name)
+            }
+            .padding(.vertical, 4)
+        }
+    }
+
+    private func contentDetailView(_ content: Content) -> some View {
+        ScrollView {
+            VStack(alignment: .leading, spacing: 12) {
+                ForEach(content.texts, id: \.self) { text in
+                    Text(text)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                }
+            }
+            .padding()
+        }
+        .navigationTitle(content.name)
+    }
 }
 
 #Preview {
     MainRuleBook()
-        .modelContainer(for: Item.self, inMemory: true)
+        .modelContainer(for: [
+            Content.self,
+            MajorCat.self,
+            GameName.self,
+            FilterTag.self,
+            FilterTable.self
+        ], inMemory: true)
 }

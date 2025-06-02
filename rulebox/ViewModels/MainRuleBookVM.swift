@@ -31,10 +31,8 @@ class MainRuleBookVM: ObservableObject {
     }
 
     private func contentHasFilter(_ content: Content, type: String, value: String) -> Bool {
-        for table in content.filterTables {
-            if table.filtertags.contains(where: { $0.type == type && $0.value == value }) {
-                return true
-            }
+        if let table = content.filterTable {
+            return table.filtertags.contains { $0.type == type && $0.value == value }
         }
         return false
     }

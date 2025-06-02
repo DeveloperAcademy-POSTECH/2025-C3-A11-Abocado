@@ -12,11 +12,11 @@ import SwiftData
 class GameName {
     @Attribute(.unique) var id: UUID
     var name: String
-    var genre: String
+    var genres: [String]
 
-    init(id: UUID = UUID(), name: String, genre: String) {
+    init(id: UUID = UUID(), name: String, genres: [String]) {
         self.id = id
         self.name = name
-        self.genre = genre
+        self.genres = genres
     }
 }

@@ -12,7 +12,9 @@ import SwiftData
 class FilterTable {
     @Attribute(.unique) var id: UUID
     var targetID: UUID
+    
     @Relationship var filtertags: [FilterTag]
+    @Relationship var content: Content?
 
     init(id: UUID = UUID(), targetID: UUID, filtertags: [FilterTag]) {
         self.id = id

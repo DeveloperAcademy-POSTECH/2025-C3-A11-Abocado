@@ -61,7 +61,7 @@ struct ruleboxApp: App {
                    let jsonData = try? Data(contentsOf: url) {
                     try NLoader.loadGameRule(from: jsonData, context: context)
                     try context.save()
-                    print("complete loading JSON data...")
+                    print("--- complete loading JSON data ---")
                 } else {
                     print("Error: file not found")
                 }

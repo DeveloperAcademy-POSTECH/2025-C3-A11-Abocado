@@ -6,28 +6,18 @@
 ////
 //
 //import Foundation
-//import SwiftData
 //
-//struct Loader {
-//    static func loadInitialDataIfNeeded(modelContext: ModelContext) {
-//        let fetchDescriptor = FetchDescriptor<GameName>()
-//        if let result = try? modelContext.fetch(fetchDescriptor), !result.isEmpty {
-//            print("Data already exist")
-//            return
-//        }
+//func loadJSONData(from fileName: String) -> Data? {
+//    guard let url = Bundle.main.url(forResource: fileName, withExtension: "json") else {
+//        print("Loader Error:: file not found : \(fileName).json")
+//        return nil
+//    }
 //
-//        let folderPath = "rulebox/Data/Resource"
-//
-//        do {
-//            let fileURLs = try FileManager.default.contentsOfDirectory(at: URL(fileURLWithPath: folderPath), includingPropertiesForKeys: nil)
-//            
-//            for fileURL in fileURLs where fileURL.pathExtension.lowercased() == "json" {
-//                print("Parsing file: \(fileURL.lastPathComponent)")
-//                let data = try Data(contentsOf: fileURL)
-//                try Parser.parseBasicRule(from: data, context: modelContext)
-//            }
-//        } catch {
-//            print("Loader 에러: \(error)")
-//        }
+//    do {
+//        let data = try Data(contentsOf: url)
+//        return data
+//    } catch {
+//        print("Loader Error:: can't load data : \(error)")
+//        return nil
 //    }
 //}

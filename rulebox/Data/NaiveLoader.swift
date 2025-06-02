@@ -13,15 +13,15 @@ import SwiftData
 
 struct BasicRule: Decodable {
     let gameName: String
-    let genre: String
+    let genres: [String]
     let contents: [ContentItem]
 }
 
 struct ContentItem: Decodable {
     let majorCat: String
     let name: String
-    let text: String
-    let image: String?
+    let texts: [String]
+    let images: [String]?
     let filterTags: [FilterTagItem]
 }
 
@@ -35,6 +35,7 @@ struct NLoader {
         //  JSON parsing
         let decoder = JSONDecoder()
         let basicRule = try decoder.decode(BasicRule.self, from: jsonData)
+        
 
         //  remove existing data ( ... )
         let gameName = basicRule.gameName
@@ -47,7 +48,7 @@ struct NLoader {
         }
 
         //  insert data
-        let game = GameName(name: basicRule.gameName, genre: basicRule.genre)
+        let game = GameName(name: basicRule.gameName, genres: basicRule.genres)
         context.insert(game)
 
         var majorCatCache: [String: MajorCat] = [:]
@@ -70,16 +71,19 @@ struct NLoader {
 
             let content = Content(
                 name: contentItem.name,
-                text: contentItem.text,
-                image: nil,
+                texts: contentItem.texts,
+                images: nil,
                 gameName: game,
                 majorCat: majorCat
             )
-            content.filterTables.append(filterTable)
+            //content.filterTables.append(filterTable)
             context.insert(content)
-
+            
             filterTable.targetID = content.id
+            filterTable.content = content
+
+            context.insert(filterTable)
+            content.filterTable = filterTable
         }
     }
 }
-
