@@ -5,27 +5,79 @@
 //  Created by Ken on 5/29/25.
 //
 
+//import SwiftUI
+//import SwiftData
+//
+//@main
+//struct ruleboxApp: App {
+//    var sharedModelContainer: ModelContainer = {
+//        let schema = Schema([
+//            Item.self,
+//        ])
+//        let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
+//
+//        do {
+//            return try ModelContainer(for: schema, configurations: [modelConfiguration])
+//        } catch {
+//            fatalError("Could not create ModelContainer: \(error)")
+//        }
+//    }()
+//
+//    var body: some Scene {
+//        WindowGroup {
+//            ContentView()
+//        }
+//        .modelContainer(sharedModelContainer)
+//    }
+//}
+
 import SwiftUI
 import SwiftData
 
 @main
 struct ruleboxApp: App {
-    var sharedModelContainer: ModelContainer = {
+    let sharedModelContainer: ModelContainer
+    
+    init() {
         let schema = Schema([
-            Item.self,
+            GameName.self,
+            MajorCat.self,
+            Content.self,
+            FilterTag.self,
+            FilterTable.self
         ])
-        let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
-
+        
         do {
-            return try ModelContainer(for: schema, configurations: [modelConfiguration])
+            sharedModelContainer = try ModelContainer(for: schema)
+            
+            // load data at init
+            let context = sharedModelContainer.mainContext
+            // load data if DB empty
+            let fetchRequest = FetchDescriptor<GameName>()
+            let games = try context.fetch(fetchRequest)
+            
+            if games.isEmpty {
+                if let url = Bundle.main.url(forResource: "basicRule", withExtension: "json"),
+                   let jsonData = try? Data(contentsOf: url) {
+                    try NLoader.loadGameRule(from: jsonData, context: context)
+                    try context.save()
+                    print("complete loading JSON data...")
+                } else {
+                    print("Error: file not found")
+                }
+            } else {
+                print("data already exist. passing loading process...")
+            }
+            
         } catch {
-            fatalError("Could not create ModelContainer: \(error)")
+            fatalError("Error: can't complete ModelContainer creation: \(error)")
         }
-    }()
-
+    }
+    
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .environment(\.modelContext, sharedModelContainer.mainContext)
         }
         .modelContainer(sharedModelContainer)
     }

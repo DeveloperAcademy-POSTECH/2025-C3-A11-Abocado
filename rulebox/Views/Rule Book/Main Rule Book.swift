@@ -6,107 +6,90 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct MainRuleBook: View {
-    @State private var isExpanded = false
+    @Query var majorCats: [MajorCat]
+    @Query var contents: [Content]
+    @Query var filterTags: [FilterTag]
+
+    @StateObject private var vm = MainRuleBookVM()
+    @Environment(\.dismiss) private var dismiss
+
     var body: some View {
         NavigationStack {
-
             ScrollView {
-                VStack(spacing: 20) {
+                VStack(alignment: .leading, spacing: 20) {
                     HStack {
-                        Text("기본판")
-                            .font(.title)
-                        Spacer()
-                        Text("2명")
-                            .font(.title)
+                        let partyValues = vm.partyValues(from: filterTags)
+                        let extensionValues = vm.extensionValues(from: filterTags)
+
+                        DisclosureGroup("인원수 필터") {
+                            ForEach(partyValues, id: \.self) { value in
+                                Button(action: { vm.selectedParty = value }) {
+                                    HStack {
+                                        Text(value)
+                                        if vm.selectedParty == value {
+                                            Image(systemName: "checkmark")
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        DisclosureGroup("확장판 필터") {
+                            ForEach(extensionValues, id: \.self) { value in
+                                Button(action: { vm.selectedExtension = value }) {
+                                    HStack {
+                                        Text(value)
+                                        if vm.selectedExtension == value {
+                                            Image(systemName: "checkmark")
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     }
 
-                    DisclosureGroup(isExpanded: $isExpanded) {
-                        VStack(alignment: .leading, spacing: 10) {
-                            NavigationLink(destination: SearchView()) {
-                                HStack {
-                                    Text("게임 준비")
-                                    Spacer()
-                                    Image(systemName: "chevron.right")
-                                }.frame(height: 25).padding()
+                    // Listing Section
+                    ForEach(majorCats) { cat in
+                        DisclosureGroup {
+                            let filtered = vm.filteredContents(for: cat, from: contents)
+                            ForEach(filtered, id: \.id) { content in
+                                NavigationLink(destination: Text(content.text)) {
+                                    Text(content.name)
+                                }.padding(.vertical, 4)
                             }
-                            NavigationLink(destination: SearchView()) {
-                                HStack {
-                                    Text("타일 놓기")
-                                    Spacer()
-                                    Image(systemName: "chevron.right")
-                                }.frame(height: 25).padding()
-                            }
-                            NavigationLink(destination: SearchView()) {
-                                HStack {
-                                    Text("점수 계산")
-                                    Spacer()
-                                    Image(systemName: "chevron.right")
-                                }.frame(height: 25).padding()
-                            }
+                        } label: {
+                            Text(cat.name)
+                                .font(.headline)
+                                .padding(.vertical, 8)
                         }
-                    } label: {
-                        ZStack {
-                            RoundedRectangle(cornerRadius: 16)
-                                .frame(height: 92)
-                                .foregroundColor(.clear)
-                            HStack {
-                                Text("게임 진행")
-                                Spacer()
-                            }
-                            .padding()
-                        }
-                    }
-                    Button(action: {}) {
-                        RoundedRectangle(cornerRadius: 16).frame(height: 92)
-                    }
-                    Button(action: {}) {
-                        RoundedRectangle(cornerRadius: 16).frame(height: 92)
-                    }
-                    Button(action: {}) {
-                        RoundedRectangle(cornerRadius: 16).frame(height: 92)
-                    }.foregroundColor(.grayNeutral05)
-                    Button(action: {}) {
-                        RoundedRectangle(cornerRadius: 16).frame(height: 92)
-                    }.foregroundColor(.grayNeutral20)
-                    Button(action: {}) {
-                        RoundedRectangle(cornerRadius: 16).frame(height: 92)
-                    }.foregroundColor(.primaryStrong)
-                    Button(action: {}) {
-                        RoundedRectangle(cornerRadius: 16).frame(height: 92)
-                    }.foregroundColor(.grayNeutral20)
-                    Button(action: {}) {
-                        RoundedRectangle(cornerRadius: 16).frame(height: 92)
                     }
                 }
+                .padding()
             }
-            .padding().toolbar {
+            .navigationTitle("카르카손")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
-                    NavigationLink(
-                        destination: GameSelectView()
-                    ) {
+                    Button(action: { dismiss() }) {
                         Image(systemName: "house")
                     }
                 }
                 ToolbarItem(placement: .topBarTrailing) {
-                    NavigationLink(
-                        destination: SearchView()
-                    ) {
+                    NavigationLink(destination: SearchView()) {
                         Image(systemName: "magnifyingglass")
                     }
                 }
                 ToolbarItem(placement: .topBarTrailing) {
-                    NavigationLink(
-                        destination: BookmarkView()
-                    ) {
+                    NavigationLink(destination: BookmarkView()) {
                         Image(systemName: "bookmark")
                     }
                 }
             }
-            .navigationTitle("카르카손").navigationBarTitleDisplayMode(.inline)
-        }.navigationBarBackButtonHidden(true)
-
+            .navigationBarBackButtonHidden()
+        }
     }
 }
 
