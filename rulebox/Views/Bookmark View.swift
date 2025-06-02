@@ -15,7 +15,7 @@ struct BookmarkView: View {
             
             ScrollView{
                 HStack{//북마크시 게임이름
-                    Text("GameName")
+                    Text("GameName").font(.smHeading)
                     Spacer()
                 }
                 .padding(.bottom, 14)
@@ -26,9 +26,13 @@ struct BookmarkView: View {
                                 .frame(width:56, height:56)
                                 .padding(.trailing, 16)
                                 
-                            VStack{
+                            VStack(alignment: .leading){
                                 Text("중분류")
+                                    .font(.mdRegular)
+                                    //.foregroundColor(.white)
+                                    .opacity(0.46)
                                 Text("소분류")
+                                    .font(.lgMedium)
                             }
                         }
                         Spacer()
