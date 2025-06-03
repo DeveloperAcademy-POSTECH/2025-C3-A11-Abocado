@@ -5,8 +5,8 @@
 //  Created by Ken on 5/29/25.
 //
 
-import SwiftUI
 import SwiftData
+import SwiftUI
 
 struct MainRuleBook: View {
     var game: GameName
@@ -16,6 +16,7 @@ struct MainRuleBook: View {
 
     @StateObject private var vm = MainRuleBookVM()
     @Environment(\.dismiss) private var dismiss
+    @State private var isExpandedMap: [UUID: Bool] = [:]
 
     // get tags for selected game
     var gameFilterTags: [FilterTag] {
@@ -37,27 +38,59 @@ struct MainRuleBook: View {
         NavigationStack {
             ScrollView {
                 VStack(alignment: .leading, spacing: 20) {
-                    // 여기에 이미지가 들어가고
-                    
-                    
+                    //                    ZStack(alignment: .top) {
+                    //                        GeometryReader { geo in
+                    //                            let offset = geo.frame(in: .global).minY
+                    //                            Image(systemName: "plus")
+                    //                                .resizable()
+                    //                                .scaledToFit()
+                    //                                .frame(height: 276)
+                    //                                .blur(radius: offset < 0 ? min(10, abs(offset) / 10) : 0)
+                    //                                .opacity(offset < -200 ? 0 : 1)
+                    //                                .offset(y: offset < 0 ? offset : 0)
+                    //                        }
+                    //                        .frame(height: 276)
+                    //                    }
+
                     // view body
-                    // 까만블록으로 감싸야할텐데 나중에 누가 해주겠지 0.0
                     FilterSection(filterTags: gameFilterTags, vm: vm)
 
                     ForEach(filteredMajorCats, id: \.id) { cat in
-                        let filtered = vm.filteredContents(for: cat, from: filteredContents)
+                        let filtered = vm.filteredContents(
+                            for: cat,
+                            from: filteredContents
+                        )
                         if !filtered.isEmpty {
-                            DisclosureGroup {
-                                ForEach(filtered, id: \.id) { content in
-                                    NavigationLink(destination: contentDetailView(content)) {
-                                        Text(content.name)
+                            let expanded = isExpandedMap[cat.id, default: false]
+
+                            VStack(alignment: .leading, spacing: 8) {
+                                Button(action: {
+                                    isExpandedMap[cat.id] = !expanded
+                                }) {
+                                    HStack {
+                                        Image(systemName: expanded ? "minus" : "plus")
+                                            .foregroundColor(.white)
+                                        Text(cat.name)
+                                            .font(.headline)
+                                            .padding(.vertical, 8)
+                                            .foregroundColor(.white)
+                                        Spacer()
                                     }
-                                    .padding(.vertical, 4)
                                 }
-                            } label: {
-                                Text(cat.name)
-                                    .font(.headline)
-                                    .padding(.vertical, 8)
+
+                                if expanded {
+                                    ForEach(filtered, id: \.id) { content in
+                                        NavigationLink(
+                                            destination: contentDetailView(content)
+                                        ) {
+                                            HStack {
+                                                Text(content.name)
+                                                Spacer()
+                                            }
+                                        }
+                                        .padding(.vertical, 4)
+                                    }
+                                }
                             }
                         }
                     }
@@ -78,7 +111,6 @@ struct MainRuleBook: View {
         }
     }
 
-
     // get contents belong to current game
     var filteredContents: [Content] {
         allContents.filter { $0.gameName.name == game.name }
@@ -86,9 +118,15 @@ struct MainRuleBook: View {
 
     // get MajorCats that have content matching content for filter
     var filteredMajorCats: [MajorCat] {
-        let grouped = Dictionary(grouping: filteredContents, by: { $0.majorCat })
-        return grouped
-            .filter { !vm.filteredContents(for: $0.key, from: $0.value).isEmpty }
+        let grouped = Dictionary(
+            grouping: filteredContents,
+            by: { $0.majorCat }
+        )
+        return
+            grouped
+            .filter {
+                !vm.filteredContents(for: $0.key, from: $0.value).isEmpty
+            }
             .map { $0.key }
             .sorted { $0.name < $1.name }
     }
@@ -113,17 +151,17 @@ struct MainRuleBookToolbar: ToolbarContent {
     var body: some ToolbarContent {
         ToolbarItem(placement: .topBarLeading) {
             Button(action: { dismiss() }) {
-                Image(systemName: "house") // icon 수정해주세요
+                Image(systemName: "house")  // icon 수정해주세요
             }
         }
         ToolbarItem(placement: .topBarTrailing) {
             NavigationLink(destination: SearchView()) {
-                Image(systemName: "magnifyingglass") // icon 수정해주세요
+                Image(systemName: "magnifyingglass")  // icon 수정해주세요
             }
         }
         ToolbarItem(placement: .topBarTrailing) {
             NavigationLink(destination: BookmarkView()) {
-                Image(systemName: "bookmark") // icon 수정해주세요
+                Image(systemName: "bookmark")  // icon 수정해주세요
             }
         }
     }
