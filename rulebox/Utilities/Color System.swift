@@ -35,7 +35,9 @@ extension Color {
     static let primaryNormal: Color = Color(hex: "#FF6200")
     static let primaryStrong: Color = Color(hex: "#EB5A00")
     static let primaryHeavy: Color = Color(hex: "#D15000")
-
+    
+    
+    static let atomicCommon: Color = Color(hex: "#D15000")
     //MARK: - Gray
     static let grayNeutral99: Color = Color(hex: "#F7F7F7")
     static let grayNeutral95: Color = Color(hex: "#DCDCDC")

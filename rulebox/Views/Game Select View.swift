@@ -21,17 +21,11 @@ struct GameSelectView: View {
                 Spacer()
 
                 NavigationLink(destination: SearchView()) {
-                    Image(systemName: "magnifyingglass")  // image 수정해주세요
-                        .foregroundColor(.white)
-                        .padding()
-                        .background(Circle().fill(Color.blue))
+                    searchIcon
                 }
 
                 NavigationLink(destination: BookmarkView()) {
-                    Image(systemName: "bookmark.fill")  // image 수정해주세요
-                        .foregroundColor(.white)
-                        .padding()
-                        .background(Circle().fill(Color.orange))
+                    bookmarkIcon
                 }
             }
             .padding()

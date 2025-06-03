@@ -18,8 +18,9 @@ struct SearchView: View {
             VStack(alignment: .leading) {
                 // 검색 바
                 HStack {
-                    Image(systemName: "magnifyingglass")
-                        .foregroundColor(.gray)
+                    Image("search")
+                        .renderingMode(.template)
+                        .foregroundColor(.white)
 
                     TextField("검색어를 입력하세요", text: $searchText)
                         .onSubmit {
@@ -30,8 +31,9 @@ struct SearchView: View {
                         Button(action: {
                             searchText = ""
                         }) {
-                            Image(systemName: "xmark.circle.fill")
-                                .foregroundColor(.gray)
+                            Image("cancel")
+                                .renderingMode(.template)
+                                .foregroundColor(.grayNeutral80)
                         }
                     }
                 }
@@ -101,8 +103,9 @@ struct SearchView: View {
                     Button(action: {
                         dismiss()
                     }) {
-                        Image(systemName: "chevron.left")
-                            .foregroundColor(.blue)
+                        Image("caret.left")
+                            .renderingMode(.template)
+                            .foregroundColor(.white)
                     }
                 }
             }
