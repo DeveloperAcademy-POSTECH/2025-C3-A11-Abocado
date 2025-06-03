@@ -6,10 +6,20 @@
 //
 
 import SwiftUI
+import SwiftData
 
 // 모달 페이지입니다.
 struct SubRuleModalView: View {
     @State private var showToast = false
+    
+    @Environment(\.modelContext) var context
+    //모든 북마크 불러오기
+    @Query var bookmarks: [Bookmark]
+    //현재 content가 북마크 되었는지 확인
+    var content: Content
+    var isBookmarked: Bool {
+        bookmarks.contains {$0.content?.id == content.id}
+    }
     
     var loremIpsum: String {
         if let url = Bundle.main.url(forResource: "lorem", withExtension: "txt", subdirectory: "Data"),
@@ -29,6 +39,11 @@ struct SubRuleModalView: View {
                     Text("상세설명 제목").font(.title).bold()
                     Spacer()
                     Button(action: {
+                        //북마크 제거
+                        if let onBookmark = bookmarks.first(where: {$0.content?.id == content.id}) {
+                            context.delete(onBookmark)
+                        }
+                        
                         showToast = true
                         DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
                             showToast = false
@@ -72,7 +87,7 @@ struct SubRuleModalView: View {
     }
 }
 
-#Preview {
-    SubRuleModalView()
-        .modelContainer(for: Item.self, inMemory: true)
-}
+//#Preview {
+//    SubRuleModalView()
+//        .modelContainer(for: Item.self, inMemory: true)
+//}
