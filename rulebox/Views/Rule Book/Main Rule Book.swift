@@ -68,13 +68,12 @@ struct MainRuleBook: View {
                                     isExpandedMap[cat.id] = !expanded
                                 }) {
                                     HStack {
-                                        Image(systemName: expanded ? "minus" : "plus")
-                                            .foregroundColor(.white)
                                         Text(cat.name)
                                             .font(.headline)
                                             .padding(.vertical, 8)
                                             .foregroundColor(.white)
                                         Spacer()
+                                        expanded ? minusIcon : plusIcon
                                     }
                                 }
 
@@ -100,7 +99,6 @@ struct MainRuleBook: View {
             .navigationTitle(game.name)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
-
                 MainRuleBookToolbar(dismiss: dismiss)
             }
             .navigationBarBackButtonHidden()
@@ -151,17 +149,17 @@ struct MainRuleBookToolbar: ToolbarContent {
     var body: some ToolbarContent {
         ToolbarItem(placement: .topBarLeading) {
             Button(action: { dismiss() }) {
-                Image(systemName: "house")  // icon 수정해주세요
+                homeToolbarIcon
             }
         }
         ToolbarItem(placement: .topBarTrailing) {
             NavigationLink(destination: SearchView()) {
-                Image(systemName: "magnifyingglass")  // icon 수정해주세요
+                searchToolbarIcon
             }
         }
         ToolbarItem(placement: .topBarTrailing) {
             NavigationLink(destination: BookmarkView()) {
-                Image(systemName: "bookmark")  // icon 수정해주세요
+                bookmarkToolbarIcon
             }
         }
     }
