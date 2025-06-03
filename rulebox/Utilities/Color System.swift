@@ -21,6 +21,15 @@ extension Color {
 
         self.init(red: r, green: g, blue: b)
     }
+    //MARK: - Opacity
+    static let opacity5 = 5
+    static let opacity10 = 10
+    static let opacity20 = 20
+    static let opacity25 = 25
+    static let opacity85 = 85
+
+    //MARK: - Others
+    static let backGround: Color = Color(hex: "#1D1E20")
 
     //MARK: - Semantic Color
     static let primaryNormal: Color = Color(hex: "#FF6200")
