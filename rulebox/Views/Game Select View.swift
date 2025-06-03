@@ -17,8 +17,7 @@ struct GameSelectView: View {
         NavigationStack {
             // Page Header part
             HStack {
-                Text("RuleBox")  // Font 수정해주세요
-
+                Text("RuleBox").font(.xlHeading)
                 Spacer()
 
                 NavigationLink(destination: SearchView()) {
@@ -36,29 +35,63 @@ struct GameSelectView: View {
                 }
             }
             .padding()
-            // genre filter 만들어야댐
-            
+            //             genre filter 만들어야댐
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack {
+                    Rectangle()
+                        .frame(width: 12).foregroundColor(.clear)
+                    GenreCapsule(title: "전체", isSelected: false)
+                    GenreCapsule(title: "가족", isSelected: true)
+                    GenreCapsule(title: "파티", isSelected: false)
+                    GenreCapsule(title: "전략", isSelected: true)
+                    GenreCapsule(title: "추리")
+                    GenreCapsule(title: "추상")
+                    GenreCapsule(title: "추리")
+                    GenreCapsule(title: "추상")
+                    GenreCapsule(title: "추리")
+                    GenreCapsule(title: "추상")
+                }
+            }.frame(height: 40)
+
             Spacer()
-            
+
             // Page Body part
-            TabView { // 생긴거 전면수정해주세요. 옆에 살짝 다음카드 보이게하려면 horizontal scrollview?
-                ForEach(games) { game in
-                    NavigationLink(destination: MainRuleBook(game: game)) {
-                        VStack {
-                            // 가나다순 이슈로 카르카손 카드가 뒤에 생기는건 일단 넘어가죠
-                            Text(game.name)
-                                .foregroundColor(.white)
-                        }
-                        .frame(width: 324, height: 520)
-                        .background(Color.blue)
-                        .cornerRadius(15)
-                        .padding()
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack {
+                    Rectangle()
+                        .frame(width: 6).foregroundColor(.clear)
+                    ForEach(games) { game in
+                        NavigationLink(destination: MainRuleBook(game: game)) {
+                            VStack {
+                                HStack {
+                                    GenreCapsule(title: "전체", isSelected: true)
+                                    GenreCapsule(title: "가족", isSelected: true)
+                                    Spacer()
+                                }
+                                Spacer()
+                                // 가나다순 이슈로 카르카손 카드가 뒤에 생기는건 일단 넘어가죠
+                                HStack {
+                                    Text(game.name)
+                                        .foregroundColor(.white)
+                                    Spacer()
+                                }
+                                HStack {
+                                    Text("2~5인")
+                                        .foregroundColor(.white)
+                                    Spacer()
+                                }
+                            }
+                            .padding(.horizontal, 8).padding(.vertical, 16)
+                            .frame(width: 324, height: 520)
+                            .background(Color.blue)
+                            .cornerRadius(28)
+                        }.padding(.horizontal, 6)
                     }
                 }
             }
             .frame(height: 520)
-            .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
-            
+            //            .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
+
             Spacer()
         }
     }
