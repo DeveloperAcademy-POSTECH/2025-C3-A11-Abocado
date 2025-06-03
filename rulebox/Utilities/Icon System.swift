@@ -8,7 +8,7 @@
 import SwiftUI
 
 /// Toolbar home Icon
-var homeIcon: some View =
+var homeToolbarIcon: some View =
     Image("home")
     .renderingMode(.template)
     .foregroundColor(.white)
@@ -16,8 +16,16 @@ var homeIcon: some View =
     .background(Circle().fill(Color.gray))
 
 /// Toolbar search Icon
-var searchIcon: some View =
+var searchToolbarIcon: some View =
     Image("search")
+    .renderingMode(.template)
+    .foregroundColor(.white)
+    .padding()
+    .background(Circle().fill(Color.gray))
+
+/// Toolbar bookmark Icon
+var bookmarkToolbarIcon: some View =
+    Image("bookmark")
     .renderingMode(.template)
     .foregroundColor(.white)
     .padding()
@@ -27,6 +35,12 @@ var searchIcon: some View =
 var bookmarkIcon: some View =
     Image("bookmark")
     .renderingMode(.template)
-    .foregroundColor(.white)
+    .foregroundColor(.grayNeutral95)
     .padding()
-    .background(Circle().fill(Color.gray))
+
+/// Toolbar bookmark Icon
+var bookmarkFilledIcon: some View =
+    Image("bookmark.fill")
+    .renderingMode(.template)
+    .foregroundColor(.primaryNormal)
+    .padding()

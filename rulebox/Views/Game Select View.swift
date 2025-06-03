@@ -19,13 +19,13 @@ struct GameSelectView: View {
             HStack {
                 Text("RuleBox").font(.xlHeading)
                 Spacer()
-
+                
                 NavigationLink(destination: SearchView()) {
-                    searchIcon
+                    searchToolbarIcon
                 }
 
                 NavigationLink(destination: BookmarkView()) {
-                    bookmarkIcon
+                    bookmarkToolbarIcon
                 }
             }
             .padding()
