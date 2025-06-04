@@ -12,6 +12,7 @@ import SwiftUI
 struct GameSelectView: View {
     @Environment(\.modelContext) private var modelContext
     @Query(sort: \GameName.name) private var games: [GameName]
+    @State private var selectedGenre: String = "전체" // Genre filter
 
     var body: some View {
         NavigationStack {
@@ -29,23 +30,32 @@ struct GameSelectView: View {
                 }
             }
             .padding()
-            //             genre filter 만들어야댐
+            
+            // Genre filter part
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack {
-                    ForEach(GenreList.allGenres, id: \.self) { genre in
+                    ForEach(["전체"] + GenreList.allGenres, id: \.self) { genre in
                         GenreCapsule(title: genre, isSelected: false)
+                            .onTapGesture {
+                                selectedGenre = genre
+                                print("\(genre) is selected")
+                            }
                     }
                 }
             }.frame(height: 40)
-
+            
             Spacer()
 
             // Page Body part
+            
+            
+            let filteredGames: [GameName] = selectedGenre == "전체" ? games : games.filter { $0.genres.contains(selectedGenre) }
+            
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack {
                     Rectangle()
                         .frame(width: 6).foregroundColor(.clear)
-                    ForEach(games) { game in
+                    ForEach(filteredGames) { game in
                         NavigationLink(destination: MainRuleBook(game: game)) {
                             VStack {
                                 HStack {

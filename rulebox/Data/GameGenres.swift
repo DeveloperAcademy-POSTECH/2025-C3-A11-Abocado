@@ -5,7 +5,7 @@
 //  Created by POS on 6/4/25.
 //
 
-import Foundation
+//import Foundation
 
 struct GenreList {
     static let allGenres = [
