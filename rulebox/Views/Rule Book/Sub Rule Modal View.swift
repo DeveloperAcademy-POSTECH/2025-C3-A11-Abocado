@@ -106,30 +106,20 @@ struct SubRuleModalView: View {
                 )
                 
                 
-                ZStack{
-                    Rectangle()
-                        .frame(maxWidth: .infinity)
-                        .frame(height: 89)
-                        .background(Color.backGround)
-                        .opacity(0.5)
-                        .blur(radius:25)
-                    
-                    HStack {
-                        NavigationLink(destination: SearchView()) {
-                            HStack {
-                                Image(systemName: "chevron.left")
-                                Text("이전 페이지")
-                            }
-                        }
-                        Spacer()
-                        NavigationLink(destination: SearchView()) {
-                            HStack {
-                                Text("다음 페이지")
-                                Image(systemName: "chevron.right")
-                            }
+                HStack {
+                    NavigationLink(destination: SearchView()) {
+                        HStack {
+                            Image(systemName: "chevron.left")
+                            Text("이전 페이지")
                         }
                     }
-                    
+                    Spacer()
+                    NavigationLink(destination: SearchView()) {
+                        HStack {
+                            Text("다음 페이지")
+                            Image(systemName: "chevron.right")
+                        }
+                    }
                 }
                 
             }
