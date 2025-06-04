@@ -36,7 +36,7 @@ struct SubRuleModalView: View {
     var body: some View {
         NavigationStack {
             ScrollView {
-                VStack(alignment: .leading)/*(spacing: 60)*/ {
+                VStack(alignment: .leading) {
                     
                     VStack(alignment: .leading) {
                         Text("MajorCat Name")
@@ -100,6 +100,7 @@ struct SubRuleModalView: View {
                         .padding(.bottom, 34)
                 }
                 .padding(.horizontal, 20)
+                .padding(.top, 50)
                 .overlay(
                     Group {
                         if showToast {
