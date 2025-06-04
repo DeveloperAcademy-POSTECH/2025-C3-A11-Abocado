@@ -32,14 +32,14 @@ var bookmarkToolbarIcon: some View =
     .background(Circle().fill(Color.gray))
 
 /// Toolbar bookmark Icon
-var bookmarkIcon: some View =
+public var bookmarkIcon: some View =
     Image("bookmark")
     .renderingMode(.template)
     .foregroundColor(.grayNeutral95)
     .padding()
 
 /// Toolbar bookmark Icon
-var bookmarkFilledIcon: some View =
+public var bookmarkFilledIcon: some View =
     Image("bookmark.fill")
     .renderingMode(.template)
     .foregroundColor(.primaryNormal)
