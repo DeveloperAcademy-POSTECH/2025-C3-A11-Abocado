@@ -1,7 +1,8 @@
 {
     "gameName": "카르카손",
     "genres": [
-        "전략"
+        "전략",
+        "가족"
     ],
     "imageFile": "unpopcat.png",
     "contents": [

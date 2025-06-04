@@ -13,7 +13,8 @@ var homeToolbarIcon: some View =
     .renderingMode(.template)
     .foregroundColor(.white)
     .padding()
-    .background(Circle().fill(Color.gray))
+    .background(Circle().fill(Color.gray).frame(width: 40, height: 40))
+    .frame(width: 40, height: 40)
 
 /// Toolbar search Icon
 var searchToolbarIcon: some View =
@@ -21,7 +22,7 @@ var searchToolbarIcon: some View =
     .renderingMode(.template)
     .foregroundColor(.white)
     .padding()
-    .background(Circle().fill(Color.gray))
+    .background(Circle().fill(Color.gray).frame(width: 40, height: 40))
 
 /// Toolbar bookmark Icon
 var bookmarkToolbarIcon: some View =
@@ -29,7 +30,8 @@ var bookmarkToolbarIcon: some View =
     .renderingMode(.template)
     .foregroundColor(.white)
     .padding()
-    .background(Circle().fill(Color.gray))
+    .background(Circle().fill(Color.gray).frame(width: 40, height: 40))
+    .frame(width: 40, height: 40)
 
 /// Toolbar bookmark Icon
 public var bookmarkIcon: some View =
@@ -43,4 +45,18 @@ public var bookmarkFilledIcon: some View =
     Image("bookmark.fill")
     .renderingMode(.template)
     .foregroundColor(.primaryNormal)
+    .padding()
+
+/// Toolbar bookmark Icon
+var minusIcon: some View =
+    Image("minus")
+    .renderingMode(.template)
+    .foregroundColor(.primaryNormal)
+    .padding()
+
+/// Toolbar bookmark Icon
+var plusIcon: some View =
+    Image("plus")
+    .renderingMode(.template)
+    .foregroundColor(.grayNeutral95)
     .padding()
