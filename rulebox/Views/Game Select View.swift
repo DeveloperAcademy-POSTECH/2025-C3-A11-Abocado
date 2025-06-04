@@ -32,18 +32,9 @@ struct GameSelectView: View {
             //             genre filter 만들어야댐
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack {
-                    Rectangle()
-                        .frame(width: 12).foregroundColor(.clear)
-                    GenreCapsule(title: "전체", isSelected: false)
-                    GenreCapsule(title: "가족", isSelected: true)
-                    GenreCapsule(title: "파티", isSelected: false)
-                    GenreCapsule(title: "전략", isSelected: true)
-                    GenreCapsule(title: "추리")
-                    GenreCapsule(title: "추상")
-                    GenreCapsule(title: "추리")
-                    GenreCapsule(title: "추상")
-                    GenreCapsule(title: "추리")
-                    GenreCapsule(title: "추상")
+                    ForEach(GenreList.allGenres, id: \.self) { genre in
+                        GenreCapsule(title: genre, isSelected: false)
+                    }
                 }
             }.frame(height: 40)
 
