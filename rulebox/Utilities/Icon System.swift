@@ -17,7 +17,7 @@ var homeToolbarIcon: some View =
 
 /// Toolbar search Icon
 var searchToolbarIcon: some View =
-    Image("search")
+    Image("Search") // 대소문자 구분해야됨
     .renderingMode(.template)
     .foregroundColor(.white)
     .padding()
