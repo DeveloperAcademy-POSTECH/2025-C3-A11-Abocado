@@ -56,6 +56,8 @@ struct ruleboxApp: App {
         WindowGroup {
             ContentView()
                 .environment(\.modelContext, sharedModelContainer.mainContext)
+                .preferredColorScheme(.dark)
+                .foregroundColor(.white)
         }
         .modelContainer(sharedModelContainer)
     }
