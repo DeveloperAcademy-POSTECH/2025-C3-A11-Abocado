@@ -17,6 +17,9 @@ struct MainRuleBook: View {
     @StateObject private var vm = MainRuleBookVM()
     @Environment(\.dismiss) private var dismiss
     @State private var isExpandedMap: [UUID: Bool] = [:]
+    
+    //SubRuleModalView() modal sheet
+    @State private var onSubRuleModalView = false
 
     // get tags for selected game
     var gameFilterTags: [FilterTag] {
@@ -80,15 +83,28 @@ struct MainRuleBook: View {
 
                                 if expanded {
                                     ForEach(filtered, id: \.id) { content in
-                                        NavigationLink(
-                                            destination: SubRuleModalView(content: content)
-                                        ) {
+                                        
+                                        Button(action:{
+                                            onSubRuleModalView = true
+                                        }, label:{
                                             HStack {
                                                 Text(content.name)
                                                 Spacer()
                                             }
-                                        }
+                                        })
                                         .padding(.vertical, 4)
+                                        .sheet(isPresented: $onSubRuleModalView){SubRuleModalView(content: content)}
+                                        
+//                                        NavigationLink(
+//                                            destination: SubRuleModalView(content: content)
+//                                        ) {
+//                                            HStack {
+//                                                Text(content.name)
+//                                                Spacer()
+//                                            }
+//                                        }
+//                                        .padding(.vertical, 4)
+//                                        .sheet(isPresented: $onSubRuleModalView){SubRuleModalView(content: content)}
                                     }
                                 }
                             }
