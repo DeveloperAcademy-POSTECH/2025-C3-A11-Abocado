@@ -81,7 +81,7 @@ struct MainRuleBook: View {
                                 if expanded {
                                     ForEach(filtered, id: \.id) { content in
                                         NavigationLink(
-                                            destination: contentDetailView(content)
+                                            destination: SubRuleModalView(content: content)
                                         ) {
                                             HStack {
                                                 Text(content.name)
