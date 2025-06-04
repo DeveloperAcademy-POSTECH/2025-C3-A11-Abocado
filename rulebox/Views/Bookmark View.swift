@@ -22,7 +22,6 @@ struct BookmarkView: View {
                 }
                 .padding(.bottom, 14)
             
-            
             ForEach(bookmarks, id: \.id) { bookmark in
                 if let content = bookmark.content {
                     HStack{ // 북마크 블럭
@@ -47,10 +46,9 @@ struct BookmarkView: View {
                         Button(action:{
                             context.delete(bookmark)
                         }){
-                            Image(systemName: "bookmark.fill") // 북마크아이콘 교체해야함
-                                .resizable()
+                            bookmarkFilledIcon // 북마크아이콘
                                 .frame(width:40, height:40)
-                                .padding(.leading, 16)
+                                //.padding(.leading, 16)
                             
                         }
                             
@@ -58,7 +56,6 @@ struct BookmarkView: View {
                 }
                     
             }
-            
                 
                 
         } //navigationView

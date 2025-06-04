@@ -5,30 +5,34 @@
 //  Created by Ken on 5/29/25.
 //
 
-import SwiftUI
 import SwiftData
+import SwiftUI
 
 // 모달 페이지입니다.
 struct SubRuleModalView: View {
     @State private var showToast = false
-    
+
     @Environment(\.modelContext) var context
+    @State var isBookmarkedState = false
     //모든 북마크 불러오기
     @Query var bookmarks: [Bookmark]
+
     //현재 content가 북마크 되었는지 확인
     var content: Content
     var isBookmarked: Bool {
-        bookmarks.contains {$0.content?.id == content.id}
+        bookmarks.contains { $0.content?.id == content.id }
     }
-    
+
     var loremIpsum: String {
-        if let url = Bundle.main.url(forResource: "lorem", withExtension: "txt", subdirectory: "Data"),
-           let contents = try? String(contentsOf: url) {
+        if let url = Bundle.main.url(
+            forResource: "lorem", withExtension: "txt", subdirectory: "Data"),
+            let contents = try? String(contentsOf: url)
+        {
             return contents
         }
         return "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
     }
-    
+
     var body: some View {
         NavigationStack {
             VStack(spacing: 60) {
@@ -38,20 +42,46 @@ struct SubRuleModalView: View {
                 HStack {
                     Text("상세설명 제목").font(.title).bold()
                     Spacer()
-                    Button(action: {
-                        //북마크 제거
-                        if let onBookmark = bookmarks.first(where: {$0.content?.id == content.id}) {
-                            context.delete(onBookmark)
-                        }
-                        
-                        showToast = true
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-                            showToast = false
-                        }
-                    }) {
-                        Image(systemName: "bookmark")
-                    }
+
+                    // 북마크on상태일때
+                    Button(
+                        action: {
+                            //북마크 해제
+                            if isBookmarkedState {
+                                //북마크 제거
+                                if let bookmark = bookmarks.first(where: {
+                                    $0.content?.id == content.id
+                                }) {
+                                    context.delete(bookmark)
+                                }
+                            } else {
+                                let newBookmark = Bookmark(content: content)
+                                context.insert(newBookmark)
+
+                                showToast = true
+                                DispatchQueue.main.asyncAfter(
+                                    deadline: .now() + 2
+                                ) {
+                                    showToast = false
+                                }
+                            }
+
+                            //상태토글
+                            isBookmarkedState.toggle()
+
+                        },
+                        label: {
+                            // 북마크아이콘
+                            (isBookmarkedState
+                                ? AnyView(bookmarkFilledIcon)
+                                : AnyView(bookmarkIcon))
+                                .frame(width: 40, height: 40)
+                        })
                 }
+                .onAppear {
+                    isBookmarkedState = isBookmarked
+                }
+
                 Text(loremIpsum)
                 HStack {
                     NavigationLink(destination: SearchView()) {
@@ -83,7 +113,6 @@ struct SubRuleModalView: View {
                 alignment: .bottom
             )
         }.padding()
-
     }
 }
 
