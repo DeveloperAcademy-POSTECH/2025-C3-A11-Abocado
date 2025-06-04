@@ -147,6 +147,7 @@ struct JSONParser {
             )
             game = try context.fetch(fetch).first!
         } else {
+            // Image로 변환하는걸 여기서 해버려도 되려나,, 근데 일단 Data type으로 받아오기
             guard let imageURL = Bundle.main.url(forResource: rule.imageFile, withExtension: nil),
                   let imageData = try? Data(contentsOf: imageURL) else {
                 throw NSError(

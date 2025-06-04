@@ -77,7 +77,9 @@ struct GameSelectView: View {
                             }
                             .padding(.horizontal, 8).padding(.vertical, 16)
                             .frame(width: 324, height: 520)
-                            .background(Image("abo"))
+                            .background(
+                                ImageConverter.imageConvert(game.image)
+                                )
                             .cornerRadius(28)
                         }.padding(.horizontal, 6)
                     }
