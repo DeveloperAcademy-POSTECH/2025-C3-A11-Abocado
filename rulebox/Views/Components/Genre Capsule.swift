@@ -11,10 +11,13 @@ import SwiftUI
 struct GenreCapsule: View {
     let title: String
     var isSelected: Bool = false
+    var action: (() -> Void)? = nil // 버튼 액션은 장르캡슐 내부에서 처리
+    
     var body: some View {
         HStack {
-            Button(action: {}) {
-
+            Button(action: {
+                action?() // 버튼 액션은 장르캡슐 내부에서 처리. 일단 외부에서 액션 입력해주는걸로
+            }) {
                 if isSelected {
                     Text(title)
                         .font(.mdMedium)
@@ -42,10 +45,10 @@ struct GenreCapsule: View {
         }
         .frame(height: 39)
         .padding(.vertical)
+        .background(Color.clear) // 버튼 터치 안됨이슈로 추가해본 한 줄
     }
 }
 
 #Preview {
-
     GenreCapsule(title: "하마", isSelected: false)
 }
