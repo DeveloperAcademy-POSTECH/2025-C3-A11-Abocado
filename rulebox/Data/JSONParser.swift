@@ -8,9 +8,12 @@
 import Foundation
 import SwiftData
 
+// MARK: - Codable Structures
+
 struct Rule: Decodable {
     let gameName: String
     let genres: [String]
+    let imageFile: String
     let contents: [ContentItem]
 }
 
@@ -27,12 +30,14 @@ struct FilterTagItem: Decodable {
     let value: String
 }
 
+// MARK: - JSON Parser
+
 struct JSONParser {
     static func loadGameRule(from jsonData: Data, context: ModelContext) throws {
         let decoder = JSONDecoder()
-        let Rule = try decoder.decode(Rule.self, from: jsonData)
+        let rule = try decoder.decode(Rule.self, from: jsonData)  // ✅ 변수 이름을 소문자로
 
-        let gameName = Rule.gameName
+        let gameName = rule.gameName
         let existingGameNames = try DupChecker.existingGameNames(context: context)
         let isExisting = existingGameNames.contains(gameName)
 
@@ -44,11 +49,21 @@ struct JSONParser {
             )
             game = try context.fetch(fetch).first!
         } else {
-            game = GameName(name: gameName, genres: Rule.genres)
+            // ✅ 이미지 로딩
+            guard let imageURL = Bundle.main.url(forResource: rule.imageFile, withExtension: nil),
+                  let imageData = try? Data(contentsOf: imageURL) else {
+                throw NSError(
+                    domain: "ImageLoadError",
+                    code: 404,
+                    userInfo: [NSLocalizedDescriptionKey: "Image file not found: \(rule.imageFile)"]
+                )
+            }
+
+            game = GameName(name: gameName, genres: rule.genres, image: imageData)
             context.insert(game)
         }
 
-        // MajorCat: check for cache. is no duplicated name >> create new instance
+        // MajorCat: cache to prevent duplicate insert
         var majorCatCache: [String: MajorCat] = [:]
         let existingMajs = try DupChecker.existingMajCats(context: context)
 
@@ -71,10 +86,12 @@ struct JSONParser {
             return newMajor
         }
 
-        // Content: if no duplicated name >> create new instance
-        let existingContents = isExisting ? try DupChecker.existingContents(forGameName: gameName, context: context) : []
+        // Content: only insert if not already existing
+        let existingContents = isExisting
+            ? try DupChecker.existingContents(forGameName: gameName, context: context)
+            : []
 
-        for item in Rule.contents {
+        for item in rule.contents {  // ✅ 여기 수정됨
             guard !existingContents.contains(item.name) else { continue }
 
             let majorCat = getOrCreateMajorCat(named: item.majorCat)

@@ -13,10 +13,12 @@ class GameName {
     @Attribute(.unique) var id: UUID
     var name: String
     var genres: [String]
+    var image: Data //image가 없는 경우는 없음. 반드시. 없음. 옵셔널 안할거야
 
-    init(id: UUID = UUID(), name: String, genres: [String]) {
+    init(id: UUID = UUID(), name: String, genres: [String], image: Data) {
         self.id = id
         self.name = name
         self.genres = genres
+        self.image = image
     }
 }

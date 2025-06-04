@@ -1,9 +1,10 @@
 {
     "gameName": "바퀴벌레포커",
     "genres": [
-        "카드게임",
-        "파티게임"
+        "카드",
+        "파티"
     ],
+    "imageFile": "아보쨩.png",
     "contents": [
         {
             "majorCat": "게임 구성",

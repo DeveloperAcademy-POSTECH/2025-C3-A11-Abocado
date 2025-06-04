@@ -1,8 +1,9 @@
 {
     "gameName": "카르카손",
     "genres": [
-        "전략게임"
+        "전략"
     ],
+    "imageFile": "아보쨩.png",
     "contents": [
         {
             "majorCat": "구성물과 준비",
