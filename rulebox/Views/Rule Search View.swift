@@ -18,7 +18,7 @@ struct SearchView: View {
             VStack(alignment: .leading) {
                 // 검색 바
                 HStack {
-                    Image("search")
+                    Image("Search") //대소문자 구분해야됨 -사나
                         .renderingMode(.template)
                         .foregroundColor(.white)
 
