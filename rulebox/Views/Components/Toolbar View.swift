@@ -7,45 +7,91 @@
 
 import SwiftUI
 
-struct ToolbarView: View {
+struct LargeToolbarView: View {
     @Environment(\.dismiss) private var dismiss
 
     let game: GameName
 
-    @State var isExapnded: Bool = false
-
     var body: some View {
-        if isExapnded {
-            VStack {
+        ZStack {
+            ImageConverter.imageConvert(game.image)
+                .resizable()
+                .frame(width: 393, height: 393)
+            VStack(alignment: .leading) {
+                HStack {
+                    Button(action: { dismiss() }) {
+                        homeToolbarIcon
+                    }
+                    Spacer()
+                    NavigationLink(destination: SearchView()) {
+                        searchToolbarIcon
+                    }
+                    NavigationLink(destination: BookmarkView()) {
+                        bookmarkToolbarIcon
+                    }
+                }.padding(.horizontal, 18).padding(.vertical, 14)
+
+                Spacer()
                 ForEach(
                     game.genres,
                     id: \.self
                 ) { genre in
                     GenreCapsule(title: genre, isSelected: true)
                 }
-            }
-            .background(
-                ImageConverter.imageConvert(game.image)?.resizable()
-                    .scaledToFill().frame(
-                        height: 400
-                    )
-            )
-        } else {
-
-            ZStack {
-                Color.clear
-                    .background(.ultraThinMaterial)
-                    .ignoresSafeArea()
-                    .background(
-                        ImageConverter.imageConvert(game.image)
-                    )
+                Text(game.name).font(.lgSemiBold)
             }
         }
     }
 }
 
+struct SmallToolbarView: View {
+    @Environment(\.dismiss) private var dismiss
+
+    let game: GameName
+
+    var body: some View {
+        ZStack {
+            ImageConverter.imageConvert(game.image)
+                .resizable()
+                .frame(width: 393, height: 68)
+            Color.clear
+                .background(.ultraThinMaterial)
+                .ignoresSafeArea()
+            VStack(alignment: .leading) {
+                HStack {
+                    Button(action: { dismiss() }) {
+                        homeToolbarIcon
+                    }
+                    Spacer()
+                    VStack(spacing: 4) {
+                        Text(game.name)
+                            .font(.mdMedium)
+                        ForEach(
+                            game.genres,
+                            id: \.self
+                        ) { genre in
+                            Text(genre)
+                                .font(.smRegular)
+                        }
+                    }
+
+                    Spacer()
+                    NavigationLink(destination: SearchView()) {
+                        searchToolbarIcon
+                    }
+                    NavigationLink(destination: BookmarkView()) {
+                        bookmarkToolbarIcon
+                    }
+                }.padding(.horizontal, 18).padding(.vertical, 14)
+
+            }
+        }
+    }
+
+}
+
 #Preview {
-    ToolbarView(
+    LargeToolbarView(
         game: GameName(name: "ad", genres: ["asdas", "asd"])
     )
 }

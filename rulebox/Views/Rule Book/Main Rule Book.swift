@@ -7,6 +7,7 @@
 
 import SwiftData
 import SwiftUI
+import UIKit
 
 struct MainRuleBook: View {
     var game: GameName
@@ -18,7 +19,7 @@ struct MainRuleBook: View {
     @Environment(\.dismiss) private var dismiss
     @State private var isExpandedMap: [UUID: Bool] = [:]
 
-    @State private var toolbarExteneded: Bool = true
+    @State private var showCompactHeader: Bool = false
 
     //SubRuleModalView() modal sheet
     @State private var onSubRuleModalView = false
@@ -41,114 +42,140 @@ struct MainRuleBook: View {
 
     var body: some View {
         NavigationStack {
-            ScrollView {
-                VStack {
-                    //                    ToolbarView(
-                    //                        game: game,
-                    //                        isExapnded: $toolbarExteneded
-                    //                    )
-                    //                    .background(
-                    //                        Color.clear
-                    //                            .background(.ultraThinMaterial)
-                    //                            .ignoresSafeArea()
-                    //                            //                                .opacity(toolbarExteneded ? 0 : 1)
-                    //                    )
-                    //                    .animation(.easeInOut, value: toolbarExteneded)
-                    VStack(alignment: .leading, spacing: 12) {
+            GeometryReader { outerGeo in
+                ScrollView {
+                    VStack(spacing: 0) {
 
-                        // view body
-                        FilterSection(filterTags: gameFilterTags, vm: vm)
-
-                        ForEach(filteredMajorCats, id: \.id) { cat in
-                            let filtered = vm.filteredContents(
-                                for: cat,
-                                from: filteredContents
+                        Color.clear
+                            .frame(height: 1)
+                            .background(
+                                GeometryReader { geo in
+                                    Color.clear.preference(
+                                        key: ScrollOffsetKey.self,
+                                        value: geo.frame(in: .global).minY
+                                    )
+                                }
                             )
-                            if !filtered.isEmpty {
-                                let expanded = isExpandedMap[
-                                    cat.id,
-                                    default: false
-                                ]
+                        if showCompactHeader {
+                            SmallToolbarView(game: game)
+                        } else {
+                            LargeToolbarView(game: game)
+                        }
+                        VStack(alignment: .leading, spacing: 12) {
 
-                                VStack(alignment: .leading, spacing: 0) {
-                                    Button(action: {
-                                        withAnimation {
-                                            isExpandedMap[cat.id] =
-                                                !expanded
-                                        }
-                                    }) {
-                                        HStack(spacing: 8) {
-                                            Text(cat.name)
-                                                .font(.smHeading)
-                                                .foregroundColor(
-                                                    expanded
-                                                        ? .primaryNormal
-                                                        : .white
-                                                )
-                                            Spacer()
-                                            (expanded
-                                                ? AnyView(minusIcon)
-                                                : AnyView(
-                                                    plusIcon
-                                                ))
+                            // view body
+                            FilterSection(filterTags: gameFilterTags, vm: vm)
 
-                                        }
-                                        .padding(.vertical, 0)
-                                        .padding(.horizontal, 16)
-                                        .contentShape(Rectangle())
-                                    }.buttonStyle(.plain)
+                            ForEach(
+                                filteredMajorCats,
+                                id: \.id
+                            ) { cat in
+                                let filtered = vm.filteredContents(
+                                    for: cat,
+                                    from: filteredContents
+                                )
+                                if !filtered.isEmpty {
+                                    let expanded = isExpandedMap[
+                                        cat.id,
+                                        default: false
+                                    ]
 
-                                    if expanded {
-                                        ForEach(filtered, id: \.id) { content in
-                                            Button(
-                                                action: {
-                                                    onSubRuleModalView = true
-                                                },
-                                                label: {
-                                                    HStack {
-                                                        Text(content.name)
-                                                        Spacer()
+                                    VStack(alignment: .leading, spacing: 0) {
+                                        Button(action: {
+                                            withAnimation {
+                                                isExpandedMap[cat.id] =
+                                                    !expanded
+                                            }
+                                        }) {
+                                            HStack(spacing: 8) {
+                                                Text(cat.name)
+                                                    .font(.smHeading)
+                                                    .foregroundColor(
+                                                        expanded
+                                                            ? .primaryNormal
+                                                            : .white
+                                                    )
+                                                Spacer()
+                                                (expanded
+                                                    ? AnyView(minusIcon)
+                                                    : AnyView(
+                                                        plusIcon
+                                                    ))
+
+                                            }
+                                            .padding(.vertical, 0)
+                                            .padding(.horizontal, 16)
+                                            .contentShape(Rectangle())
+                                        }.buttonStyle(.plain)
+
+                                        if expanded {
+                                            ForEach(filtered, id: \.id) {
+                                                content in
+                                                Button(
+                                                    action: {
+                                                        onSubRuleModalView =
+                                                            true
+                                                    },
+                                                    label: {
+                                                        HStack {
+                                                            Text(content.name)
+                                                            Spacer()
+                                                        }
                                                     }
+                                                )
+                                                .padding(.vertical, 8)
+                                                .padding(.horizontal, 14)
+                                                .sheet(
+                                                    isPresented:
+                                                        $onSubRuleModalView
+                                                ) {
+                                                    SubRuleModalView(
+                                                        content: content
+                                                    )
                                                 }
-                                            )
-                                            .padding(.vertical, 8)
-                                            .padding(.horizontal, 14)
-                                            .sheet(
-                                                isPresented: $onSubRuleModalView
-                                            ) {
-                                                SubRuleModalView(
-                                                    content: content
+
+                                            }
+                                        }
+                                    }.background(
+                                        Group {
+                                            if expanded {
+                                                RoundedRectangle(
+                                                    cornerRadius: 20
+                                                )
+                                                .stroke(
+                                                    Color.primaryNormal,
+                                                    lineWidth: 1
                                                 )
                                             }
-
                                         }
-                                    }
-                                }.background(
-                                    Group {
-                                        if expanded {
-                                            RoundedRectangle(
-                                                cornerRadius: 20
-                                            )
-                                            .stroke(
-                                                Color.primaryNormal,
-                                                lineWidth: 1
-                                            )
-                                        }
-                                    }
-                                )
+                                    )
+                                }
                             }
                         }
+                        Rectangle()
+                            .fill(Color.gray.opacity(0.3))
+                            .frame(height: 500)
+                            .cornerRadius(12)
+                            .padding()
+                    }
+                    .onPreferenceChange(ScrollOffsetKey.self) { value in
+                        showCompactHeader =
+                            value < outerGeo.safeAreaInsets.top - 50
+                        print("Scroll offset: \(value)")
+                    }
+                    .animation(
+                        .easeInOut(duration: 0.25),
+                        value: showCompactHeader
+                    )
+                    .onAppear {
+                        vm.setupDefaults(from: gameFilterTags)
                     }
                 }
                 .onAppear {
                     vm.setupDefaults(from: gameFilterTags)
                 }
             }
-            .onAppear {
-                vm.setupDefaults(from: gameFilterTags)
-            }
-
-        }
+        }.navigationBarHidden(true)
 
         // get contents belong to current game
         var filteredContents: [Content] {
@@ -171,6 +198,14 @@ struct MainRuleBook: View {
         }
     }
 
+}
+
+// PreferenceKey for detecting scroll
+struct ScrollOffsetKey: PreferenceKey {
+    static var defaultValue: CGFloat = 0
+    static func reduce(value: inout CGFloat, nextValue: () -> CGFloat) {
+        value = nextValue()
+    }
 }
 
 struct ContentDetailView: View {
