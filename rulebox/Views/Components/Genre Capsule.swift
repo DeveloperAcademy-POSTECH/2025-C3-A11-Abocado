@@ -42,10 +42,10 @@ struct GenreCapsule: View {
         }
         .frame(height: 39)
         .padding(.vertical)
+        .background(Color.clear) // 버튼 터치 안됨이슈로 추가해본 한 줄
     }
 }
 
 #Preview {
-
     GenreCapsule(title: "하마", isSelected: false)
 }

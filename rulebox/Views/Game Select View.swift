@@ -12,7 +12,7 @@ import SwiftUI
 struct GameSelectView: View {
     @Environment(\.modelContext) private var modelContext
     @Query(sort: \GameName.name) private var games: [GameName]
-    @State private var selectedGenre: String = "전체" // Genre filter
+    @State private var selectedGenre: String = "전체"  // Genre filter
 
     var body: some View {
         NavigationStack {
@@ -20,7 +20,7 @@ struct GameSelectView: View {
             HStack {
                 Text("RuleBox").font(.xlHeading)
                 Spacer()
-                
+
                 NavigationLink(destination: SearchView()) {
                     searchToolbarIcon
                 }
@@ -30,7 +30,7 @@ struct GameSelectView: View {
                 }
             }
             .padding()
-            
+
             // Genre filter part
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack {
@@ -43,14 +43,15 @@ struct GameSelectView: View {
                     }
                 }
             }.frame(height: 40)
-            
+
             Spacer()
 
             // Page Body part
-            
-            
-            let filteredGames: [GameName] = selectedGenre == "전체" ? games : games.filter { $0.genres.contains(selectedGenre) }
-            
+
+            let filteredGames: [GameName] =
+                selectedGenre == "전체"
+                ? games : games.filter { $0.genres.contains(selectedGenre) }
+
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack {
                     Rectangle()
@@ -80,7 +81,7 @@ struct GameSelectView: View {
                             .frame(width: 324, height: 520)
                             .background(
                                 ImageConverter.imageConvert(game.image)
-                                )
+                            )
                             .cornerRadius(28)
                         }.padding(.horizontal, 6)
                     }
