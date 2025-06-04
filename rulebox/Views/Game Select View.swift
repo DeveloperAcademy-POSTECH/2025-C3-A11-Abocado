@@ -75,7 +75,7 @@ struct GameCardView: View {
             VStack {
                 HStack(alignment: .top) {
                     ForEach(game.genres, id: \.self) { genre in
-                        GenreCapsule(title: genre, isSelected: selectedGenre == "전체" || selectedGenre == genre)
+                        GenreCapsule(title: genre, isSelected: true)
                     }
                     Spacer()
                 }
