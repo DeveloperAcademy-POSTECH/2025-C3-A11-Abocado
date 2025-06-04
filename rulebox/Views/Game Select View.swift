@@ -35,11 +35,10 @@ struct GameSelectView: View {
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack {
                     ForEach(["전체"] + GenreList.allGenres, id: \.self) { genre in
-                        GenreCapsule(title: genre, isSelected: false)
-                            .onTapGesture {
-                                selectedGenre = genre
-                                print("\(genre) is selected")
-                            }
+                        GenreCapsule(title: genre, isSelected: selectedGenre == genre) {
+                            selectedGenre = genre
+                            print("\(genre) is selected")
+                        }
                     }
                 }
             }.frame(height: 40)
