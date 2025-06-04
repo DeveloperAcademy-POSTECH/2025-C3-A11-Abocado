@@ -12,85 +12,95 @@ import SwiftUI
 struct GameSelectView: View {
     @Environment(\.modelContext) private var modelContext
     @Query(sort: \GameName.name) private var games: [GameName]
-    @State private var selectedGenre: String = "전체"  // Genre filter
-
+    @StateObject private var vm = GameSelectVM()
+    
     var body: some View {
         NavigationStack {
-            // Page Header part
-            HStack {
-                Text("RuleBox").font(.xlHeading)
-                Spacer()
-
-                NavigationLink(destination: SearchView()) {
-                    searchToolbarIcon
-                }
-
-                NavigationLink(destination: BookmarkView()) {
-                    bookmarkToolbarIcon
-                }
-            }
-            .padding()
-
-            // Genre filter part
-            ScrollView(.horizontal, showsIndicators: false) {
+            VStack {
+                // Page Header part
                 HStack {
-                    ForEach(["전체"] + GenreList.allGenres, id: \.self) { genre in
-                        GenreCapsule(title: genre, isSelected: selectedGenre == genre) {
-                            selectedGenre = genre
-                            print("\(genre) is selected")
+                    Text("RuleBox").font(.xlHeading)
+                    Spacer()
+                    
+                    NavigationLink(destination: SearchView()) {
+                        searchToolbarIcon
+                    }
+                    
+                    NavigationLink(destination: BookmarkView()) {
+                        bookmarkToolbarIcon
+                    }
+                }
+                .padding()
+
+                // Genre filter part
+                ScrollView(.horizontal, showsIndicators: false) {
+                    HStack {
+                        ForEach(["전체"] + GenreList.allGenres, id: \.self) { genre in
+                            GenreCapsule(title: genre, isSelected: vm.selectedGenre == genre) {
+                                vm.selectedGenre = genre
+                                print("\(genre) is selected")
+                            }
                         }
                     }
                 }
-            }.frame(height: 40)
+                .frame(height: 40)
 
-            Spacer()
+                Spacer(minLength: 20)
 
-            // Page Body part
+                // Page Body part
+                ScrollView(.horizontal, showsIndicators: false) {
+                    HStack {
+                        Rectangle().frame(width: 6).foregroundColor(.clear)
 
-            let filteredGames: [GameName] =
-                selectedGenre == "전체"
-                ? games : games.filter { $0.genres.contains(selectedGenre) }
-
-            ScrollView(.horizontal, showsIndicators: false) {
-                HStack {
-                    Rectangle()
-                        .frame(width: 6).foregroundColor(.clear)
-                    ForEach(filteredGames) { game in
-                        NavigationLink(destination: MainRuleBook(game: game)) {
-                            VStack {
-                                HStack {
-                                    GenreCapsule(title: "전체", isSelected: true)
-                                    GenreCapsule(title: "가족", isSelected: true)
-                                    Spacer()
-                                }
-                                Spacer()
-                                // 가나다순 이슈로 카르카손 카드가 뒤에 생기는건 일단 넘어가죠
-                                HStack {
-                                    Text(game.name)
-                                        .foregroundColor(.white)
-                                    Spacer()
-                                }
-                                HStack {
-                                    Text("2~5인")
-                                        .foregroundColor(.white)
-                                    Spacer()
-                                }
-                            }
-                            .padding(.horizontal, 8).padding(.vertical, 16)
-                            .frame(width: 324, height: 520)
-                            .background(
-                                ImageConverter.imageConvert(game.image)
-                            )
-                            .cornerRadius(28)
-                        }.padding(.horizontal, 6)
+                        ForEach(vm.filterGames(from: games)) { game in
+                            GameCardView(game: game, selectedGenre: vm.selectedGenre)
+                        }
                     }
                 }
-            }
-            .frame(height: 520)
-            //            .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
+                .frame(height: 520)
 
-            Spacer()
+                Spacer()
+            }
         }
+    }
+}
+
+
+struct GameCardView: View {
+    let game: GameName
+    let selectedGenre: String
+
+    var body: some View {
+        NavigationLink(destination: MainRuleBook(game: game)) {
+            VStack {
+                HStack(alignment: .top) {
+                    ForEach(game.genres, id: \.self) { genre in
+                        GenreCapsule(title: genre, isSelected: selectedGenre == "전체" || selectedGenre == genre)
+                    }
+                    Spacer()
+                }
+
+                Spacer()
+                // 가나다순 이슈로 카르카손 카드가 뒤에 생기는건 일단 넘어가죠
+                HStack {
+                    Text(game.name)
+                        .foregroundColor(.white)
+                    Spacer()
+                }
+                HStack {
+                    Text("2~5인") // 아 여기도 나중에 바꿔야되네
+                        .foregroundColor(.white)
+                    Spacer()
+                }
+            }
+            .padding(.horizontal, 8).padding(.vertical, 16)
+            .frame(width: 324, height: 520)
+            .background(
+                ImageConverter.imageConvert(game.image)
+            )
+            .cornerRadius(28)
+        }
+        .padding(.horizontal, 6)
     }
 }
 
