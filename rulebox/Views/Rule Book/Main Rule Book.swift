@@ -20,6 +20,9 @@ struct MainRuleBook: View {
 
     @State private var toolbarExteneded: Bool = true
 
+    //SubRuleModalView() modal sheet
+    @State private var onSubRuleModalView = false
+
     // get tags for selected game
     var gameFilterTags: [FilterTag] {
         let contents = allContents.filter { $0.gameName.name == game.name }
@@ -51,20 +54,7 @@ struct MainRuleBook: View {
                     //                            //                                .opacity(toolbarExteneded ? 0 : 1)
                     //                    )
                     //                    .animation(.easeInOut, value: toolbarExteneded)
-                    VStack(alignment: .leading, spacing: 20) {
-                        //                    ZStack(alignment: .top) {
-                        //                        GeometryReader { geo in
-                        //                            let offset = geo.frame(in: .global).minY
-                        //                            Image(systemName: "plus")
-                        //                                .resizable()
-                        //                                .scaledToFit()
-                        //                                .frame(height: 276)
-                        //                                .blur(radius: offset < 0 ? min(10, abs(offset) / 10) : 0)
-                        //                                .opacity(offset < -200 ? 0 : 1)
-                        //                                .offset(y: offset < 0 ? offset : 0)
-                        //                        }
-                        //                        .frame(height: 276)
-                        //                    }
+                    VStack(alignment: .leading, spacing: 12) {
 
                         // view body
                         FilterSection(filterTags: gameFilterTags, vm: vm)
@@ -80,198 +70,60 @@ struct MainRuleBook: View {
                                     default: false
                                 ]
 
-                                VStack(alignment: .leading, spacing: 8) {
+                                VStack(alignment: .leading, spacing: 0) {
                                     Button(action: {
                                         withAnimation {
                                             isExpandedMap[cat.id] =
                                                 !expanded
                                         }
                                     }) {
-                                        HStack {
+                                        HStack(spacing: 8) {
                                             Text(cat.name)
                                                 .font(.smHeading)
-                                                .padding(.vertical, 8)
-                                            Spacer()
-                                            (expanded
-                                                ? AnyView(minusIcon)
-                                                : AnyView(
-                                                    plusIcon
-                                                ))
-
-                                        }
-                                    }
-
-                                    if expanded {
-                                        ForEach(filtered, id: \.id) {
-                                            content in
-                                            NavigationLink(
-                                                destination:
-                                                    contentDetailView(
-                                                        content
-                                                    )
-                                            ) {
-                                                HStack {
-                                                    Text(content.name).font(
-                                                        .lgRegular
-                                                    )
-                                                    Spacer()
-                                                }
-                                            }
-                                            .padding(.vertical, 4)
-                                        }
-                                    }
-                                }.padding(.vertical, 20).padding(
-                                    .horizontal,
-                                    14
-                                )
-                                .background(
-                                    Group {
-                                        if expanded {
-                                            AniView(
-                                                RoundedRectangle(
-                                                    cornerRadius: 20
+                                                .foregroundColor(
+                                                    expanded
+                                                        ? .primaryNormal
+                                                        : .white
                                                 )
-                                                .stroke(
-                                                    Color.primaryNormal,
-                                                    lineWidth: 1
+                                            Spacer()
+                                            (expanded
+                                                ? AnyView(minusIcon)
+                                                : AnyView(
+                                                    plusIcon
+                                                ))
+
+                                        }
+                                        .padding(.vertical, 0)
+                                        .padding(.horizontal, 16)
+                                        .contentShape(Rectangle())
+                                    }.buttonStyle(.plain)
+
+                                    if expanded {
+                                        ForEach(filtered, id: \.id) { content in
+                                            Button(
+                                                action: {
+                                                    onSubRuleModalView = true
+                                                },
+                                                label: {
+                                                    HStack {
+                                                        Text(content.name)
+                                                        Spacer()
+                                                    }
+                                                }
+                                            )
+                                            .padding(.vertical, 8)
+                                            .padding(.horizontal, 14)
+                                            .sheet(
+                                                isPresented: $onSubRuleModalView
+                                            ) {
+                                                SubRuleModalView(
+                                                    content: content
                                                 )
-                                            )
-                                        }
-                                    }
-                                )
-                            }
-                        }
-                        ForEach(filteredMajorCats, id: \.id) { cat in
-                            let filtered = vm.filteredContents(
-                                for: cat,
-                                from: filteredContents
-                            )
-                            if !filtered.isEmpty {
-                                let expanded = isExpandedMap[
-                                    cat.id,
-                                    default: false
-                                ]
-
-                                VStack(alignment: .leading, spacing: 8) {
-                                    Button(action: {
-                                        withAnimation {
-                                            isExpandedMap[cat.id] =
-                                                !expanded
-                                        }
-                                    }) {
-                                        HStack {
-                                            Text(cat.name)
-                                                .font(.smHeading)
-                                                .padding(.vertical, 8)
-                                            Spacer()
-                                            (expanded
-                                                ? AnyView(minusIcon)
-                                                : AnyView(
-                                                    plusIcon
-                                                ))
-
-                                        }
-                                    }
-
-                                    if expanded {
-                                        ForEach(filtered, id: \.id) {
-                                            content in
-                                            NavigationLink(
-                                                destination:
-                                                    contentDetailView(
-                                                        content
-                                                    )
-                                            ) {
-                                                HStack {
-                                                    Text(content.name).font(
-                                                        .lgRegular
-                                                    )
-                                                    Spacer()
-                                                }
                                             }
-                                            .padding(.vertical, 4)
-                                        }
-                                    }
-                                }.padding(.vertical, 20).padding(
-                                    .horizontal,
-                                    14
-                                )
-                                .background(
-                                    Group {
-                                        if expanded {
-                                            RoundedRectangle(
-                                                cornerRadius: 20
-                                            )
-                                            .stroke(
-                                                Color.primaryNormal,
-                                                lineWidth: 1
-                                            )
-                                        }
-                                    }
-                                )
-                            }
-                        }
-                        ForEach(filteredMajorCats, id: \.id) { cat in
-                            let filtered = vm.filteredContents(
-                                for: cat,
-                                from: filteredContents
-                            )
-                            if !filtered.isEmpty {
-                                let expanded = isExpandedMap[
-                                    cat.id,
-                                    default: false
-                                ]
-
-                                VStack(alignment: .leading, spacing: 8) {
-                                    Button(action: {
-                                        withAnimation {
-                                            isExpandedMap[cat.id] =
-                                                !expanded
-                                        }
-                                    }) {
-                                        HStack {
-                                            Text(cat.name)
-                                                .font(.smHeading)
-                                                .padding(.vertical, 8)
-                                            //                                                .foregroundColor(
-                                            //                                                    expanded
-                                            //                                                        ? .primaryNormal
-                                            //                                                        : .white
-                                            //                                                )
-                                            Spacer()
-                                            (expanded
-                                                ? AnyView(minusIcon)
-                                                : AnyView(
-                                                    plusIcon
-                                                ))
 
                                         }
                                     }
-
-                                    if expanded {
-                                        ForEach(filtered, id: \.id) {
-                                            content in
-                                            NavigationLink(
-                                                destination:
-                                                    contentDetailView(
-                                                        content
-                                                    )
-                                            ) {
-                                                HStack {
-                                                    Text(content.name).font(
-                                                        .lgRegular
-                                                    )
-                                                    Spacer()
-                                                }
-                                            }
-                                            .padding(.vertical, 4)
-                                        }
-                                    }
-                                }.padding(.vertical, 20).padding(
-                                    .horizontal,
-                                    14
-                                )
-                                .background(
+                                }.background(
                                     Group {
                                         if expanded {
                                             RoundedRectangle(
@@ -287,53 +139,44 @@ struct MainRuleBook: View {
                             }
                         }
                     }
-                    .padding()
                 }
-            }.overlay(alignment: .top) {
-                if !toolbarExteneded {
-                    ToolbarView(
-                        title: game.name,
-                        genres: game.genres,
-                        isExapnded: .constant(false)
-                    )
-                    .background(.ultraThinMaterial)
+                .onAppear {
+                    vm.setupDefaults(from: gameFilterTags)
                 }
             }
-            .navigationBarTitleDisplayMode(.inline)
-            .navigationBarBackButtonHidden()
             .onAppear {
                 vm.setupDefaults(from: gameFilterTags)
             }
-        }
-        .navigationBarTitleDisplayMode(.inline)
-        .navigationBarBackButtonHidden()
-        .onAppear {
-            vm.setupDefaults(from: gameFilterTags)
+
         }
 
+        // get contents belong to current game
+        var filteredContents: [Content] {
+            allContents.filter { $0.gameName.name == game.name }
+        }
+
+        // get MajorCats that have content matching content for filter
+        var filteredMajorCats: [MajorCat] {
+            let grouped = Dictionary(
+                grouping: filteredContents,
+                by: { $0.majorCat }
+            )
+            return
+                grouped
+                .filter {
+                    !vm.filteredContents(for: $0.key, from: $0.value).isEmpty
+                }
+                .map { $0.key }
+                .sorted { $0.name < $1.name }
+        }
     }
 
-    // get contents belong to current game
-    var filteredContents: [Content] {
-        allContents.filter { $0.gameName.name == game.name }
-    }
+}
 
-    // get MajorCats that have content matching content for filter
-    var filteredMajorCats: [MajorCat] {
-        let grouped = Dictionary(
-            grouping: filteredContents,
-            by: { $0.majorCat }
-        )
-        return
-            grouped
-            .filter {
-                !vm.filteredContents(for: $0.key, from: $0.value).isEmpty
-            }
-            .map { $0.key }
-            .sorted { $0.name < $1.name }
-    }
+struct ContentDetailView: View {
+    let content: Content
 
-    private func contentDetailView(_ content: Content) -> some View {
+    var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 12) {
                 ForEach(content.texts, id: \.self) { text in
@@ -344,28 +187,6 @@ struct MainRuleBook: View {
             .padding()
         }
         .navigationTitle(content.name)
-    }
-}
-
-struct MainRuleBookToolbar: ToolbarContent {
-    var dismiss: DismissAction
-
-    var body: some ToolbarContent {
-        ToolbarItem(placement: .topBarLeading) {
-            Button(action: { dismiss() }) {
-                homeToolbarIcon
-            }
-        }
-        ToolbarItem(placement: .topBarTrailing) {
-            NavigationLink(destination: SearchView()) {
-                searchToolbarIcon
-            }
-        }
-        ToolbarItem(placement: .topBarTrailing) {
-            NavigationLink(destination: BookmarkView()) {
-                bookmarkToolbarIcon
-            }
-        }
     }
 }
 
@@ -404,12 +225,5 @@ struct FilterSection: View {
                 }
             }
         }
-    }
-}
-
-private struct ScrollOffsetPreferenceKey: PreferenceKey {
-    static var defaultValue: CGFloat = 0
-    static func reduce(value: inout CGFloat, nextValue: () -> CGFloat) {
-        value = nextValue()
     }
 }

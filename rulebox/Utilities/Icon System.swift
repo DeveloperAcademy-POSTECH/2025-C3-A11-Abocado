@@ -18,7 +18,7 @@ var homeToolbarIcon: some View =
 
 /// Toolbar search Icon
 var searchToolbarIcon: some View =
-    Image("Search") // 대소문자 구분해야됨
+    Image("search")
     .renderingMode(.template)
     .foregroundColor(.white)
     .padding()
@@ -52,11 +52,13 @@ var minusIcon: some View =
     Image("minus")
     .renderingMode(.template)
     .foregroundColor(.primaryNormal)
-    .padding()
+    .padding(.vertical, 20)
+    .padding(.horizontal, 14)
 
 /// Toolbar bookmark Icon
 var plusIcon: some View =
     Image("plus")
     .renderingMode(.template)
     .foregroundColor(.grayNeutral95)
-    .padding()
+    .padding(.vertical, 20)
+    .padding(.horizontal, 14)

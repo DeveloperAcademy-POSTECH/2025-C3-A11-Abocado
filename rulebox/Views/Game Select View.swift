@@ -75,7 +75,7 @@ struct GameCardView: View {
             VStack {
                 HStack(alignment: .top) {
                     ForEach(game.genres, id: \.self) { genre in
-                        GenreCapsule(title: genre, isSelected: selectedGenre == "전체" || selectedGenre == genre)
+                        GenreCapsule(title: genre, isSelected: true)
                     }
                     Spacer()
                 }
@@ -88,7 +88,7 @@ struct GameCardView: View {
                     Spacer()
                 }
                 HStack {
-                    Text("2~5인") // 아 여기도 나중에 바꿔야되네
+                    Text("2~5인") // 아 여기도 나중에 바꿔야되네 filterTag가 contents에 있으니까 이걸 ..... ... ... ... 가져와? 어디서 계산해서 매핑해두면 안되려나
                         .foregroundColor(.white)
                     Spacer()
                 }

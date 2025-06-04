@@ -35,14 +35,17 @@ struct SubRuleModalView: View {
 
     var body: some View {
         NavigationStack {
-            
-            ZStack {
-                VStack(alignment: .leading)/*(spacing: 60)*/ {
+            ScrollView {
+                VStack(alignment: .leading) {
                     
                     VStack(alignment: .leading) {
-                        Text("MajorCat Name").font(.lgRegular)
+                        Text("MajorCat Name")
+                            .font(.lgRegular)
+                            .foregroundColor(.grayNeutral70)
                         HStack{
-                            Text("상세설명 제목").font(.mdHeading)
+                            Text("상세설명 제목")
+                                .font(.mdHeading)
+                                .foregroundColor(.white)
                             Spacer()
                             // 북마크
                             Button(
@@ -82,15 +85,22 @@ struct SubRuleModalView: View {
                         }
                     }
                     
+                    //이미지영역
                     HStack {
                         Spacer()
                         Text("이미지가 들어갈 거에요")
                         Spacer()
                     }
+                    .padding(.bottom, 12)
                     
+                    //설명영역
                     Text(loremIpsum)
+                        .foregroundColor(.grayNeutral99)
+                        .font(.lgRegular)
+                        .padding(.bottom, 34)
                 }
                 .padding(.horizontal, 20)
+                .padding(.top, 50)
                 .overlay(
                     Group {
                         if showToast {
@@ -104,40 +114,37 @@ struct SubRuleModalView: View {
                     },
                     alignment: .bottom
                 )
+            }
+            .safeAreaInset(edge: .bottom){
                 
-                
-                ZStack{
-                    Rectangle()
-                        .frame(maxWidth: .infinity)
-                        .frame(height: 89)
-                        .background(Color.backGround)
-                        .opacity(0.5)
-                        .blur(radius:25)
-                    
-                    HStack {
-                        NavigationLink(destination: SearchView()) {
-                            HStack {
-                                Image(systemName: "chevron.left")
-                                Text("이전 페이지")
-                            }
-                        }
-                        Spacer()
-                        NavigationLink(destination: SearchView()) {
-                            HStack {
-                                Text("다음 페이지")
-                                Image(systemName: "chevron.right")
-                            }
+                HStack {
+                    NavigationLink(destination: SearchView()) {
+                        HStack {
+                            Image("caret.left")
+                                .tint(.white)
+                            Text("이전 페이지")
+                                .font(.lgRegular)
                         }
                     }
-                    
+                    Spacer()
+                    NavigationLink(destination: SearchView()) {
+                        HStack {
+                            Text("다음 페이지")
+                                .font(.lgRegular)
+                            Image("caret.left").rotationEffect(.degrees(180))
+                                .tint(.white)
+                        }
+                    }
                 }
-                
+                .padding(.horizontal, 10)
+                .padding(.top, 10)
+                .padding(.bottom, 40)
+                .frame(width: 393, alignment: .trailing)
+                .background(Color.backGround.opacity(0.5).blur(radius: 25))
             }
             
-            
-            
         }//.padding()
-
+        
     }
 }
 
