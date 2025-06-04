@@ -18,7 +18,7 @@ var homeToolbarIcon: some View =
 
 /// Toolbar search Icon
 var searchToolbarIcon: some View =
-    Image("search")
+    Image("Search") // 대소문자 구분해야됨
     .renderingMode(.template)
     .foregroundColor(.white)
     .padding()
@@ -34,14 +34,14 @@ var bookmarkToolbarIcon: some View =
     .frame(width: 40, height: 40)
 
 /// Toolbar bookmark Icon
-var bookmarkIcon: some View =
+public var bookmarkIcon: some View =
     Image("bookmark")
     .renderingMode(.template)
     .foregroundColor(.grayNeutral95)
     .padding()
 
 /// Toolbar bookmark Icon
-var bookmarkFilledIcon: some View =
+public var bookmarkFilledIcon: some View =
     Image("bookmark.fill")
     .renderingMode(.template)
     .foregroundColor(.primaryNormal)
