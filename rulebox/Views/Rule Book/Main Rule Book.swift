@@ -5,100 +5,213 @@
 //  Created by Ken on 5/29/25.
 //
 
-import SwiftUI
 import SwiftData
+import SwiftUI
+import UIKit
 
 struct MainRuleBook: View {
-    @Query var majorCats: [MajorCat]
-    @Query var contents: [Content]
+    var game: GameName
+
+    @Query var allContents: [Content]
     @Query var filterTags: [FilterTag]
 
     @StateObject private var vm = MainRuleBookVM()
     @Environment(\.dismiss) private var dismiss
+    @State private var isExpandedMap: [UUID: Bool] = [:]
+
+    @State private var showCompactHeader: Bool = false
+
+    //SubRuleModalView() modal sheet
+    @State private var onSubRuleModalView = false
+
+    // get tags for selected game
+    var gameFilterTags: [FilterTag] {
+        let contents = allContents.filter { $0.gameName.name == game.name }
+        let allTags = contents.compactMap { $0.filterTable?.filtertags ?? [] }
+        let merged = allTags.flatMap { $0 }
+        var uniqueTags = [FilterTag]()
+        var seenIds = Set<UUID>()
+        for tag in merged {
+            if !seenIds.contains(tag.id) {
+                uniqueTags.append(tag)
+                seenIds.insert(tag.id)
+            }
+        }
+        return uniqueTags
+    }
 
     var body: some View {
         NavigationStack {
-            ScrollView {
-                VStack(alignment: .leading, spacing: 20) {
-                    HStack {
-                        let partyValues = vm.partyValues(from: filterTags)
-                        let extensionValues = vm.extensionValues(from: filterTags)
+            GeometryReader { outerGeo in
+                ScrollView {
+                    VStack(spacing: 0) {
 
-                        DisclosureGroup("인원수 필터") {
-                            ForEach(partyValues, id: \.self) { value in
-                                Button(action: { vm.selectedParty = value }) {
-                                    HStack {
-                                        Text(value)
-                                        if vm.selectedParty == value {
-                                            Image(systemName: "checkmark")
+                        Color.clear
+                            .frame(height: 1)
+                            .background(
+                                GeometryReader { geo in
+                                    Color.clear.preference(
+                                        key: ScrollOffsetKey.self,
+                                        value: geo.frame(in: .global).minY
+                                    )
+                                }
+                            )
+                        if showCompactHeader {
+                            SmallToolbarView(game: game)
+                        } else {
+                            LargeToolbarView(game: game)
+                        }
+                        VStack(alignment: .leading, spacing: 12) {
+
+                            // view body
+                            FilterSection(filterTags: gameFilterTags, vm: vm)
+
+                            ForEach(
+                                filteredMajorCats,
+                                id: \.id
+                            ) { cat in
+                                let filtered = vm.filteredContents(
+                                    for: cat,
+                                    from: filteredContents
+                                )
+                                if !filtered.isEmpty {
+                                    let expanded = isExpandedMap[
+                                        cat.id,
+                                        default: false
+                                    ]
+
+                                    VStack(alignment: .leading, spacing: 0) {
+                                        Button(action: {
+                                            withAnimation {
+                                                isExpandedMap[cat.id] =
+                                                    !expanded
+                                            }
+                                        }) {
+                                            HStack(spacing: 8) {
+                                                Text(cat.name)
+                                                    .font(.smHeading)
+                                                    .foregroundColor(
+                                                        expanded
+                                                            ? .primaryNormal
+                                                            : .white
+                                                    )
+                                                Spacer()
+                                                (expanded
+                                                    ? AnyView(minusIcon)
+                                                    : AnyView(
+                                                        plusIcon
+                                                    ))
+
+                                            }
+                                            .padding(.vertical, 0)
+                                            .padding(.horizontal, 16)
+                                            .contentShape(Rectangle())
+                                        }.buttonStyle(.plain)
+
+                                        if expanded {
+                                            ForEach(filtered, id: \.id) {
+                                                content in
+                                                Button(
+                                                    action: {
+                                                        onSubRuleModalView =
+                                                            true
+                                                    },
+                                                    label: {
+                                                        HStack {
+                                                            Text(content.name)
+                                                            Spacer()
+                                                        }
+                                                    }
+                                                )
+                                                .padding(.vertical, 8)
+                                                .padding(.horizontal, 14)
+                                                .sheet(
+                                                    isPresented:
+                                                        $onSubRuleModalView
+                                                ) {
+                                                    SubRuleModalView(
+                                                        content: content
+                                                    )
+                                                }
+
+                                            }
                                         }
-                                    }
+                                    }.background(
+                                        Group {
+                                            if expanded {
+                                                RoundedRectangle(
+                                                    cornerRadius: 20
+                                                )
+                                                .stroke(
+                                                    Color.primaryNormal,
+                                                    lineWidth: 1
+                                                )
+                                            }
+                                        }
+                                    )
                                 }
                             }
                         }
-
-                        DisclosureGroup("확장판 필터") {
-                            ForEach(extensionValues, id: \.self) { value in
-                                Button(action: { vm.selectedExtension = value }) {
-                                    HStack {
-                                        Text(value)
-                                        if vm.selectedExtension == value {
-                                            Image(systemName: "checkmark")
-                                        }
-                                    }
-                                }
-                            }
-                        }
+                        Rectangle()
+                            .fill(Color.gray.opacity(0.3))
+                            .frame(height: 500)
+                            .cornerRadius(12)
+                            .padding()
                     }
-
-                    ForEach(majorCats) { cat in
-                        DisclosureGroup {
-                            contentList(for: cat)
-                        } label: {
-                            Text(cat.name)
-                                .font(.headline)
-                                .padding(.vertical, 8)
-                        }
+                    .onPreferenceChange(ScrollOffsetKey.self) { value in
+                        showCompactHeader =
+                            value < outerGeo.safeAreaInsets.top - 50
+                        print("Scroll offset: \(value)")
+                    }
+                    .animation(
+                        .easeInOut(duration: 0.25),
+                        value: showCompactHeader
+                    )
+                    .onAppear {
+                        vm.setupDefaults(from: gameFilterTags)
                     }
                 }
-                .padding()
-            }
-            .navigationTitle("카르카손")
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .topBarLeading) {
-                    Button(action: { dismiss() }) {
-                        Image(systemName: "house")
-                    }
-                }
-                ToolbarItem(placement: .topBarTrailing) {
-                    NavigationLink(destination: SearchView()) {
-                        Image(systemName: "magnifyingglass")
-                    }
-                }
-                ToolbarItem(placement: .topBarTrailing) {
-                    NavigationLink(destination: BookmarkView()) {
-                        Image(systemName: "bookmark")
-                    }
+                .onAppear {
+                    vm.setupDefaults(from: gameFilterTags)
                 }
             }
-            .navigationBarBackButtonHidden()
+        }.navigationBarHidden(true)
+
+        // get contents belong to current game
+        var filteredContents: [Content] {
+            allContents.filter { $0.gameName.name == game.name }
+        }
+
+        // get MajorCats that have content matching content for filter
+        var filteredMajorCats: [MajorCat] {
+            let grouped = Dictionary(
+                grouping: filteredContents,
+                by: { $0.majorCat }
+            )
+            return
+                grouped
+                .filter {
+                    !vm.filteredContents(for: $0.key, from: $0.value).isEmpty
+                }
+                .map { $0.key }
+                .sorted { $0.name < $1.name }
         }
     }
 
-    // MARK: - Subviews
+}
 
-    private func contentList(for cat: MajorCat) -> some View {
-        let filtered = vm.filteredContents(for: cat, from: contents)
-        return ForEach(filtered, id: \.id) { content in
-            NavigationLink(destination: contentDetailView(content)) {
-                Text(content.name)
-            }
-            .padding(.vertical, 4)
-        }
+// PreferenceKey for detecting scroll
+struct ScrollOffsetKey: PreferenceKey {
+    static var defaultValue: CGFloat = 0
+    static func reduce(value: inout CGFloat, nextValue: () -> CGFloat) {
+        value = nextValue()
     }
+}
 
-    private func contentDetailView(_ content: Content) -> some View {
+struct ContentDetailView: View {
+    let content: Content
+
+    var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 12) {
                 ForEach(content.texts, id: \.self) { text in
@@ -112,13 +225,40 @@ struct MainRuleBook: View {
     }
 }
 
-#Preview {
-    MainRuleBook()
-        .modelContainer(for: [
-            Content.self,
-            MajorCat.self,
-            GameName.self,
-            FilterTag.self,
-            FilterTable.self
-        ], inMemory: true)
+struct FilterSection: View {
+    var filterTags: [FilterTag]
+    @ObservedObject var vm: MainRuleBookVM
+
+    var body: some View {
+        HStack {
+            // 나중에 하프모달로 뜨게 수정해야돼 엉엉
+            let partyValues = vm.partyValues(from: filterTags)
+            let extensionValues = vm.extensionValues(from: filterTags)
+
+            DisclosureGroup("확장판 필터: \(vm.selectedExtensions.count)개") {
+                ForEach(extensionValues, id: \.self) { value in
+                    Button(action: { vm.toggleExtension(value) }) {
+                        HStack {
+                            Text(value)
+                            if vm.selectedExtensions.contains(value) {
+                                Image(systemName: "checkmark")
+                            }
+                        }
+                    }
+                }
+            }
+            DisclosureGroup("인원수 필터") {
+                ForEach(partyValues, id: \.self) { value in
+                    Button(action: { vm.selectedParty = value }) {
+                        HStack {
+                            Text(value)
+                            if vm.selectedParty == value {
+                                Image(systemName: "checkmark")
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
 }

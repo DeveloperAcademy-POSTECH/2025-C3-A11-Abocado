@@ -28,7 +28,7 @@ struct ruleboxApp: App {
             let context = sharedModelContainer.mainContext
             
             // scan all json file in bundle
-            let jsonFileNames = [   "Carcassonne", "CockroachPoker"    ]
+            let jsonFileNames = [   "Carcassonne", "CockroachPoker"   ]
             
             for fileName in jsonFileNames {
                 if let url = Bundle.main.url(forResource: fileName, withExtension: "json"),
@@ -56,6 +56,8 @@ struct ruleboxApp: App {
         WindowGroup {
             ContentView()
                 .environment(\.modelContext, sharedModelContainer.mainContext)
+                .preferredColorScheme(.dark)
+                .foregroundColor(.white)
         }
         .modelContainer(sharedModelContainer)
     }

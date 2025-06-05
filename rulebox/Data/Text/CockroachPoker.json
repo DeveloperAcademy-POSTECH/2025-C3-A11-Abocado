@@ -1,9 +1,10 @@
 {
     "gameName": "바퀴벌레포커",
     "genres": [
-        "카드게임",
-        "파티게임"
+        "카드",
+        "파티"
     ],
+    "imageFile": "unpopcat.png",
     "contents": [
         {
             "majorCat": "게임 구성",
@@ -16,10 +17,7 @@
                 ""
             ],
             "filterTags": [
-                { "type": "party", "value": "2" },
-                { "type": "party", "value": "3" },
-                { "type": "party", "value": "4" },
-                { "type": "party", "value": "5" },
+                { "type": "party", "value": "9" },
                 { "type": "extension", "value": "basic" }
             ]
         },
@@ -34,10 +32,8 @@
                 ""
             ],
             "filterTags": [
-                { "type": "party", "value": "2" },
-                { "type": "party", "value": "3" },
-                { "type": "party", "value": "4" },
-                { "type": "party", "value": "5" },
+                { "type": "party", "value": "99" },
+                { "type": "party", "value": "9" },
                 { "type": "extension", "value": "basic" }
             ]
         },
@@ -52,11 +48,8 @@
                 ""
             ],
             "filterTags": [
-                { "type": "party", "value": "2" },
-                { "type": "party", "value": "3" },
-                { "type": "party", "value": "4" },
-                { "type": "party", "value": "5" },
-                { "type": "extension", "value": "basic" }
+                { "type": "party", "value": "999" },
+                { "type": "extension", "value": "대재앙 확장팩" }
             ]
         }
     ]

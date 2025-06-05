@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		37D72F632DF12EAB004E86A7 /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = 37D72F622DF12EAB004E86A7 /* Lottie */; };
 		BE889EBD2DE86E420004A67A /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = BE889EBC2DE86E420004A67A /* README.md */; };
 /* End PBXBuildFile section */
 
@@ -82,6 +83,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				37D72F632DF12EAB004E86A7 /* Lottie in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -137,12 +139,14 @@
 			buildRules = (
 			);
 			dependencies = (
+				37D72F612DF12E93004E86A7 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				BEB4D5082DE86BEC006B74A0 /* rulebox */,
 			);
 			name = rulebox;
 			packageProductDependencies = (
+				37D72F622DF12EAB004E86A7 /* Lottie */,
 			);
 			productName = rulebox;
 			productReference = BEB4D5062DE86BEC006B74A0 /* rulebox.app */;
@@ -229,6 +233,9 @@
 			);
 			mainGroup = BEB4D4FD2DE86BEC006B74A0;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				37D72F3B2DF12AA8004E86A7 /* XCRemoteSwiftPackageReference "lottie-spm" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = BEB4D5072DE86BEC006B74A0 /* Products */;
 			projectDirPath = "";
@@ -291,6 +298,10 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		37D72F612DF12E93004E86A7 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			productRef = 37D72F602DF12E93004E86A7 /* Lottie */;
+		};
 		BEB4D5172DE86BED006B74A0 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = BEB4D5052DE86BEC006B74A0 /* rulebox */;
@@ -428,6 +439,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = MC42SV6CN7;
@@ -447,6 +459,7 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "c3-A11-abocado.rulebox";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
@@ -462,6 +475,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = MC42SV6CN7;
@@ -481,6 +495,7 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "c3-A11-abocado.rulebox";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
@@ -497,6 +512,7 @@
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 18.5;
 				MARKETING_VERSION = 1.0;
@@ -515,6 +531,7 @@
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 18.5;
 				MARKETING_VERSION = 1.0;
@@ -532,6 +549,7 @@
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
 				GENERATE_INFOPLIST_FILE = YES;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "c3-A11-abocado.ruleboxUITests";
@@ -548,6 +566,7 @@
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
 				GENERATE_INFOPLIST_FILE = YES;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "c3-A11-abocado.ruleboxUITests";
@@ -599,6 +618,30 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		37D72F3B2DF12AA8004E86A7 /* XCRemoteSwiftPackageReference "lottie-spm" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/airbnb/lottie-spm.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 4.5.2;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		37D72F602DF12E93004E86A7 /* Lottie */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 37D72F3B2DF12AA8004E86A7 /* XCRemoteSwiftPackageReference "lottie-spm" */;
+			productName = Lottie;
+		};
+		37D72F622DF12EAB004E86A7 /* Lottie */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 37D72F3B2DF12AA8004E86A7 /* XCRemoteSwiftPackageReference "lottie-spm" */;
+			productName = Lottie;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = BEB4D4FE2DE86BEC006B74A0 /* Project object */;
 }
