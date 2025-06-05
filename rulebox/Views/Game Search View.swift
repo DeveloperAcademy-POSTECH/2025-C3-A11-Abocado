@@ -15,54 +15,67 @@ struct GameSearchView: View {
 
     var body: some View {
         NavigationStack {
-            VStack(alignment: .leading) {
-                // 검색 바
-                HStack {
-                    Image(systemName: "magnifyingglass")
-                        .foregroundColor(.gray)
+            ScrollView {
+                VStack(alignment: .leading) {
+                    // 검색 바
+                    HStack {
+                        Image("search")  //대소문자 구분해야됨 -사나
+                            .renderingMode(.template)
+                            .foregroundColor(.white)
 
-                    TextField("검색어를 입력하세요", text: $searchText)
-                        .onSubmit {
-                            // 검색하기
-                        }
+                        TextField("검색어를 입력하세요", text: $searchText)
+                            .onSubmit {
+                                // 검색하기
+                            }
 
-                    if !searchText.isEmpty {
-                        Button(action: {
-                            searchText = ""
-                        }) {
-                            Image(systemName: "xmark.circle.fill")
-                                .foregroundColor(.gray)
+                        if !searchText.isEmpty {
+                            Button(action: {
+                                searchText = ""
+                            }) {
+                                Image("cancel")
+                                    .renderingMode(.template)
+                                    .foregroundColor(.grayNeutral80)
+                            }
                         }
                     }
-                    
-                }
-                .padding(8)
-                .background(Color(.systemGray6))
-                .clipShape(.capsule)
+                    .padding(8)
+                    .background(Color(.systemGray6))
+                    .clipShape(.capsule)
 
-                // 최근 검색어
-                HStack {
-                    Text("최근 검색어").font(.lgSemiBold)
-                    Spacer()
-                    Text("전체 삭제").font(.mdRegular)  //TODO: 칼라 변경 필요
-                }.padding()
-
-                ScrollView(.horizontal, showsIndicators: false) {
+                    // 최근 검색어
                     HStack {
-                        Button(action: {}) {
-                            Text("타일").padding(.horizontal, 8)
-                        }
-                        Button(action: {}) {
-                            Image(systemName: "multiply")  // TODO: 아이콘 변경해야함
-                        }
+                        Text("최근 검색어").font(.lgSemiBold)
+                        Spacer()
+                        Text("전체 삭제").font(.mdRegular).foregroundColor(
+                            .grayNeutral40
+                        )
                     }.padding()
-                        .overlay(Capsule().stroke(.gray, lineWidth: 1))  //TODO: 색변경 필요
-                }
-                Spacer()
-            }.padding()
-        }.navigationTitle("설명서 검색")
-            .navigationBarTitleDisplayMode(.inline)
 
+                    ScrollView(.horizontal, showsIndicators: false) {
+                        SearchedCapsule(title: "검색어1")
+                        SearchedCapsule(title: "검색어2")
+                        SearchedCapsule(title: "검색어3")
+                        SearchedCapsule(title: "검색어4")
+                        SearchedCapsule(title: "검색어5")
+                    }
+                    Spacer()
+                }
+                .padding()
+            }
+            .ignoresSafeArea(.keyboard) 
+        }
+        .navigationTitle("게임 검색")
+        .navigationBarBackButtonHidden(true)
+        .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarLeading) {
+                Button(action: {
+                    dismiss()
+                }) {
+                    backButtonToolbarIcon
+                }
+            }
+        }
     }
 }
 

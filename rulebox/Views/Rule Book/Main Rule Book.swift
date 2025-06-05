@@ -24,6 +24,7 @@ struct MainRuleBook: View {
     //SubRuleModalView() modal sheet
     @State private var selectedContent: Content? = nil
     @State private var onSubRuleModalView = false
+    @State private var selectedContent: Content? = nil
 
     // get tags for selected game
     var gameFilterTags: [FilterTag] {
@@ -67,14 +68,12 @@ struct MainRuleBook: View {
                             // view body
                             FilterSection(filterTags: gameFilterTags, vm: vm)
 
-                            ForEach(
-                                filteredMajorCats,
-                                id: \.id
-                            ) { cat in
+                            ForEach(filteredMajorCats, id: \.id) { cat in
                                 let filtered = vm.filteredContents(
                                     for: cat,
                                     from: filteredContents
                                 )
+
                                 if !filtered.isEmpty {
                                     let expanded = isExpandedMap[
                                         cat.id,
@@ -87,6 +86,12 @@ struct MainRuleBook: View {
                                                 isExpandedMap[cat.id] =
                                                     !expanded
                                             }
+
+                                            if let direct = filtered.first(
+                                                where: { $0.name == cat.name })
+                                            {
+                                                selectedContent = direct
+                                            }
                                         }) {
                                             HStack(spacing: 8) {
                                                 Text(cat.name)
@@ -96,12 +101,12 @@ struct MainRuleBook: View {
                                                             ? .primaryNormal
                                                             : .white
                                                     )
+
                                                 Spacer()
+
                                                 (expanded
                                                     ? AnyView(minusIcon)
-                                                    : AnyView(
-                                                        plusIcon
-                                                    ))
+                                                    : AnyView(plusIcon))
 
                                             }
                                             .padding(.vertical, 0)
@@ -147,11 +152,6 @@ struct MainRuleBook: View {
                                 }
                             }
                         }
-                        Rectangle()
-                            .fill(Color.gray.opacity(0.3))
-                            .frame(height: 500)
-                            .cornerRadius(12)
-                            .padding()
                     }
                     .onPreferenceChange(ScrollOffsetKey.self) { value in
                         showCompactHeader =
@@ -170,7 +170,12 @@ struct MainRuleBook: View {
                     vm.setupDefaults(from: gameFilterTags)
                 }
             }
-        }.navigationBarHidden(true)
+        }
+        .navigationBarHidden(true)
+        .sheet(item: $selectedContent) { content in
+            /// 대분류가 없는 경우, 다이렉트로 content표시
+            SubRuleModalView(content: content)
+        }
 
         // get contents belong to current game
         var filteredContents: [Content] {
@@ -189,10 +194,9 @@ struct MainRuleBook: View {
                     !vm.filteredContents(for: $0.key, from: $0.value).isEmpty
                 }
                 .map { $0.key }
-                .sorted { $0.name < $1.name }
+                .sorted { $0.name > $1.name }
         }
     }
-
 }
 
 // PreferenceKey for detecting scroll
@@ -200,23 +204,6 @@ struct ScrollOffsetKey: PreferenceKey {
     static var defaultValue: CGFloat = 0
     static func reduce(value: inout CGFloat, nextValue: () -> CGFloat) {
         value = nextValue()
-    }
-}
-
-struct ContentDetailView: View {
-    let content: Content
-
-    var body: some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: 12) {
-                ForEach(content.texts, id: \.self) { text in
-                    Text(text)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                }
-            }
-            .padding()
-        }
-        .navigationTitle(content.name)
     }
 }
 
@@ -230,7 +217,7 @@ struct FilterSection: View {
             let partyValues = vm.partyValues(from: filterTags)
             let extensionValues = vm.extensionValues(from: filterTags)
 
-            DisclosureGroup("확장판 필터: \(vm.selectedExtensions.count)개") {
+            DisclosureGroup("확장 추가: \(vm.selectedExtensions.count)개") {
                 ForEach(extensionValues, id: \.self) { value in
                     Button(action: { vm.toggleExtension(value) }) {
                         HStack {
@@ -242,6 +229,12 @@ struct FilterSection: View {
                     }
                 }
             }
+            .background(
+                Color.atomicOpacity20
+            )
+            .clipShape(
+                RoundedRectangle(cornerRadius: 10)
+            )
             DisclosureGroup("인원수 필터") {
                 ForEach(partyValues, id: \.self) { value in
                     Button(action: { vm.selectedParty = value }) {
@@ -251,9 +244,15 @@ struct FilterSection: View {
                                 Image(systemName: "checkmark")
                             }
                         }
+
                     }
                 }
-            }
+            }.background(
+                Color.atomicOpacity20
+            )
+            .clipShape(
+                RoundedRectangle(cornerRadius: 10)
+            )
         }
     }
 }

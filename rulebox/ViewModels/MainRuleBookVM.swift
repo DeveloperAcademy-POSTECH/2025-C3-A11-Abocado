@@ -12,6 +12,8 @@ import SwiftData
 class MainRuleBookVM: ObservableObject {
     @Published var selectedParty: String? = nil
     @Published var selectedExtensions: Set<String> = []
+    @Published var selectedContetnt: Content? = nil
+    @Published var onSubRuleBook: Bool = false
 
     // init selected value setting
     func setupDefaults(from tags: [FilterTag]) {
@@ -44,13 +46,25 @@ class MainRuleBookVM: ObservableObject {
         -> [Content]
     {
         contents.filter { content in
-            content.majorCat.id == cat.id
-                && (selectedParty == nil
-                    || contentHasFilter(
-                        content, type: "party", value: selectedParty!))
-                && (selectedExtensions.isEmpty
-                    || contentHasAnyExtension(content))
-        }.sorted { $0.name < $1.name }
+            content.majorCat.id == cat.id &&
+            (selectedParty == nil || contentHasFilter(content, type: "party", value: selectedParty!)) &&
+            (selectedExtensions.isEmpty || contentHasAnyExtension(content))
+        }.sorted { $0.name > $1.name }
+    }
+    
+    /// 대분류가 필요없는 경우바로 상세보기를 띄운다
+    func ifDirectContent (
+        cat: MajorCat,
+        from contents: [Content]
+    ){
+        let filtered = filteredContents(for: cat, from: contents)
+        
+        if let check = filtered.first(where: { $0.name == cat.name }) {
+            selectedContetnt = check
+            onSubRuleBook = true
+        } else {
+            onSubRuleBook = false
+        }
     }
 
     private func contentHasFilter(
