@@ -8,5 +8,14 @@
 		<string>WantedSans-Regular.ttf</string>
 		<string>WantedSans-SemiBold.ttf</string>
 	</array>
+	<key>UILaunchScreen</key>
+	<dict>
+		<key>UIColorName</key>
+		<string>backGround</string>
+		<key>UIImageName</key>
+		<string>Splash</string>
+		<key>UILaunchScreen</key>
+		<dict/>
+	</dict>
 </dict>
 </plist>
