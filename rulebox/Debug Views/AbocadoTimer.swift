@@ -8,27 +8,29 @@
 import Foundation
 import SwiftUI
 
+
 struct AbocadoTimer: View {
-    @State private var minutes = 0
-    @State private var seconds = 0
-    @State private var totalTime = 0
-    @State private var remainingTime = 0
-    @State private var timerRunning = false
-    @State private var timer: Timer?
+    @StateObject private var vm = TimerViewModel()
 
     var body: some View {
         VStack(spacing: 40) {
-            Text(timeString(from: remainingTime))
-                .font(.system(size: 60, weight: .bold, design: .monospaced))
+            Spacer()
 
-            if !timerRunning && remainingTime == 0 {
+            // 시간 표시
+            Text(vm.formattedTime())
+                .font(.system(size: 72, weight: .bold, design: .monospaced))
+                .padding()
+
+            // 시간 설정 (Wheel Picker)
+            if !vm.isRunning && vm.remainingTime == vm.originalTime {
                 HStack {
-                    Picker("분", selection: $minutes) {
+                    Picker("분", selection: $vm.selectedMinutes) {
                         ForEach(0..<60) { Text("\($0)분") }
                     }
                     .frame(width: 100)
                     .clipped()
-                    Picker("초", selection: $seconds) {
+
+                    Picker("초", selection: $vm.selectedSeconds) {
                         ForEach(0..<60) { Text("\($0)초") }
                     }
                     .frame(width: 100)
@@ -37,69 +39,35 @@ struct AbocadoTimer: View {
                 .pickerStyle(WheelPickerStyle())
             }
 
+            // 버튼
             HStack(spacing: 40) {
                 Button(action: {
-                    if timerRunning {
-                        pauseTimer()
-                    } else {
-                        startTimer()
-                    }
+                    vm.startPause()
                 }) {
-                    Text(timerRunning ? "일시정지" : "시작")
-                        .font(.title)
-                        .frame(width: 120, height: 50)
-                        .background(Color.blue)
+                    Text(vm.isRunning ? "일시정지" : "시작")
+                        .frame(width: 100, height: 44)
+                        .background(Color.blue.opacity(0.7))
                         .foregroundColor(.white)
-                        .cornerRadius(10)
+                        .cornerRadius(12)
                 }
 
-                Button(action: resetTimer) {
+                Button(action: {
+                    vm.reset()
+                }) {
                     Text("리셋")
-                        .font(.title)
-                        .frame(width: 120, height: 50)
-                        .background(Color.red)
-                        .foregroundColor(.white)
-                        .cornerRadius(10)
+                        .frame(width: 100, height: 44)
+                        .background(Color.gray.opacity(0.3))
+                        .foregroundColor(.black)
+                        .cornerRadius(12)
                 }
+                .disabled(vm.remainingTime == vm.originalTime && !vm.isRunning)
             }
+
+            Spacer()
         }
         .padding()
-    }
-
-    func startTimer() {
-        if remainingTime == 0 {
-            totalTime = minutes * 60 + seconds
-            remainingTime = totalTime
-        }
-
-        timerRunning = true
-        timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { _ in
-            if remainingTime > 0 {
-                remainingTime -= 1
-            } else {
-                timer?.invalidate()
-                timerRunning = false
-            }
-        }
-    }
-
-    func pauseTimer() {
-        timer?.invalidate()
-        timerRunning = false
-    }
-
-    func resetTimer() {
-        timer?.invalidate()
-        timerRunning = false
-        remainingTime = 0
-        minutes = 0
-        seconds = 0
-    }
-
-    func timeString(from seconds: Int) -> String {
-        let m = seconds / 60
-        let s = seconds % 60
-        return String(format: "%02d:%02d", m, s)
+        .navigationTitle("타이머")
+        .navigationBarTitleDisplayMode(.inline)
     }
 }
 
