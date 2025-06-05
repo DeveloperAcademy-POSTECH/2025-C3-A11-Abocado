@@ -11,8 +11,8 @@ struct Accordion: View {
     @State private var isExpanded: Bool = false
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            // 헤더: 텍스트 + 아이콘
+        ZStack {
+            VStack(alignment: .leading, spacing: 8) {
             HStack {
                 Text("섹션 제목")
                     .font(.smHeading)
@@ -31,6 +31,7 @@ struct Accordion: View {
                     }
             }
             .padding(.vertical, 20)
+            .padding(.horizontal, 20)
 
             if isExpanded {
                 VStack(alignment: .leading, spacing: 10) {
@@ -39,11 +40,22 @@ struct Accordion: View {
                 }
                 .font(.lgRegular)
                 .foregroundColor(.white)
+                .padding(.horizontal, 20)
+                .padding(.bottom, 18)
             }
+            }
+            .background(isExpanded ? Color.primaryNormal.opacity(0.15) : Color.clear)
+            .overlay(
+                RoundedRectangle(cornerRadius: 16)
+                    .stroke(Color.primaryNormal, lineWidth: isExpanded ? 1 : 0)
+            )
+            .cornerRadius(16)
+            .padding(.horizontal, 14)
+            
         }
-        .padding()
     }
 }
+
 
 #Preview {
     Accordion()
