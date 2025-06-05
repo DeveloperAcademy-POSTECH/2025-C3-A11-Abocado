@@ -23,9 +23,10 @@ struct FilterSection: View {
                 EFCapsule(count: vm.selectedExtensions.count)
             }
             .sheet(isPresented: $showEFModal) {
-                ExtensionFilterView()
+                ExtensionFilterView(filterTags: filterTags, vm: vm)
                     .presentationDetents([.medium, .large])
             }
+            
 
             Button {
                 showPFModal = true
@@ -101,6 +102,7 @@ struct EFCapsule: View {
                 .frame(width: 24, height: 24)
 
         }
+        
         .padding(.leading, 12)
         .padding(.trailing, 6)
         .padding(.vertical, 6)
