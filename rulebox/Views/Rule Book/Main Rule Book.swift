@@ -22,6 +22,7 @@ struct MainRuleBook: View {
     @State private var showCompactHeader: Bool = false
 
     //SubRuleModalView() modal sheet
+    @State private var selectedContent: Content? = nil
     @State private var onSubRuleModalView = false
 
     // get tags for selected game
@@ -113,8 +114,7 @@ struct MainRuleBook: View {
                                                 content in
                                                 Button(
                                                     action: {
-                                                        onSubRuleModalView =
-                                                            true
+                                                        selectedContent = content
                                                     },
                                                     label: {
                                                         HStack {
@@ -125,13 +125,8 @@ struct MainRuleBook: View {
                                                 )
                                                 .padding(.vertical, 8)
                                                 .padding(.horizontal, 14)
-                                                .sheet(
-                                                    isPresented:
-                                                        $onSubRuleModalView
-                                                ) {
-                                                    SubRuleModalView(
-                                                        content: content
-                                                    )
+                                                .sheet(item: $selectedContent) { content in
+                                                    SubRuleModalView(content: content)
                                                 }
 
                                             }

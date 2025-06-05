@@ -26,7 +26,6 @@ struct SubRuleModalView: View {
         bookmarks.contains { $0.content?.id == content.id }
     }
     
-    
 
     /// 여기에는 설명이 나옵니다
 //    var loremIpsum: String {
@@ -150,9 +149,7 @@ struct SubRuleModalView: View {
                 .frame(width: 393, alignment: .trailing)
                 .background(Color.backGround.opacity(0.5).blur(radius: 25))
             }
-            
-        }//.padding()
-        
+        }
     }
 }
 
