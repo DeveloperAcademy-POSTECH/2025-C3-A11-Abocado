@@ -16,7 +16,9 @@ struct LargeToolbarView: View {
         ZStack {
             ImageConverter.imageConvert(game.image)
                 .resizable()
-                .frame(width: 393, height: 393)
+                .scaledToFill()
+                .frame(width: 393, height: 312)
+                .clipped()
             VStack(alignment: .leading) {
                 HStack {
                     Button(action: { dismiss() }) {
@@ -37,8 +39,9 @@ struct LargeToolbarView: View {
                     id: \.self
                 ) { genre in
                     GenreCapsule(title: genre, isSelected: true)
-                }
-                Text(game.name).font(.lgSemiBold)
+                }.padding(.horizontal, 20).padding(.vertical, 8)
+                Text(game.name).font(.lgSemiBold).padding(.horizontal, 20)
+                    .padding(.bottom, 18)
             }
         }
     }

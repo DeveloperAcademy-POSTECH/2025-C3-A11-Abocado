@@ -13,7 +13,9 @@ var homeToolbarIcon: some View =
     .renderingMode(.template)
     .foregroundColor(.white)
     .padding()
-    .background(Circle().fill(Color.gray).frame(width: 40, height: 40))
+    .background(
+        Circle().fill(Color.atomicOpacity20).frame(width: 40, height: 40)
+    )
     .frame(width: 40, height: 40)
 
 /// Toolbar search Icon
@@ -22,7 +24,9 @@ var searchToolbarIcon: some View =
     .renderingMode(.template)
     .foregroundColor(.white)
     .padding()
-    .background(Circle().fill(Color.gray).frame(width: 40, height: 40))
+    .background(
+        Circle().fill(Color.atomicOpacity20).frame(width: 40, height: 40)
+    )
 
 /// Toolbar bookmark Icon
 var bookmarkToolbarIcon: some View =
@@ -30,7 +34,9 @@ var bookmarkToolbarIcon: some View =
     .renderingMode(.template)
     .foregroundColor(.white)
     .padding()
-    .background(Circle().fill(Color.gray).frame(width: 40, height: 40))
+    .background(
+        Circle().fill(Color.atomicOpacity20).frame(width: 40, height: 40)
+    )
     .frame(width: 40, height: 40)
 
 /// Toolbar bookmark Icon
