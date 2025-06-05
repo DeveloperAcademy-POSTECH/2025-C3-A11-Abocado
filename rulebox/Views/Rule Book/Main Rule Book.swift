@@ -181,7 +181,7 @@ struct MainRuleBook: View {
                     !vm.filteredContents(for: $0.key, from: $0.value).isEmpty
                 }
                 .map { $0.key }
-                //.sorted { $0.name < $1.name } 설명의 순서가 바뀔 수 있어서 한번 꺼두기
+                .sorted { $0.name > $1.name } //MARK: 설명순서가 있어서 역순으로
         }
     }
 }

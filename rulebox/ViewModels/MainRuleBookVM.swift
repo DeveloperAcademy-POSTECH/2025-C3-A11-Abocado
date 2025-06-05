@@ -49,7 +49,7 @@ class MainRuleBookVM: ObservableObject {
             content.majorCat.id == cat.id &&
             (selectedParty == nil || contentHasFilter(content, type: "party", value: selectedParty!)) &&
             (selectedExtensions.isEmpty || contentHasAnyExtension(content))
-        }.sorted { $0.name < $1.name }
+        }.sorted { $0.name > $1.name }
     }
     
     /// 대분류가 필요없는 경우바로 상세보기를 띄운다
