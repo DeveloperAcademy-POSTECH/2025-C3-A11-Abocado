@@ -13,14 +13,16 @@ struct SearchedCapsule: View {
     var body: some View {
         HStack {
             Button(action: {}) {
-                Text(title).font(.mdMedium).foregroundStyle(.gray)  // 색변경 필요
+                Text(title).font(.mdMedium).foregroundColor(.grayNeutral99)
             }.padding(.vertical, 6).padding(.leading, 12)
             Button(action: {}) {
-                Image(systemName: "multiply").foregroundColor(.gray)  // TODO: 아이콘 변경해야함
+                Image("cross").foregroundColor(.grayNeutral60)
             }.frame(width: 24, height: 24).padding(.vertical, 6)
 
         }
-        .overlay(Capsule().stroke(.gray, lineWidth: 1)).frame(height: 34)
+        .overlay(Capsule().stroke(Color.grayNeutral30, lineWidth: 1)).frame(
+            height: 34
+        )
         .padding(.vertical)
     }
 }

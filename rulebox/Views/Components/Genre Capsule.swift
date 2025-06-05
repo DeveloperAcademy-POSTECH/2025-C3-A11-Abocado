@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-/// 최근 검색어 표시 캡슐
+/// 장르 표시 캡슐
 struct GenreCapsule: View {
     let title: String
     var isSelected: Bool = false
@@ -40,7 +40,7 @@ struct GenreCapsule: View {
                         .padding(.vertical, verticalPadding)
                         .padding(.horizontal, horizontalPadding)
                         .background(
-                            Capsule().stroke(Color.gray, lineWidth: 1)
+                            Capsule().stroke(Color.grayNeutral95, lineWidth: 1)
                         )
                 }
 
