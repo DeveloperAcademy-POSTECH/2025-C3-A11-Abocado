@@ -1,10 +1,10 @@
 {
-    "gameName": "바퀴벌레포커",
+    "gameName": "사보타지",
     "genres": [
         "카드",
-        "파티"
+        "마피아"
     ],
-    "imageFile": "image_02.png",
+    "imageFile": "image_03.png",
     "contents": [
         {
             "majorCat": "게임 구성",
