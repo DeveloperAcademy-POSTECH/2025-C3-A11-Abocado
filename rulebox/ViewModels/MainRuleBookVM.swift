@@ -8,25 +8,12 @@
 import Foundation
 import SwiftData
 
-
-
 @MainActor
 class MainRuleBookVM: ObservableObject {
     @Published var selectedParty: String? = nil
-    @Published var selectedExtensions: Set<String> = []
+    @Published var selectedExtension: String? = nil
 
-    // init selected value setting
-    func setupDefaults(from tags: [FilterTag]) {
-        if selectedParty == nil {
-            let party = partyValues(from: tags).first
-            selectedParty = party
-        }
-        if selectedExtensions.isEmpty {
-            selectedExtensions = ["basic"]
-        }
-    }
-    
-    
+    // only listing unique values
     func partyValues(from filterTags: [FilterTag]) -> [String] {
         Set(filterTags.filter { $0.type == "party" }.map { $0.value }).sorted()
     }
@@ -34,32 +21,18 @@ class MainRuleBookVM: ObservableObject {
         Set(filterTags.filter { $0.type == "extension" }.map { $0.value }).sorted()
     }
 
-    func toggleExtension(_ ext: String) {
-        if selectedExtensions.contains(ext) {
-            selectedExtensions.remove(ext)
-        } else {
-            selectedExtensions.insert(ext)
-        }
-    }
-
+    // filtering process
     func filteredContents(for cat: MajorCat, from contents: [Content]) -> [Content] {
         contents.filter { content in
             content.majorCat.id == cat.id &&
             (selectedParty == nil || contentHasFilter(content, type: "party", value: selectedParty!)) &&
-            (selectedExtensions.isEmpty || contentHasAnyExtension(content))
+            (selectedExtension == nil || contentHasFilter(content, type: "extension", value: selectedExtension!))
         }.sorted { $0.name < $1.name }
     }
 
     private func contentHasFilter(_ content: Content, type: String, value: String) -> Bool {
-        content.filterTable?.filtertags.contains { $0.type == type && $0.value == value } ?? false
-    }
-
-    private func contentHasAnyExtension(_ content: Content) -> Bool {
-        guard let table = content.filterTable else { return false }
-        for tag in table.filtertags where tag.type == "extension" {
-            if selectedExtensions.contains(tag.value) {
-                return true
-            }
+        if let table = content.filterTable {
+            return table.filtertags.contains { $0.type == type && $0.value == value }
         }
         return false
     }
