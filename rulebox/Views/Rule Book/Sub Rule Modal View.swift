@@ -17,21 +17,27 @@ struct SubRuleModalView: View {
     //모든 북마크 불러오기
     @Query var bookmarks: [Bookmark]
 
+    @Query var majorCat: [MajorCat]
+    
     //현재 content가 북마크 되었는지 확인
     var content: Content
+    
     var isBookmarked: Bool {
         bookmarks.contains { $0.content?.id == content.id }
     }
+    
+    
 
-    var loremIpsum: String {
-        if let url = Bundle.main.url(
-            forResource: "lorem", withExtension: "txt", subdirectory: "Data"),
-            let contents = try? String(contentsOf: url)
-        {
-            return contents
-        }
-        return "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
-    }
+    /// 여기에는 설명이 나옵니다
+//    var loremIpsum: String {
+//        if let url = Bundle.main.url(
+//            forResource: "lorem", withExtension: "txt", subdirectory: "Data"),
+//            let contents = try? String(contentsOf: url)
+//        {
+//            return contents
+//        }
+//        return "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+//    }
 
     var body: some View {
         NavigationStack {
@@ -39,15 +45,17 @@ struct SubRuleModalView: View {
                 VStack(alignment: .leading) {
                     
                     VStack(alignment: .leading) {
-                        Text("MajorCat Name")
-                            .font(.lgRegular)
-                            .foregroundColor(.grayNeutral70)
+                            Text(content.majorCat.name) // 중분류
+                                .font(.lgRegular)
+                                .foregroundColor(.grayNeutral70)
+                        
                         HStack{
-                            Text("상세설명 제목")
+                            
+                            Text(content.name) // 소분류
                                 .font(.mdHeading)
                                 .foregroundColor(.white)
                             Spacer()
-                            // 북마크
+                            //TODO: 북마크
                             Button(
                                 action: {
                                     //북마크 해제
@@ -94,10 +102,10 @@ struct SubRuleModalView: View {
                     .padding(.bottom, 12)
                     
                     //설명영역
-                    Text(loremIpsum)
-                        .foregroundColor(.grayNeutral99)
-                        .font(.lgRegular)
-                        .padding(.bottom, 34)
+//                    Text(loremIpsum)
+//                        .foregroundColor(.grayNeutral99)
+//                        .font(.lgRegular)
+//                        .padding(.bottom, 34)
                 }
                 .padding(.horizontal, 20)
                 .padding(.top, 50)

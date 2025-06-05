@@ -15,7 +15,7 @@ class FilterTag {
     var type: String
 
     init(id: UUID = UUID(), value: String, type: String) {
-        self.id = id
+    self.id = id
         self.value = value
         self.type = type
     }

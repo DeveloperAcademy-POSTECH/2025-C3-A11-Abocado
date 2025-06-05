@@ -11,6 +11,7 @@ import SwiftData
 // TODO: 디자인 - 하마, 개발 - 닉스
 struct BookmarkView: View {
     @Environment(\.modelContext) var context
+    
     @Query var bookmarks: [Bookmark] // 북마크 불러오기
     
     var body: some View {
