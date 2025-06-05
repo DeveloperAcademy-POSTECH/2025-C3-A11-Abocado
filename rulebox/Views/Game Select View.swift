@@ -22,7 +22,7 @@ struct GameSelectView: View {
                     Text("RuleBox").font(.xlHeading)
                     Spacer()
 
-                    NavigationLink(destination: SearchView()) {
+                    NavigationLink(destination: GameSearchView()) {
                         searchToolbarIcon
                     }
 

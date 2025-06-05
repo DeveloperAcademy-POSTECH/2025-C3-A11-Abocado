@@ -16,7 +16,7 @@ struct SearchedCapsule: View {
                 Text(title).font(.mdMedium).foregroundColor(.grayNeutral99)
             }.padding(.vertical, 6).padding(.leading, 12)
             Button(action: {}) {
-                Image("cross").foregroundColor(.grayNeutral60)
+                crossIcon
             }.frame(width: 24, height: 24).padding(.vertical, 6)
 
         }

@@ -15,87 +15,93 @@ struct SearchView: View {
 
     var body: some View {
         NavigationStack {
-            VStack(alignment: .leading) {
-                // 검색 바
-                HStack {
-                    Image("Search") //대소문자 구분해야됨 -사나
-                        .renderingMode(.template)
-                        .foregroundColor(.white)
-
-                    TextField("검색어를 입력하세요", text: $searchText)
-                        .onSubmit {
-                            // 검색하기
-                        }
-
-                    if !searchText.isEmpty {
-                        Button(action: {
-                            searchText = ""
-                        }) {
-                            Image("cancel")
-                                .renderingMode(.template)
-                                .foregroundColor(.grayNeutral80)
-                        }
-                    }
-                }
-                .padding(8)
-                .background(Color(.systemGray6))
-                .clipShape(.capsule)
-
-                // 최근 검색어
-                HStack {
-                    Text("최근 검색어").font(.lgSemiBold)
-                    Spacer()
-                    Text("전체 삭제").font(.mdRegular)  //TODO: 칼라 변경 필요
-                }.padding()
-
-                ScrollView(.horizontal, showsIndicators: false) {
+            ScrollView {
+                VStack(alignment: .leading) {
+                    // 검색 바
                     HStack {
-                        SearchedCapsule(title: "타일")
-                        SearchedCapsule(title: "성")
-                        SearchedCapsule(title: "제목")
-                        SearchedCapsule(title: "타일")
+                        Image("search")  //대소문자 구분해야됨 -사나
+                            .renderingMode(.template)
+                            .foregroundColor(.white)
+
+                        TextField("검색어를 입력하세요", text: $searchText)
+                            .onSubmit {
+                                // 검색하기
+                            }
+
+                        if !searchText.isEmpty {
+                            Button(action: {
+                                searchText = ""
+                            }) {
+                                Image("cancel")
+                                    .renderingMode(.template)
+                                    .foregroundColor(.grayNeutral80)
+                            }
+                        }
                     }
-                }.frame(height: 40)
+                    .padding(8)
+                    .background(Color(.systemGray6))
+                    .clipShape(.capsule)
 
-                // 자주 찾는 페이지
-                Text(
-                    "자주 찾는 페이지"
-                ).font(.lgSemiBold).padding()
+                    // 최근 검색어
+                    HStack {
+                        Text("최근 검색어").font(.lgSemiBold)
+                        Spacer()
+                        Text("전체 삭제").font(.mdRegular)
+                            .foregroundColor(.grayNeutral70)
+                    }.padding()
 
-                MostVisitedPage(
-                    number: 1,
-                    title: "도로 점수 계산하기",
-                    subtitle: "게임 진행 - 도로",
-                    onTap: {}
-                )
-                MostVisitedPage(
-                    number: 2,
-                    title: "성 점수 계산하기",
-                    subtitle: "게임 진행 - 성",
-                    onTap: {}
-                )
-                MostVisitedPage(
-                    number: 3,
-                    title: "도로 점수 계산하기",
-                    subtitle: "게임 진행 - 도로",
-                    onTap: {}
-                )
-                MostVisitedPage(
-                    number: 4,
-                    title: "도로 점수 계산하기",
-                    subtitle: "게임 진행 - 도로",
-                    onTap: {}
-                )
-                MostVisitedPage(
-                    number: 5,
-                    title: "도로 점수 계산하기",
-                    subtitle: "게임 진행 - 도로",
-                    onTap: {}
-                )
+                    ScrollView(.horizontal, showsIndicators: false) {
+                        HStack {
+                            SearchedCapsule(title: "타일")
+                            SearchedCapsule(title: "성")
+                            SearchedCapsule(title: "제목")
+                            SearchedCapsule(title: "타일")
+                        }
+                    }.frame(height: 40)
 
-                Spacer()
-            }.padding()
-        }.navigationTitle("설명서 검색")
+                    // 자주 찾는 페이지
+                    Text(
+                        "자주 찾는 페이지"
+                    ).font(.lgSemiBold).padding()
+
+                    MostVisitedPage(
+                        number: 1,
+                        title: "도로 점수 계산하기",
+                        subtitle: "게임 진행 - 도로",
+                        onTap: {}
+                    )
+                    MostVisitedPage(
+                        number: 2,
+                        title: "성 점수 계산하기",
+                        subtitle: "게임 진행 - 성",
+                        onTap: {}
+                    )
+                    MostVisitedPage(
+                        number: 3,
+                        title: "도로 점수 계산하기",
+                        subtitle: "게임 진행 - 도로",
+                        onTap: {}
+                    )
+                    MostVisitedPage(
+                        number: 4,
+                        title: "도로 점수 계산하기",
+                        subtitle: "게임 진행 - 도로",
+                        onTap: {}
+                    )
+                    MostVisitedPage(
+                        number: 5,
+                        title: "도로 점수 계산하기",
+                        subtitle: "게임 진행 - 도로",
+                        onTap: {}
+                    )
+
+                    Spacer()
+                }
+                .padding()
+            }
+            .ignoresSafeArea(.keyboard)
+        }
+            .navigationTitle("설명서 검색")
             .navigationBarBackButtonHidden(true)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
@@ -103,9 +109,7 @@ struct SearchView: View {
                     Button(action: {
                         dismiss()
                     }) {
-                        Image("caret.left")
-                            .renderingMode(.template)
-                            .foregroundColor(.white)
+                        backButtonToolbarIcon
                     }
                 }
             }
