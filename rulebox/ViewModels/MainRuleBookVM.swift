@@ -53,7 +53,7 @@ class MainRuleBookVM: ObservableObject {
     }
     
     /// 대분류가 필요없는 경우바로 상세보기를 띄운다
-    func ifNoMajCat (
+    func ifDirectContent (
         cat: MajorCat,
         from contents: [Content]
     ){

@@ -23,6 +23,7 @@ struct MainRuleBook: View {
 
     //SubRuleModalView() modal sheet
     @State private var onSubRuleModalView = false
+    @State private var selectedContent: Content? = nil
 
     // get tags for selected game
     var gameFilterTags: [FilterTag] {
@@ -66,14 +67,17 @@ struct MainRuleBook: View {
                             // view body
                             FilterSection(filterTags: gameFilterTags, vm: vm)
 
-                            ForEach( filteredMajorCats, id: \.id ) { cat in
+                            ForEach(filteredMajorCats, id: \.id) { cat in
                                 let filtered = vm.filteredContents(
                                     for: cat,
                                     from: filteredContents
                                 )
-                                
+
                                 if !filtered.isEmpty {
-                                    let expanded = isExpandedMap[ cat.id, default: false ]
+                                    let expanded = isExpandedMap[
+                                        cat.id,
+                                        default: false
+                                    ]
 
                                     VStack(alignment: .leading, spacing: 0) {
                                         Button(action: {
@@ -81,15 +85,27 @@ struct MainRuleBook: View {
                                                 isExpandedMap[cat.id] =
                                                     !expanded
                                             }
+                                           
+                                            if let direct = filtered.first(
+                                                where: { $0.name == cat.name })
+                                            {
+                                                selectedContent = direct
+                                            }
                                         }) {
                                             HStack(spacing: 8) {
                                                 Text(cat.name)
                                                     .font(.smHeading)
-                                                    .foregroundColor( expanded ? .primaryNormal : .white )
-                                                
+                                                    .foregroundColor(
+                                                        expanded
+                                                            ? .primaryNormal
+                                                            : .white
+                                                    )
+
                                                 Spacer()
-                                                
-                                                (expanded ? AnyView(minusIcon) : AnyView( plusIcon ))
+
+                                                (expanded
+                                                    ? AnyView(minusIcon)
+                                                    : AnyView(plusIcon))
 
                                             }
                                             .padding(.vertical, 0)
@@ -98,10 +114,12 @@ struct MainRuleBook: View {
                                         }.buttonStyle(.plain)
 
                                         if expanded {
-                                            ForEach(filtered, id: \.id) { content in
+                                            ForEach(filtered, id: \.id) {
+                                                content in
                                                 Button(
                                                     action: {
-                                                        onSubRuleModalView = true
+                                                        onSubRuleModalView =
+                                                            true
                                                     },
                                                     label: {
                                                         HStack {
@@ -162,7 +180,11 @@ struct MainRuleBook: View {
                     vm.setupDefaults(from: gameFilterTags)
                 }
             }
-        }.navigationBarHidden(true)
+        }
+        .navigationBarHidden(true)
+        .sheet(item: $selectedContent) { content in /// 대분류가 없는 경우, 다이렉트로 content표시
+            SubRuleModalView(content: content)
+        }
 
         // get contents belong to current game
         var filteredContents: [Content] {
@@ -181,7 +203,7 @@ struct MainRuleBook: View {
                     !vm.filteredContents(for: $0.key, from: $0.value).isEmpty
                 }
                 .map { $0.key }
-                .sorted { $0.name > $1.name } //MARK: 설명순서가 있어서 역순으로
+                .sorted { $0.name > $1.name }
         }
     }
 }
@@ -193,23 +215,6 @@ struct ScrollOffsetKey: PreferenceKey {
         value = nextValue()
     }
 }
-//SubRuleModalView를 띄우면 됩니다
-//struct ContentDetailView: View {
-//    let content: Content
-//
-//    var body: some View {
-//        ScrollView {
-//            VStack(alignment: .leading, spacing: 12) {
-//                ForEach(content.texts, id: \.self) { text in
-//                    Text(text)
-//                        .frame(maxWidth: .infinity, alignment: .leading)
-//                }
-//            }
-//            .padding()
-//        }
-//        .navigationTitle(content.name)
-//    }
-//}
 
 struct FilterSection: View {
     var filterTags: [FilterTag]
