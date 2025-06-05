@@ -13,19 +13,15 @@ struct SubRuleModalView: View {
     @State private var showToast = false
 
     @Environment(\.modelContext) var context
-    @State var isBookmarkedState = false
-    //모든 북마크 불러오기
+    
+    @State var isBookmarked = false
+    
     @Query var bookmarks: [Bookmark]
-
     @Query var majorCat: [MajorCat]
     
     //현재 content가 북마크 되었는지 확인
     var content: Content
-    
-    var isBookmarked: Bool {
-        bookmarks.contains { $0.content?.id == content.id }
-    }
-    
+
 
     /// 여기에는 설명이 나옵니다
 //    var loremIpsum: String {
@@ -57,17 +53,16 @@ struct SubRuleModalView: View {
                             //TODO: 북마크
                             Button(
                                 action: {
-                                    //북마크 해제
-                                    if isBookmarkedState {
-                                        //북마크 제거
-                                        if let bookmark = bookmarks.first(where: {
-                                            $0.content?.id == content.id
-                                        }) {
-                                            context.delete(bookmark)
-                                        }
-                                    } else {
+                                    //북마크 false 상태
+                                    if isBookmarked {
                                         let newBookmark = Bookmark(content: content)
                                         context.insert(newBookmark)
+                                        isBookmarked = true
+                                        
+                                    } else {
+                                        //북마크 제거
+                                        if let bookmark = bookmarks.first(where: { $0.content?.id == content.id }) { context.delete(bookmark) }
+                                        isBookmarked = false
                                         
                                         showToast = true
                                         DispatchQueue.main.asyncAfter(
@@ -77,34 +72,47 @@ struct SubRuleModalView: View {
                                         }
                                     }
                                     //상태토글
-                                    isBookmarkedState.toggle()
+                                    isBookmarked.toggle()
+                                    
                                 },
                                 label: {
                                     // 북마크아이콘
-                                    (isBookmarkedState
-                                        ? AnyView(bookmarkFilledIcon)
-                                        : AnyView(bookmarkIcon))
-                                        .frame(width: 40, height: 40)
+                                    (isBookmarked
+                                     ? AnyView(bookmarkFilledIcon)
+                                     : AnyView(bookmarkIcon))
+                                    .frame(width: 40, height: 40)
                                 })
+                            
                             .onAppear {
-                                isBookmarkedState = isBookmarked
+                                // bookmarks에 해당 content.id가 있다면 true, 없다면 false
+                                isBookmarked = bookmarks.contains {$0.content?.id == content.id}
                             }
+                            .onChange(of: bookmarks) { newBookmarks in
+                                isBookmarked = newBookmarks.contains {$0.content?.id == content.id}
+                            }
+                            
+                            
+                            
                         }
+                        
                     }
                     
-                    //이미지영역
-                    HStack {
-                        Spacer()
-                        Text("이미지가 들어갈 거에요")
-                        Spacer()
+                    ForEach(0..<content.texts.count, id: \.self) { index in
+                        HStack {
+                            Spacer()
+                            //Image(content.images[index])
+                            Text("이미지가 들어갈 거에요")
+                            Spacer()
+                        }
+                        .padding(.bottom, 12)
+                        
+                        //설명영역
+                        Text(content.texts[index])
+                            .foregroundColor(.grayNeutral99)
+                            .font(.lgRegular)
+                            .padding(.bottom, 34)
                     }
-                    .padding(.bottom, 12)
                     
-                    //설명영역
-//                    Text(loremIpsum)
-//                        .foregroundColor(.grayNeutral99)
-//                        .font(.lgRegular)
-//                        .padding(.bottom, 34)
                 }
                 .padding(.horizontal, 20)
                 .padding(.top, 50)

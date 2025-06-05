@@ -9,6 +9,9 @@ import SwiftUI
 
 struct LargeToolbarView: View {
     @Environment(\.dismiss) private var dismiss
+    
+    @Binding var isBookmarked: Bool
+    var content: Content
 
     let game: GameName
 
@@ -25,8 +28,8 @@ struct LargeToolbarView: View {
                     Spacer()
                     NavigationLink(destination: SearchView()) {
                         searchToolbarIcon
-                    }
-                    NavigationLink(destination: BookmarkView()) {
+                    
+                        NavigationLink(destination: BookmarkView(isBookmarked: $isBookmarked, content: content)) {
                         bookmarkToolbarIcon
                     }
                 }.padding(.horizontal, 18).padding(.vertical, 14)

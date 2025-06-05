@@ -14,6 +14,10 @@ struct BookmarkView: View {
     
     @Query var bookmarks: [Bookmark] // 북마크 불러오기
     
+    @Binding var isBookmarked: Bool
+    
+    var content: Content
+    
     var body: some View {
             
         ScrollView{ //navigationView
@@ -23,12 +27,14 @@ struct BookmarkView: View {
                 }
                 .padding(.bottom, 14)
             
-            ForEach(bookmarks, id: \.id) { bookmark in
+            ForEach(bookmarks /*, id: \.id*/) { bookmark in
                 if let content = bookmark.content {
                     HStack{ // 북마크 블럭
                         NavigationLink(destination: SubRuleModalView(content: content)){ // 이동페이지
                             HStack{
-                                RoundedRectangle(cornerSize: .init(width:8, height: 8)) // rectagle()대신 소분류 이미지
+                                //content images 중 첫번째
+                                RoundedRectangle(cornerSize: .init(width:8, height: 8))
+                                //Image(content.images[0])
                                     .frame(width:56, height:56)
                                     .padding(.trailing, 16)
                                     
@@ -46,12 +52,11 @@ struct BookmarkView: View {
                         
                         Button(action:{
                             context.delete(bookmark)
-                        }){
+                        }, label:{
                             bookmarkFilledIcon // 북마크아이콘
                                 .frame(width:40, height:40)
                                 //.padding(.leading, 16)
-                            
-                        }
+                        })
                             
                     } // 북마크 블럭
                 }
@@ -71,6 +76,6 @@ struct BookmarkView: View {
     }
 }
 
-#Preview {
-    BookmarkView()
-}
+//#Preview {
+//    BookmarkView()
+//}
