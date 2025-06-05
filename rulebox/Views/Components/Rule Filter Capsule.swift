@@ -26,7 +26,6 @@ struct FilterSection: View {
                 ExtensionFilterView(filterTags: filterTags, vm: vm)
                     .presentationDetents([.medium, .large])
             }
-            
 
             Button {
                 showPFModal = true
@@ -34,46 +33,9 @@ struct FilterSection: View {
                 PFCapsule(selectedValue: vm.selectedParty ?? "선택되지 않음")
             }
             .sheet(isPresented: $showPFModal) {
-                PartyFilterView()
+                PartyFilterView(vm: vm)
                     .presentationDetents([.medium, .large])
             }
-            //            DisclosureGroup("확장 추가: \(vm.selectedExtensions.count)개") {
-            //                ForEach(extensionValues, id: \.self) { value in
-            //                    Button(action: { vm.toggleExtension(value) }) {
-            //                        HStack {
-            //                            Text(value)
-            //                            if vm.selectedExtensions.contains(value) {
-            //                                Image(systemName: "checkmark")
-            //                            }
-            //                        }
-            //                    }
-            //                }
-            //            }
-            //            .background(
-            //                Color.atomicOpacity20
-            //            )
-            //            .clipShape(
-            //                RoundedRectangle(cornerRadius: 10)
-            //            )
-            //
-            //            DisclosureGroup("인원수 필터") {
-            //                ForEach(partyValues, id: \.self) { value in
-            //                    Button(action: { vm.selectedParty = value }) {
-            //                        HStack {
-            //                            Text(value)
-            //                            if vm.selectedParty == value {
-            //                                Image(systemName: "checkmark")
-            //                            }
-            //                        }
-            //
-            //                    }
-            //                }
-            //            }.background(
-            //                Color.atomicOpacity20
-            //            )
-            //            .clipShape(
-            //                RoundedRectangle(cornerRadius: 10)
-            //            )
         }
     }
 }
@@ -86,28 +48,28 @@ struct EFCapsule: View {
         HStack(alignment: .center, spacing: 4) {
             Text("확장 추가")
                 .font(
-                    Font.custom("Wanted Sans", size: 14)
-                        .weight(.medium)
+                    .mdMedium
                 )
                 .foregroundColor(.white)
 
             Text("\(count)개")
                 .font(
-                    Font.custom("Wanted Sans", size: 14)
-                        .weight(.medium)
+                    .mdMedium
                 )
-                .foregroundColor(.red)
+                .foregroundColor(.primaryNormal)
 
             Image("caret.down")
+                .renderingMode(.template)
                 .frame(width: 24, height: 24)
+                .foregroundColor(.white)
 
         }
-        
+
         .padding(.leading, 12)
         .padding(.trailing, 6)
         .padding(.vertical, 6)
         .frame(height: 36, alignment: .leading)
-        .background(.white.opacity(0.2))
+        .background(Color.atomicOpacity20)
         .cornerRadius(10)
     }
 }
@@ -119,17 +81,19 @@ struct PFCapsule: View {
     var body: some View {
         HStack(alignment: .center, spacing: 4) {
             Text("\(selectedValue)명")
-                .font(Font.custom("Wanted Sans", size: 14).weight(.medium))
+                .font(.mdMedium)
                 .foregroundColor(.white)
 
             Image("caret.down")
+                .renderingMode(.template)
                 .frame(width: 24, height: 24)
+                .foregroundColor(.white)
         }
         .padding(.leading, 12)
         .padding(.trailing, 6)
         .padding(.vertical, 6)
         .frame(height: 36)
-        .background(.white.opacity(0.2))
+        .background(Color.atomicOpacity20)
         .cornerRadius(10)
     }
 }

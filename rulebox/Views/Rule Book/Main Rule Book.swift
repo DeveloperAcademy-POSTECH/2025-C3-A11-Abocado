@@ -66,6 +66,7 @@ struct MainRuleBook: View {
 
                             // view body
                             FilterSection(filterTags: gameFilterTags, vm: vm)
+                                .padding(.horizontal, 18).padding(.top, 24)
 
                             ForEach(filteredMajorCats, id: \.id) { cat in
                                 let filtered = vm.filteredContents(
@@ -111,6 +112,19 @@ struct MainRuleBook: View {
                                             .padding(.vertical, 0)
                                             .padding(.horizontal, 16)
                                             .contentShape(Rectangle())
+                                            .background(
+                                                RoundedCorner(
+                                                    radius: 14,
+                                                    corners: [
+                                                        .topLeft, .topRight,
+                                                    ]
+                                                )
+                                                .fill(
+                                                    Color.primaryNormal.opacity(
+                                                        expanded ? 0.1 : 0
+                                                    )
+                                                )
+                                            )
                                         }.buttonStyle(.plain)
 
                                         if expanded {
@@ -122,7 +136,9 @@ struct MainRuleBook: View {
                                                             true
                                                     },
                                                     label: {
-                                                        HStack {
+                                                        HStack(
+                                                            alignment: .center
+                                                        ) {
                                                             Text(content.name)
                                                             Spacer()
                                                         }
@@ -130,6 +146,24 @@ struct MainRuleBook: View {
                                                 )
                                                 .padding(.vertical, 8)
                                                 .padding(.horizontal, 14)
+                                                .background(
+                                                    RoundedCorner(
+                                                        radius: 14,
+                                                        corners: [
+                                                            //TODO: 가운데는 코너라운드 없애기 
+                                                            .topLeft, .topRight,
+                                                            .bottomLeft,
+                                                            .bottomRight,
+                                                        ]
+                                                    )
+                                                    .fill(
+                                                        Color.primaryNormal
+                                                            .opacity(
+                                                                expanded
+                                                                    ? 0.1 : 0
+                                                            )
+                                                    )
+                                                )
                                                 .sheet(
                                                     isPresented:
                                                         $onSubRuleModalView
@@ -140,6 +174,10 @@ struct MainRuleBook: View {
                                                 }
 
                                             }
+                                        } else {
+                                            Divider().foregroundStyle(
+                                                Color.white
+                                            ).padding(.horizontal, 18)
                                         }
                                     }.background(
                                         Group {
@@ -209,5 +247,20 @@ struct ScrollOffsetKey: PreferenceKey {
     static var defaultValue: CGFloat = 0
     static func reduce(value: inout CGFloat, nextValue: () -> CGFloat) {
         value = nextValue()
+    }
+}
+
+// Custom shape for rounding specific corners
+struct RoundedCorner: Shape {
+    var radius: CGFloat = .infinity
+    var corners: UIRectCorner = .allCorners
+
+    func path(in rect: CGRect) -> Path {
+        let path = UIBezierPath(
+            roundedRect: rect,
+            byRoundingCorners: corners,
+            cornerRadii: CGSize(width: radius, height: radius)
+        )
+        return Path(path.cgPath)
     }
 }

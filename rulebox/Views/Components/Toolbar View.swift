@@ -17,9 +17,9 @@ struct LargeToolbarView: View {
             ImageConverter.imageConvert(game.image)
                 .resizable()
                 .scaledToFill()
-                .frame(width: 393, height: 312)
+                .frame(width: 393, height: 312, alignment: .top)
                 .clipped()
-            
+
             VStack(alignment: .leading) {
                 HStack {
                     Button(action: { dismiss() }) {
@@ -35,14 +35,18 @@ struct LargeToolbarView: View {
                 }.padding(.horizontal, 18).padding(.vertical, 14)
 
                 Spacer()
-                ForEach(
-                    game.genres,
-                    id: \.self
-                ) { genre in
-                    GenreCapsule(title: genre, isSelected: true)
+                VStack {
+                    HStack(spacing: 5) {
+                        ForEach(
+                            game.genres,
+                            id: \.self
+                        ) { genre in
+                            GenreCapsule(title: genre, isSelected: true)
+                        }
+                    }
+                    Text(game.name).font(.lgHeading)
+                        .padding(.bottom, 18)
                 }.padding(.horizontal, 20)
-                Text(game.name).font(.lgHeading).padding(.horizontal, 20)
-                    .padding(.bottom, 18)
             }
         }
     }
