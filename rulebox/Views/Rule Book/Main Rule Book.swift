@@ -66,19 +66,14 @@ struct MainRuleBook: View {
                             // view body
                             FilterSection(filterTags: gameFilterTags, vm: vm)
 
-                            ForEach(
-                                filteredMajorCats,
-                                id: \.id
-                            ) { cat in
+                            ForEach( filteredMajorCats, id: \.id ) { cat in
                                 let filtered = vm.filteredContents(
                                     for: cat,
                                     from: filteredContents
                                 )
+                                
                                 if !filtered.isEmpty {
-                                    let expanded = isExpandedMap[
-                                        cat.id,
-                                        default: false
-                                    ]
+                                    let expanded = isExpandedMap[ cat.id, default: false ]
 
                                     VStack(alignment: .leading, spacing: 0) {
                                         Button(action: {
@@ -90,17 +85,11 @@ struct MainRuleBook: View {
                                             HStack(spacing: 8) {
                                                 Text(cat.name)
                                                     .font(.smHeading)
-                                                    .foregroundColor(
-                                                        expanded
-                                                            ? .primaryNormal
-                                                            : .white
-                                                    )
+                                                    .foregroundColor( expanded ? .primaryNormal : .white )
+                                                
                                                 Spacer()
-                                                (expanded
-                                                    ? AnyView(minusIcon)
-                                                    : AnyView(
-                                                        plusIcon
-                                                    ))
+                                                
+                                                (expanded ? AnyView(minusIcon) : AnyView( plusIcon ))
 
                                             }
                                             .padding(.vertical, 0)
@@ -109,12 +98,10 @@ struct MainRuleBook: View {
                                         }.buttonStyle(.plain)
 
                                         if expanded {
-                                            ForEach(filtered, id: \.id) {
-                                                content in
+                                            ForEach(filtered, id: \.id) { content in
                                                 Button(
                                                     action: {
-                                                        onSubRuleModalView =
-                                                            true
+                                                        onSubRuleModalView = true
                                                     },
                                                     label: {
                                                         HStack {
@@ -194,10 +181,9 @@ struct MainRuleBook: View {
                     !vm.filteredContents(for: $0.key, from: $0.value).isEmpty
                 }
                 .map { $0.key }
-                .sorted { $0.name < $1.name }
+                //.sorted { $0.name < $1.name } 설명의 순서가 바뀔 수 있어서 한번 꺼두기
         }
     }
-
 }
 
 // PreferenceKey for detecting scroll
@@ -207,23 +193,23 @@ struct ScrollOffsetKey: PreferenceKey {
         value = nextValue()
     }
 }
-
-struct ContentDetailView: View {
-    let content: Content
-
-    var body: some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: 12) {
-                ForEach(content.texts, id: \.self) { text in
-                    Text(text)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                }
-            }
-            .padding()
-        }
-        .navigationTitle(content.name)
-    }
-}
+//SubRuleModalView를 띄우면 됩니다
+//struct ContentDetailView: View {
+//    let content: Content
+//
+//    var body: some View {
+//        ScrollView {
+//            VStack(alignment: .leading, spacing: 12) {
+//                ForEach(content.texts, id: \.self) { text in
+//                    Text(text)
+//                        .frame(maxWidth: .infinity, alignment: .leading)
+//                }
+//            }
+//            .padding()
+//        }
+//        .navigationTitle(content.name)
+//    }
+//}
 
 struct FilterSection: View {
     var filterTags: [FilterTag]
