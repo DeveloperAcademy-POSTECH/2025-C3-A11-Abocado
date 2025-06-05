@@ -15,16 +15,17 @@ struct SearchedCapsule: View {
             Button(action: {}) {
                 Text(title).font(.mdMedium).foregroundStyle(.gray)  // 색변경 필요
             }.padding(.vertical, 6).padding(.leading, 12)
+            
             Button(action: {}) {
-                Image(systemName: "multiply").foregroundColor(.gray)  // TODO: 아이콘 변경해야함
-            }.frame(width: 24, height: 24).padding(.vertical, 6)
+                Image(systemName: "multiply").foregroundColor(.gray)  // TODO: 아이콘 변경해야함, crossIcon 등록 필요
+            }.frame(width: 24, height: 24).padding(.vertical, 5).padding(.trailing, 4)
 
         }
-        .overlay(Capsule().stroke(.gray, lineWidth: 1)).frame(height: 34)
+        .overlay(Capsule().stroke(Color.grayNeutral30, lineWidth: 1)).frame(height: 34)
         .padding(.vertical)
     }
 }
 
 #Preview {
-    SearchedCapsule(title: "하마")
+    SearchedCapsule(title: "카르카손")
 }

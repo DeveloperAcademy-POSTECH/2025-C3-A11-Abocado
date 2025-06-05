@@ -1,0 +1,12 @@
+{
+  "images" : [
+    {
+      "filename" : "State=Unselected.svg",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}

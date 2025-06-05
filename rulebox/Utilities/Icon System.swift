@@ -62,3 +62,16 @@ var plusIcon: some View =
     .foregroundColor(.grayNeutral95)
     .padding(.vertical, 20)
     .padding(.horizontal, 14)
+
+/// Checkbox Base Icon
+public var CheckboxSelectedIcon: some View =
+    Image("checkbox.selected")
+    //.renderingMode(.template)
+    //.foregroundColor(.grayNeutral95)
+    .padding()
+
+public var CheckboxUnSelectedIcon: some View =
+    Image("checkbox.unselected")
+    //.renderingMode(.template)
+    //.foregroundColor(.grayNeutral95)
+    .padding()
