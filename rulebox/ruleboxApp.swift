@@ -28,7 +28,7 @@ struct ruleboxApp: App {
             let context = sharedModelContainer.mainContext
             
             // scan all json file in bundle
-            let jsonFileNames = [   "Carcassonne", "CockroachPoker"   ]
+            let jsonFileNames = [   "Carcassonne", "CockroachPoker", "Sabotage", "Avalon", "Bonanza"    ]
             
             for fileName in jsonFileNames {
                 if let url = Bundle.main.url(forResource: fileName, withExtension: "json"),

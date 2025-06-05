@@ -5,7 +5,7 @@
 //  Created by POS on 6/4/25.
 //
 
-//import Foundation
+import Foundation
 
 struct GenreList {
     static let allGenres = [
@@ -21,5 +21,5 @@ struct GenreList {
         "유아용",
         "액션",
         "클래식"
-    ]
+    ].sorted { $0.compare($1, locale: Locale(identifier: "ko_KR")) == .orderedAscending }
 }
