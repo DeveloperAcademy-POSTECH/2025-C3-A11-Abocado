@@ -43,57 +43,64 @@ struct SearchView: View {
                     .clipShape(.capsule)
 
                     // 최근 검색어
-                    HStack {
-                        Text("최근 검색어").font(.lgSemiBold)
-                        Spacer()
-                        Text("전체 삭제").font(.mdRegular)
-                            .foregroundColor(.grayNeutral70)
-                    }.padding()
-
-                    ScrollView(.horizontal, showsIndicators: false) {
+                    VStack(spacing: 16) {
                         HStack {
-                            SearchedCapsule(title: "타일")
-                            SearchedCapsule(title: "성")
-                            SearchedCapsule(title: "제목")
-                            SearchedCapsule(title: "타일")
-                        }
-                    }.frame(height: 40)
+                            Text("최근 검색어").font(.lgSemiBold)
+                            Spacer()
+                            Text("전체 삭제").font(.mdRegular)
+                                .foregroundColor(.grayNeutral70)
+                        }.padding(.horizontal, 0)
+
+                        ScrollView(.horizontal, showsIndicators: false) {
+                            HStack {
+                                SearchedCapsule(title: "타일")
+                                SearchedCapsule(title: "성")
+                                SearchedCapsule(title: "제목")
+                                SearchedCapsule(title: "타일")
+                            }
+                        }.frame(height: 40)
+                    }.padding(.vertical, 14)
 
                     // 자주 찾는 페이지
                     Text(
                         "자주 찾는 페이지"
-                    ).font(.lgSemiBold).padding()
+                    ).font(.lgSemiBold).padding(.horizontal, 0).padding(
+                        .vertical,
+                        14
+                    )
 
-                    MostVisitedPage(
-                        number: 1,
-                        title: "도로 점수 계산하기",
-                        subtitle: "게임 진행 - 도로",
-                        onTap: {}
-                    )
-                    MostVisitedPage(
-                        number: 2,
-                        title: "성 점수 계산하기",
-                        subtitle: "게임 진행 - 성",
-                        onTap: {}
-                    )
-                    MostVisitedPage(
-                        number: 3,
-                        title: "도로 점수 계산하기",
-                        subtitle: "게임 진행 - 도로",
-                        onTap: {}
-                    )
-                    MostVisitedPage(
-                        number: 4,
-                        title: "도로 점수 계산하기",
-                        subtitle: "게임 진행 - 도로",
-                        onTap: {}
-                    )
-                    MostVisitedPage(
-                        number: 5,
-                        title: "도로 점수 계산하기",
-                        subtitle: "게임 진행 - 도로",
-                        onTap: {}
-                    )
+                    VStack(spacing: 10) {
+                        MostVisitedPage(
+                            number: 1,
+                            title: "도로 점수 계산하기",
+                            subtitle: "게임 진행 - 도로",
+                            onTap: {}
+                        )
+                        MostVisitedPage(
+                            number: 2,
+                            title: "성 점수 계산하기",
+                            subtitle: "게임 진행 - 성",
+                            onTap: {}
+                        )
+                        MostVisitedPage(
+                            number: 3,
+                            title: "도로 점수 계산하기",
+                            subtitle: "게임 진행 - 도로",
+                            onTap: {}
+                        )
+                        MostVisitedPage(
+                            number: 4,
+                            title: "도로 점수 계산하기",
+                            subtitle: "게임 진행 - 도로",
+                            onTap: {}
+                        )
+                        MostVisitedPage(
+                            number: 5,
+                            title: "도로 점수 계산하기",
+                            subtitle: "게임 진행 - 도로",
+                            onTap: {}
+                        )
+                    }
 
                     Spacer()
                 }
@@ -101,18 +108,18 @@ struct SearchView: View {
             }
             .ignoresSafeArea(.keyboard)
         }
-            .navigationTitle("설명서 검색")
-            .navigationBarBackButtonHidden(true)
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) {
-                    Button(action: {
-                        dismiss()
-                    }) {
-                        backButtonToolbarIcon
-                    }
+        .navigationTitle("설명서 검색")
+        .navigationBarBackButtonHidden(true)
+        .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarLeading) {
+                Button(action: {
+                    dismiss()
+                }) {
+                    backButtonToolbarIcon
                 }
             }
+        }
 
     }
 }
@@ -128,8 +135,10 @@ struct MostVisitedPage: View {
     let subtitle: String
     let onTap: () -> Void
     var body: some View {
-        HStack {
-            Text(number.formatted()).font(.lgRegular).padding()
+        HStack(spacing: 16) {
+            Text(number.formatted()).font(.lgRegular).foregroundColor(
+                .primaryNormal
+            )
             VStack(alignment: .leading) {
                 Text(subtitle)
                     .font(.mdRegular)

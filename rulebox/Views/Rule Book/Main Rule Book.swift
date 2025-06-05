@@ -85,7 +85,7 @@ struct MainRuleBook: View {
                                                 isExpandedMap[cat.id] =
                                                     !expanded
                                             }
-                                           
+
                                             if let direct = filtered.first(
                                                 where: { $0.name == cat.name })
                                             {
@@ -157,11 +157,6 @@ struct MainRuleBook: View {
                                 }
                             }
                         }
-                        Rectangle()
-                            .fill(Color.gray.opacity(0.3))
-                            .frame(height: 500)
-                            .cornerRadius(12)
-                            .padding()
                     }
                     .onPreferenceChange(ScrollOffsetKey.self) { value in
                         showCompactHeader =
@@ -182,7 +177,8 @@ struct MainRuleBook: View {
             }
         }
         .navigationBarHidden(true)
-        .sheet(item: $selectedContent) { content in /// 대분류가 없는 경우, 다이렉트로 content표시
+        .sheet(item: $selectedContent) { content in
+            /// 대분류가 없는 경우, 다이렉트로 content표시
             SubRuleModalView(content: content)
         }
 
@@ -226,7 +222,7 @@ struct FilterSection: View {
             let partyValues = vm.partyValues(from: filterTags)
             let extensionValues = vm.extensionValues(from: filterTags)
 
-            DisclosureGroup("확장판 필터: \(vm.selectedExtensions.count)개") {
+            DisclosureGroup("확장 추가: \(vm.selectedExtensions.count)개") {
                 ForEach(extensionValues, id: \.self) { value in
                     Button(action: { vm.toggleExtension(value) }) {
                         HStack {
@@ -238,6 +234,12 @@ struct FilterSection: View {
                     }
                 }
             }
+            .background(
+                Color.atomicOpacity20
+            )
+            .clipShape(
+                RoundedRectangle(cornerRadius: 10)
+            )
             DisclosureGroup("인원수 필터") {
                 ForEach(partyValues, id: \.self) { value in
                     Button(action: { vm.selectedParty = value }) {
@@ -247,9 +249,15 @@ struct FilterSection: View {
                                 Image(systemName: "checkmark")
                             }
                         }
+
                     }
                 }
-            }
+            }.background(
+                Color.atomicOpacity20
+            )
+            .clipShape(
+                RoundedRectangle(cornerRadius: 10)
+            )
         }
     }
 }
