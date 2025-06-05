@@ -5,11 +5,14 @@
 //  Created by Ken on 5/29/25.
 //
 
+import SwiftData
 import SwiftUI
 
 struct SearchView: View {
 
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.modelContext) private var modelContext
+    @Query private var rules: [SearchRules]
 
     @State private var searchText: String = ""
 
@@ -25,7 +28,12 @@ struct SearchView: View {
 
                         TextField("검색어를 입력하세요", text: $searchText)
                             .onSubmit {
-                                // 검색하기
+                                let trimmedText = searchText.trimmingCharacters(
+                                    in: .whitespacesAndNewlines
+                                )
+                                guard !trimmedText.isEmpty else { return }
+                                let newSearch = SearchRules(name: trimmedText)
+                                modelContext.insert(newSearch)
                             }
 
                         if !searchText.isEmpty {
@@ -48,15 +56,23 @@ struct SearchView: View {
                             Text("최근 검색어").font(.lgSemiBold)
                             Spacer()
                             Text("전체 삭제").font(.mdRegular)
-                                .foregroundColor(.grayNeutral70)
+                                .foregroundColor(.grayNeutral70).onTapGesture {
+                                    for rule in rules {
+                                        modelContext.delete(rule)
+                                    }
+                                }
                         }.padding(.horizontal, 0)
 
                         ScrollView(.horizontal, showsIndicators: false) {
                             HStack {
-                                SearchedCapsule(title: "타일")
-                                SearchedCapsule(title: "성")
-                                SearchedCapsule(title: "제목")
-                                SearchedCapsule(title: "타일")
+                                ForEach(
+                                    rules.sorted(by: { $0.date > $1.date }),
+                                    id: \.self
+                                ) { rule in
+                                    SearchedCapsule(title: rule.name) {
+                                        modelContext.delete(rule)
+                                    }
+                                }
                             }
                         }.frame(height: 40)
                     }.padding(.vertical, 14)

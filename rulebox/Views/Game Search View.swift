@@ -5,11 +5,14 @@
 //  Created by Ken on 5/29/25.
 //
 
+import SwiftData
 import SwiftUI
 
 struct GameSearchView: View {
 
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.modelContext) private var modelContext
+    @Query private var games: [SearchGames]
 
     @State private var searchText: String = ""
 
@@ -25,7 +28,12 @@ struct GameSearchView: View {
 
                         TextField("검색어를 입력하세요", text: $searchText)
                             .onSubmit {
-                                // 검색하기
+                                let trimmedText = searchText.trimmingCharacters(
+                                    in: .whitespacesAndNewlines
+                                )
+                                guard !trimmedText.isEmpty else { return }
+                                let newSearch = SearchGames(name: trimmedText)
+                                modelContext.insert(newSearch)
                             }
 
                         if !searchText.isEmpty {
@@ -43,26 +51,40 @@ struct GameSearchView: View {
                     .clipShape(.capsule)
 
                     // 최근 검색어
-                    HStack {
-                        Text("최근 검색어").font(.lgSemiBold)
-                        Spacer()
-                        Text("전체 삭제").font(.mdRegular).foregroundColor(
-                            .grayNeutral40
-                        )
-                    }.padding()
+                    VStack(spacing: 16) {
+                        HStack {
+                            Text("최근 검색어").font(.lgSemiBold)
+                            Spacer()
+                            Text("전체 삭제").font(.mdRegular)
+                                .foregroundColor(.grayNeutral70).onTapGesture {
+                                    for game in games {
+                                        modelContext.delete(game)
+                                    }
+                                }
+                        }.padding(.horizontal, 0)
 
-                    ScrollView(.horizontal, showsIndicators: false) {
-                        SearchedCapsule(title: "검색어1")
-                        SearchedCapsule(title: "검색어2")
-                        SearchedCapsule(title: "검색어3")
-                        SearchedCapsule(title: "검색어4")
-                        SearchedCapsule(title: "검색어5")
-                    }
+                        ScrollView(.horizontal, showsIndicators: false) {
+                            HStack(spacing: 10) {
+                                ForEach(
+                                    games.sorted(by: { $0.date > $1.date }),
+                                    id: \.self
+                                ) {
+                                    game in
+                                    SearchedCapsule(
+                                        title: game.name,
+                                        onDelete: {
+                                            modelContext.delete(game)
+                                        }
+                                    )
+                                }
+                            }
+                        }.frame(height: 40)
+                    }.padding(.vertical, 14)
                     Spacer()
                 }
                 .padding()
             }
-            .ignoresSafeArea(.keyboard) 
+            .ignoresSafeArea(.keyboard)
         }
         .navigationTitle("게임 검색")
         .navigationBarBackButtonHidden(true)
@@ -81,5 +103,5 @@ struct GameSearchView: View {
 
 #Preview {
     SearchView()
-        .modelContainer(for: Item.self, inMemory: true)
+        .modelContainer(for: SearchGames.self, inMemory: true)
 }

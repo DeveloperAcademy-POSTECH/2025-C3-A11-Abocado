@@ -19,7 +19,9 @@ struct ruleboxApp: App {
             MajorCat.self,
             Content.self,
             FilterTag.self,
-            FilterTable.self
+            FilterTable.self,
+            SearchGames.self,
+            SearchRules.self
         ])
 
         do {
