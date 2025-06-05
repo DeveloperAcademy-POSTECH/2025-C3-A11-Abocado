@@ -67,6 +67,8 @@ struct GameSelectView: View {
                 .frame(height: 520)
 
                 Spacer()
+                
+                
             }
         }
     }
