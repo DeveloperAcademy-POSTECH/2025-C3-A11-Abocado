@@ -19,6 +19,15 @@ struct LargeToolbarView: View {
                 .scaledToFill()
                 .frame(width: 393, height: 312, alignment: .top)
                 .clipped()
+            
+            LinearGradient(
+                gradient: Gradient(colors: [
+                    Color.black.opacity(0.0), // 시작은 어둡게
+                    Color.black.opacity(0.7)  // 끝은 투명하게
+                ]),
+                startPoint: .top,
+                endPoint: .bottom
+            )
 
             VStack(alignment: .leading) {
                 HStack {
