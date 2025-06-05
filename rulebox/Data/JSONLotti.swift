@@ -22,6 +22,6 @@ struct LottieView: UIViewRepresentable {
     func updateUIView(_ uiView: UIViewType, context: Context) {}
 }
 
-// JSON 파일 이름 넣기
+/// JSON 파일 이름 넣기
 // LottieView(filename: "Carca Basic_1_Setup_and_Components_1")
 //    .frame(width: 706, height: 550)
