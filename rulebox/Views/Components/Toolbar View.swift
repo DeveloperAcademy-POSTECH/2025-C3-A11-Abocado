@@ -10,9 +10,6 @@ import SwiftUI
 struct LargeToolbarView: View {
     @Environment(\.dismiss) private var dismiss
     
-    @Binding var isBookmarked: Bool
-    var content: Content
-
     let game: GameName
 
     var body: some View {
@@ -31,8 +28,8 @@ struct LargeToolbarView: View {
                     Spacer()
                     NavigationLink(destination: SearchView()) {
                         searchToolbarIcon
-                    
-                        NavigationLink(destination: BookmarkView(isBookmarked: $isBookmarked, content: content)) {
+                    }
+                    NavigationLink(destination: BookmarkView()) {
                         bookmarkToolbarIcon
                     }
                 }.padding(.horizontal, 18).padding(.vertical, 14)
@@ -53,6 +50,8 @@ struct LargeToolbarView: View {
 
 struct SmallToolbarView: View {
     @Environment(\.dismiss) private var dismiss
+    
+    var content: Content
 
     let game: GameName
 
@@ -97,8 +96,8 @@ struct SmallToolbarView: View {
 
 }
 
-#Preview {
-    LargeToolbarView(
-        game: GameName(name: "ad", genres: ["asdas", "asd"])
-    )
-}
+//#Preview {
+//    LargeToolbarView(
+//        game: GameName(name: "ad", genres: ["asdas", "asd"])
+//    )
+//}

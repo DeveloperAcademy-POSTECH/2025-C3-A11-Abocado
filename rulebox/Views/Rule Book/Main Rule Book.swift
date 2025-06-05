@@ -21,10 +21,10 @@ struct MainRuleBook: View {
 
     @State private var showCompactHeader: Bool = false
 
+    
     //SubRuleModalView() modal sheet
     @State private var selectedContent: Content? = nil
     @State private var onSubRuleModalView = false
-    @State private var selectedContent: Content? = nil
 
     // get tags for selected game
     var gameFilterTags: [FilterTag] {
@@ -58,11 +58,12 @@ struct MainRuleBook: View {
                                     )
                                 }
                             )
-                        if showCompactHeader {
-                            SmallToolbarView(game: game)
-                        } else {
-                            LargeToolbarView(game: game)
-                        }
+                        //TODO: 타이틀 사이즈 변경 필요
+//                        if showCompactHeader {
+//                            LargeToolbarView(game: game)
+//                        } else {
+                        LargeToolbarView(game: game)
+//                        }
                         VStack(alignment: .leading, spacing: 12) {
 
                             // view body

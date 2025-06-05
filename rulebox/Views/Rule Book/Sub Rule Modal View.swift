@@ -1,38 +1,15 @@
-//
-//  Sub Rule Page.swift
-//  rulebox
-//
-//  Created by Ken on 5/29/25.
-//
-
 import SwiftData
 import SwiftUI
 
-// 모달 페이지입니다.
 struct SubRuleModalView: View {
-    @State private var showToast = false
-
     @Environment(\.modelContext) var context
-    
-    @State var isBookmarked = false
-    
+
     @Query var bookmarks: [Bookmark]
-    @Query var majorCat: [MajorCat]
     
-    //현재 content가 북마크 되었는지 확인
+    @State private var showToast = false
+    @State private var isBookmarked = false
+
     var content: Content
-
-
-    /// 여기에는 설명이 나옵니다
-//    var loremIpsum: String {
-//        if let url = Bundle.main.url(
-//            forResource: "lorem", withExtension: "txt", subdirectory: "Data"),
-//            let contents = try? String(contentsOf: url)
-//        {
-//            return contents
-//        }
-//        return "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
-//    }
 
     var body: some View {
         NavigationStack {
@@ -40,86 +17,67 @@ struct SubRuleModalView: View {
                 VStack(alignment: .leading) {
                     
                     VStack(alignment: .leading) {
-                            Text(content.majorCat.name) // 중분류
-                                .font(.lgRegular)
-                                .foregroundColor(.grayNeutral70)
+                        Text(content.majorCat.name)
+                            .font(.lgRegular)
+                            .foregroundColor(.grayNeutral70)
                         
-                        HStack{
-                            
-                            Text(content.name) // 소분류
+                        HStack {
+                            Text(content.name)
                                 .font(.mdHeading)
                                 .foregroundColor(.white)
                             Spacer()
-                            //TODO: 북마크
-                            Button(
-                                action: {
-                                    //북마크 false 상태
-                                    if isBookmarked {
-                                        let newBookmark = Bookmark(content: content)
-                                        context.insert(newBookmark)
-                                        isBookmarked = true
-                                        
-                                    } else {
-                                        //북마크 제거
-                                        if let bookmark = bookmarks.first(where: { $0.content?.id == content.id }) { context.delete(bookmark) }
-                                        isBookmarked = false
-                                        
-                                        showToast = true
-                                        DispatchQueue.main.asyncAfter(
-                                            deadline: .now() + 2
-                                        ) {
-                                            showToast = false
-                                        }
+                            
+                            // 북마크 버튼
+                            Button(action: {
+                                if isBookmarked {
+                                    // 북마크 제거
+                                    if let bookmark = bookmarks.first(where: { $0.content?.id == content.id }) {
+                                        context.delete(bookmark)
+                                        try? context.save()
                                     }
-                                    //상태토글
-                                    isBookmarked.toggle()
-                                    
-                                },
-                                label: {
-                                    // 북마크아이콘
-                                    (isBookmarked
-                                     ? AnyView(bookmarkFilledIcon)
-                                     : AnyView(bookmarkIcon))
-                                    .frame(width: 40, height: 40)
-                                })
-                            
-                            .onAppear {
-                                // bookmarks에 해당 content.id가 있다면 true, 없다면 false
-                                isBookmarked = bookmarks.contains {$0.content?.id == content.id}
+                                    showToast = true
+                                    DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                                        showToast = false
+                                    }
+                                } else {
+                                    // 북마크 추가
+                                    let newBookmark = Bookmark(content: content)
+                                    context.insert(newBookmark)
+                                    try? context.save()
+                                }
+
+                                isBookmarked.toggle()
+                            }) {
+                                (isBookmarked
+                                 ? AnyView(bookmarkFilledIcon)
+                                 : AnyView(bookmarkIcon))
+                                .frame(width: 40, height: 40)
                             }
-                            .onChange(of: bookmarks) { newBookmarks in
-                                isBookmarked = newBookmarks.contains {$0.content?.id == content.id}
-                            }
-                            
-                            
-                            
                         }
-                        
                     }
-                    
+
                     ForEach(0..<content.texts.count, id: \.self) { index in
-                        HStack {
-                            Spacer()
-                            //Image(content.images[index])
-                            Text("이미지가 들어갈 거에요")
-                            Spacer()
+                        VStack(alignment: .leading) {
+                            HStack {
+                                Spacer()
+                                Text("이미지가 들어갈 거에요")
+                                Spacer()
+                            }
+                            .padding(.bottom, 12)
+
+                            Text(content.texts[index])
+                                .foregroundColor(.grayNeutral99)
+                                .font(.lgRegular)
+                                .padding(.bottom, 34)
                         }
-                        .padding(.bottom, 12)
-                        
-                        //설명영역
-                        Text(content.texts[index])
-                            .foregroundColor(.grayNeutral99)
-                            .font(.lgRegular)
-                            .padding(.bottom, 34)
                     }
-                    
                 }
                 .padding(.horizontal, 20)
                 .padding(.top, 50)
                 .overlay(
                     Group {
                         if showToast {
-                            Text("북마크에 추가되었습니다")
+                            Text("북마크에서 제거되었습니다")
                                 .padding()
                                 .background(Color.black.opacity(0.7))
                                 .foregroundColor(.white)
@@ -130,24 +88,25 @@ struct SubRuleModalView: View {
                     alignment: .bottom
                 )
             }
-            .safeAreaInset(edge: .bottom){
-                
+            .onAppear {
+                isBookmarked = bookmarks.contains { $0.content?.id == content.id }
+            }
+            .onChange(of: bookmarks) { newValue in
+                isBookmarked = newValue.contains { $0.content?.id == content.id }
+            }
+            .safeAreaInset(edge: .bottom) {
                 HStack {
                     NavigationLink(destination: SearchView()) {
                         HStack {
-                            Image("caret.left")
-                                .tint(.white)
-                            Text("이전 페이지")
-                                .font(.lgRegular)
+                            Image("caret.left").tint(.white)
+                            Text("이전 페이지").font(.lgRegular)
                         }
                     }
                     Spacer()
                     NavigationLink(destination: SearchView()) {
                         HStack {
-                            Text("다음 페이지")
-                                .font(.lgRegular)
-                            Image("caret.left").rotationEffect(.degrees(180))
-                                .tint(.white)
+                            Text("다음 페이지").font(.lgRegular)
+                            Image("caret.left").rotationEffect(.degrees(180)).tint(.white)
                         }
                     }
                 }
@@ -160,8 +119,3 @@ struct SubRuleModalView: View {
         }
     }
 }
-
-//#Preview {
-//    SubRuleModalView()
-//        .modelContainer(for: Item.self, inMemory: true)
-//}

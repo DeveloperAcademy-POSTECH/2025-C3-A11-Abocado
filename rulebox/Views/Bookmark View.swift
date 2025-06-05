@@ -13,10 +13,7 @@ struct BookmarkView: View {
     @Environment(\.modelContext) var context
     
     @Query var bookmarks: [Bookmark] // 북마크 불러오기
-    
-    @Binding var isBookmarked: Bool
-    
-    var content: Content
+    var content: Content?
     
     var body: some View {
             
@@ -27,7 +24,7 @@ struct BookmarkView: View {
                 }
                 .padding(.bottom, 14)
             
-            ForEach(bookmarks /*, id: \.id*/) { bookmark in
+            ForEach(bookmarks, id: \.self) { bookmark in
                 if let content = bookmark.content {
                     HStack{ // 북마크 블럭
                         NavigationLink(destination: SubRuleModalView(content: content)){ // 이동페이지
@@ -52,6 +49,7 @@ struct BookmarkView: View {
                         
                         Button(action:{
                             context.delete(bookmark)
+                            try? context.save()
                         }, label:{
                             bookmarkFilledIcon // 북마크아이콘
                                 .frame(width:40, height:40)

@@ -14,6 +14,8 @@ struct GameSelectView: View {
     @Query(sort: \GameName.name) private var games: [GameName]
     @StateObject private var vm = GameSelectVM()
 
+//    @Query var bookmarks: [Bookmark]?
+
     var body: some View {
         NavigationStack {
             VStack {
@@ -72,7 +74,7 @@ struct GameSelectView: View {
     }
 }
 
-#Preview {
-    GameSelectView()
-        .modelContainer(for: GameName.self, inMemory: true)
-}
+//#Preview {
+//    GameSelectView()
+//        .modelContainer(for: GameName.self, inMemory: true)
+//}
