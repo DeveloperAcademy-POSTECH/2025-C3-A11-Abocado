@@ -16,6 +16,7 @@ class Content {
     var texts: [String]
     var words: [String]?
     var images: [Data]?
+    var bookmarkedState: Bool
 
     @Relationship var gameName: GameName
     @Relationship var majorCat: MajorCat
@@ -29,7 +30,8 @@ class Content {
         images: [Data]? = nil,
         gameName: GameName,
         majorCat: MajorCat,
-        filterTable: FilterTable? = nil
+        filterTable: FilterTable? = nil,
+        bookmarkedState: Bool = false
     ) {
         self.id = id
         self.name = name
@@ -39,5 +41,6 @@ class Content {
         self.gameName = gameName
         self.majorCat = majorCat
         self.filterTable = filterTable
+        self.bookmarkedState = bookmarkedState
     }
 }

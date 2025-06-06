@@ -9,7 +9,7 @@ import SwiftUI
 
 struct LargeToolbarView: View {
     @Environment(\.dismiss) private var dismiss
-
+    
     let game: GameName
 
     var body: some View {
@@ -63,6 +63,8 @@ struct LargeToolbarView: View {
 
 struct SmallToolbarView: View {
     @Environment(\.dismiss) private var dismiss
+    
+    var content: Content
 
     let game: GameName
 
@@ -107,8 +109,8 @@ struct SmallToolbarView: View {
 
 }
 
-#Preview {
-    LargeToolbarView(
-        game: GameName(name: "ad", genres: ["asdas", "asd"])
-    )
-}
+//#Preview {
+//    LargeToolbarView(
+//        game: GameName(name: "ad", genres: ["asdas", "asd"])
+//    )
+//}
