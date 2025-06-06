@@ -21,7 +21,9 @@ struct MainRuleBook: View {
 
     @State private var showCompactHeader: Bool = false
 
+    
     //SubRuleModalView() modal sheet
+    @State private var selectedContent: Content? = nil
     @State private var onSubRuleModalView = false
 
     // get tags for selected game
@@ -56,24 +58,29 @@ struct MainRuleBook: View {
                                     )
                                 }
                             )
-                        if showCompactHeader {
-                            SmallToolbarView(game: game)
-                        } else {
-                            LargeToolbarView(game: game)
-                        }
+                        //TODO: 타이틀 사이즈 변경 필요
+//                        if showCompactHeader {
+//                            LargeToolbarView(game: game)
+//                        } else {
+                        LargeToolbarView(game: game)
+//                        }
                         VStack(alignment: .leading, spacing: 12) {
 
                             // view body
                             FilterSection(filterTags: gameFilterTags, vm: vm)
+                                .padding(.horizontal, 18).padding(.top, 24)
 
-                            ForEach( filteredMajorCats, id: \.id ) { cat in
+                            ForEach(filteredMajorCats, id: \.id) { cat in
                                 let filtered = vm.filteredContents(
                                     for: cat,
                                     from: filteredContents
                                 )
-                                
+
                                 if !filtered.isEmpty {
-                                    let expanded = isExpandedMap[ cat.id, default: false ]
+                                    let expanded = isExpandedMap[
+                                        cat.id,
+                                        default: false
+                                    ]
 
                                     VStack(alignment: .leading, spacing: 0) {
                                         Button(action: {
@@ -81,30 +88,58 @@ struct MainRuleBook: View {
                                                 isExpandedMap[cat.id] =
                                                     !expanded
                                             }
+
+                                            if let direct = filtered.first(
+                                                where: { $0.name == cat.name })
+                                            {
+                                                selectedContent = direct
+                                            }
                                         }) {
                                             HStack(spacing: 8) {
                                                 Text(cat.name)
                                                     .font(.smHeading)
-                                                    .foregroundColor( expanded ? .primaryNormal : .white )
-                                                
+                                                    .foregroundColor(
+                                                        expanded
+                                                            ? .primaryNormal
+                                                            : .white
+                                                    )
+
                                                 Spacer()
-                                                
-                                                (expanded ? AnyView(minusIcon) : AnyView( plusIcon ))
+
+                                                (expanded
+                                                    ? AnyView(minusIcon)
+                                                    : AnyView(plusIcon))
 
                                             }
                                             .padding(.vertical, 0)
                                             .padding(.horizontal, 16)
                                             .contentShape(Rectangle())
+                                            .background(
+                                                RoundedCorner(
+                                                    radius: 14,
+                                                    corners: [
+                                                        .topLeft, .topRight,
+                                                    ]
+                                                )
+                                                .fill(
+                                                    Color.primaryNormal.opacity(
+                                                        expanded ? 0.1 : 0
+                                                    )
+                                                )
+                                            )
                                         }.buttonStyle(.plain)
 
                                         if expanded {
-                                            ForEach(filtered, id: \.id) { content in
+                                            ForEach(filtered, id: \.id) {
+                                                content in
                                                 Button(
                                                     action: {
-                                                        onSubRuleModalView = true
+                                                        selectedContent = content
                                                     },
                                                     label: {
-                                                        HStack {
+                                                        HStack(
+                                                            alignment: .center
+                                                        ) {
                                                             Text(content.name)
                                                             Spacer()
                                                         }
@@ -112,6 +147,24 @@ struct MainRuleBook: View {
                                                 )
                                                 .padding(.vertical, 8)
                                                 .padding(.horizontal, 14)
+                                                .background(
+                                                    RoundedCorner(
+                                                        radius: 14,
+                                                        corners: [
+                                                            //TODO: 가운데는 코너라운드 없애기 
+                                                            .topLeft, .topRight,
+                                                            .bottomLeft,
+                                                            .bottomRight,
+                                                        ]
+                                                    )
+                                                    .fill(
+                                                        Color.primaryNormal
+                                                            .opacity(
+                                                                expanded
+                                                                    ? 0.1 : 0
+                                                            )
+                                                    )
+                                                )
                                                 .sheet(
                                                     isPresented:
                                                         $onSubRuleModalView
@@ -122,6 +175,10 @@ struct MainRuleBook: View {
                                                 }
 
                                             }
+                                        } else {
+                                            Divider().foregroundStyle(
+                                                Color.white
+                                            ).padding(.horizontal, 18)
                                         }
                                     }.background(
                                         Group {
@@ -139,11 +196,6 @@ struct MainRuleBook: View {
                                 }
                             }
                         }
-                        Rectangle()
-                            .fill(Color.gray.opacity(0.3))
-                            .frame(height: 500)
-                            .cornerRadius(12)
-                            .padding()
                     }
                     .onPreferenceChange(ScrollOffsetKey.self) { value in
                         showCompactHeader =
@@ -162,7 +214,12 @@ struct MainRuleBook: View {
                     vm.setupDefaults(from: gameFilterTags)
                 }
             }
-        }.navigationBarHidden(true)
+        }
+        .navigationBarHidden(true)
+        .sheet(item: $selectedContent) { content in
+            /// 대분류가 없는 경우, 다이렉트로 content표시
+            SubRuleModalView(content: content)
+        }
 
         // get contents belong to current game
         var filteredContents: [Content] {
@@ -181,7 +238,7 @@ struct MainRuleBook: View {
                     !vm.filteredContents(for: $0.key, from: $0.value).isEmpty
                 }
                 .map { $0.key }
-                //.sorted { $0.name < $1.name } 설명의 순서가 바뀔 수 있어서 한번 꺼두기
+                .sorted { $0.name > $1.name }
         }
     }
 }
@@ -193,58 +250,18 @@ struct ScrollOffsetKey: PreferenceKey {
         value = nextValue()
     }
 }
-//SubRuleModalView를 띄우면 됩니다
-//struct ContentDetailView: View {
-//    let content: Content
-//
-//    var body: some View {
-//        ScrollView {
-//            VStack(alignment: .leading, spacing: 12) {
-//                ForEach(content.texts, id: \.self) { text in
-//                    Text(text)
-//                        .frame(maxWidth: .infinity, alignment: .leading)
-//                }
-//            }
-//            .padding()
-//        }
-//        .navigationTitle(content.name)
-//    }
-//}
 
-struct FilterSection: View {
-    var filterTags: [FilterTag]
-    @ObservedObject var vm: MainRuleBookVM
+// Custom shape for rounding specific corners
+struct RoundedCorner: Shape {
+    var radius: CGFloat = .infinity
+    var corners: UIRectCorner = .allCorners
 
-    var body: some View {
-        HStack {
-            // 나중에 하프모달로 뜨게 수정해야돼 엉엉
-            let partyValues = vm.partyValues(from: filterTags)
-            let extensionValues = vm.extensionValues(from: filterTags)
-
-            DisclosureGroup("확장판 필터: \(vm.selectedExtensions.count)개") {
-                ForEach(extensionValues, id: \.self) { value in
-                    Button(action: { vm.toggleExtension(value) }) {
-                        HStack {
-                            Text(value)
-                            if vm.selectedExtensions.contains(value) {
-                                Image(systemName: "checkmark")
-                            }
-                        }
-                    }
-                }
-            }
-            DisclosureGroup("인원수 필터") {
-                ForEach(partyValues, id: \.self) { value in
-                    Button(action: { vm.selectedParty = value }) {
-                        HStack {
-                            Text(value)
-                            if vm.selectedParty == value {
-                                Image(systemName: "checkmark")
-                            }
-                        }
-                    }
-                }
-            }
-        }
+    func path(in rect: CGRect) -> Path {
+        let path = UIBezierPath(
+            roundedRect: rect,
+            byRoundingCorners: corners,
+            cornerRadii: CGSize(width: radius, height: radius)
+        )
+        return Path(path.cgPath)
     }
 }

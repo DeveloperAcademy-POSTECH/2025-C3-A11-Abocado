@@ -13,7 +13,9 @@ var homeToolbarIcon: some View =
     .renderingMode(.template)
     .foregroundColor(.white)
     .padding()
-    .background(Circle().fill(Color.gray).frame(width: 40, height: 40))
+    .background(
+        Circle().fill(Color.atomicOpacity20).frame(width: 40, height: 40)
+    )
     .frame(width: 40, height: 40)
 
 /// Toolbar search Icon
@@ -22,7 +24,9 @@ var searchToolbarIcon: some View =
     .renderingMode(.template)
     .foregroundColor(.white)
     .padding()
-    .background(Circle().fill(Color.gray).frame(width: 40, height: 40))
+    .background(
+        Circle().fill(Color.atomicOpacity20).frame(width: 40, height: 40)
+    )
 
 /// Toolbar bookmark Icon
 var bookmarkToolbarIcon: some View =
@@ -30,8 +34,20 @@ var bookmarkToolbarIcon: some View =
     .renderingMode(.template)
     .foregroundColor(.white)
     .padding()
-    .background(Circle().fill(Color.gray).frame(width: 40, height: 40))
+    .background(
+        Circle().fill(Color.atomicOpacity20).frame(width: 40, height: 40)
+    )
     .frame(width: 40, height: 40)
+
+/// Toolbar search Icon
+var backButtonToolbarIcon: some View =
+    Image("caret.left")
+    .renderingMode(.template)
+    .foregroundColor(.white)
+    .padding()
+    .background(
+        Circle().fill(Color.atomicOpacity20).frame(width: 40, height: 40)
+    )
 
 /// Toolbar bookmark Icon
 public var bookmarkIcon: some View =
@@ -62,3 +78,11 @@ var plusIcon: some View =
     .foregroundColor(.grayNeutral95)
     .padding(.vertical, 20)
     .padding(.horizontal, 14)
+
+/// Cross Icon
+var crossIcon: some View =
+    Image("cross")
+    .renderingMode(.template)
+    .foregroundColor(.grayNeutral60)
+    .padding(.vertical, 5)
+    .padding(.horizontal, 2)

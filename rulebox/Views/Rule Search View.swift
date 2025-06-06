@@ -5,110 +5,187 @@
 //  Created by Ken on 5/29/25.
 //
 
+import SwiftData
 import SwiftUI
 
 struct SearchView: View {
 
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.modelContext) private var modelContext
+    @Query private var rules: [SearchRules]
 
+    @Query var allContents: [Content]
+    @State var searchedContent: [Content] = []
     @State private var searchText: String = ""
+    
+    //SubRuleModalView() modal sheet
+    @State private var onSubRuleModalView = false
+    @State private var selectedContent: Content? = nil
 
     var body: some View {
         NavigationStack {
-            VStack(alignment: .leading) {
-                // 검색 바
-                HStack {
-                    Image("Search") //대소문자 구분해야됨 -사나
-                        .renderingMode(.template)
-                        .foregroundColor(.white)
-
-                    TextField("검색어를 입력하세요", text: $searchText)
-                        .onSubmit {
-                            // 검색하기
-                        }
-
-                    if !searchText.isEmpty {
-                        Button(action: {
-                            searchText = ""
-                        }) {
-                            Image("cancel")
-                                .renderingMode(.template)
-                                .foregroundColor(.grayNeutral80)
-                        }
-                    }
-                }
-                .padding(8)
-                .background(Color(.systemGray6))
-                .clipShape(.capsule)
-
-                // 최근 검색어
-                HStack {
-                    Text("최근 검색어").font(.lgSemiBold)
-                    Spacer()
-                    Text("전체 삭제").font(.mdRegular)  //TODO: 칼라 변경 필요
-                }.padding()
-
-                ScrollView(.horizontal, showsIndicators: false) {
+            ScrollView {
+                VStack(alignment: .leading) {
+                    // 검색 바
                     HStack {
-                        SearchedCapsule(title: "타일")
-                        SearchedCapsule(title: "성")
-                        SearchedCapsule(title: "제목")
-                        SearchedCapsule(title: "타일")
-                    }
-                }.frame(height: 40)
-
-                // 자주 찾는 페이지
-                Text(
-                    "자주 찾는 페이지"
-                ).font(.lgSemiBold).padding()
-
-                MostVisitedPage(
-                    number: 1,
-                    title: "도로 점수 계산하기",
-                    subtitle: "게임 진행 - 도로",
-                    onTap: {}
-                )
-                MostVisitedPage(
-                    number: 2,
-                    title: "성 점수 계산하기",
-                    subtitle: "게임 진행 - 성",
-                    onTap: {}
-                )
-                MostVisitedPage(
-                    number: 3,
-                    title: "도로 점수 계산하기",
-                    subtitle: "게임 진행 - 도로",
-                    onTap: {}
-                )
-                MostVisitedPage(
-                    number: 4,
-                    title: "도로 점수 계산하기",
-                    subtitle: "게임 진행 - 도로",
-                    onTap: {}
-                )
-                MostVisitedPage(
-                    number: 5,
-                    title: "도로 점수 계산하기",
-                    subtitle: "게임 진행 - 도로",
-                    onTap: {}
-                )
-
-                Spacer()
-            }.padding()
-        }.navigationTitle("설명서 검색")
-            .navigationBarBackButtonHidden(true)
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) {
-                    Button(action: {
-                        dismiss()
-                    }) {
-                        Image("caret.left")
+                        Image("search")  //대소문자 구분해야됨 -사나
                             .renderingMode(.template)
                             .foregroundColor(.white)
+
+                        TextField("검색어를 입력하세요", text: $searchText)
+                            .onSubmit {
+                                let keyword = searchText.lowercased()
+                                    .trimmingCharacters(
+                                        in: .whitespacesAndNewlines
+                                    )
+                                guard !keyword.isEmpty else { return }
+                                let newSearch = SearchRules(name: keyword)
+                                modelContext.insert(newSearch)
+
+                                print(keyword)
+                                print("전체 콘텐츠: \(allContents.map(\.words))")
+
+                                // Update searched content
+                                searchedContent = allContents.filter {
+                                    ($0.words?.contains {
+                                        $0.lowercased().contains(keyword)
+                                            || $0.lowercased().hasPrefix(
+                                                keyword
+                                            )
+                                    }) ?? false
+                                }
+                                print("검색된 콘텐츠: \(searchedContent.map(\.name))")
+                            }
+
+                        if !searchText.isEmpty {
+                            Button(action: {
+                                searchText = ""
+                            }) {
+                                Image("cancel")
+                                    .renderingMode(.template)
+                                    .foregroundColor(.grayNeutral80)
+                            }
+                        }
                     }
+                    .padding(8)
+                    .background(Color(.systemGray6))
+                    .clipShape(.capsule)
+
+                    // 최근 검색어
+                    VStack(spacing: 16) {
+                        HStack {
+                            Text("최근 검색어").font(.lgSemiBold)
+                            Spacer()
+                            Text("전체 삭제").font(.mdRegular)
+                                .foregroundColor(.grayNeutral70).onTapGesture {
+                                    for rule in rules {
+                                        modelContext.delete(rule)
+                                    }
+                                }
+                        }.padding(.horizontal, 0)
+
+                        ScrollView(.horizontal, showsIndicators: false) {
+                            HStack {
+                                ForEach(
+                                    rules.sorted(by: { $0.date > $1.date }),
+                                    id: \.self
+                                ) { rule in
+                                    SearchedCapsule(title: rule.name, onTap: {})
+                                    {
+                                        modelContext.delete(rule)
+                                    }
+                                }
+                            }
+                        }.frame(height: 40)
+                    }.padding(.vertical, 14)
+
+                    if !searchText.isEmpty {
+
+                        VStack(alignment: .leading, spacing: 8) {
+                            Text("검색된 룰").font(.lgSemiBold)
+                            ScrollView(.horizontal, showsIndicators: false) {
+                                HStack(spacing: 10) {
+                                    ForEach(searchedContent, id: \.self) { content in
+                                        Button(action: {
+                                            selectedContent = content
+                                        }) {
+                                            Text(content.name)
+                                                .padding(.horizontal, 12)
+                                                .padding(.vertical, 8)
+                                                .background(Color.grayNeutral30)
+                                                .cornerRadius(8)
+                                                .foregroundColor(.white)
+                                        }
+                                    }
+                                }
+                            }.frame(height: 40)
+                        }.padding(.top)
+                    }
+
+                    // 자주 찾는 페이지
+                    Text(
+                        "자주 찾는 페이지"
+                    ).font(.lgSemiBold).padding(.horizontal, 0).padding(
+                        .vertical,
+                        14
+                    )
+
+                    VStack(spacing: 10) {
+                        MostVisitedPage(
+                            number: 1,
+                            title: "도로 점수 계산하기",
+                            subtitle: "게임 진행 - 도로",
+                            onTap: {}
+                        )
+                        MostVisitedPage(
+                            number: 2,
+                            title: "성 점수 계산하기",
+                            subtitle: "게임 진행 - 성",
+                            onTap: {}
+                        )
+                        MostVisitedPage(
+                            number: 3,
+                            title: "도로 점수 계산하기",
+                            subtitle: "게임 진행 - 도로",
+                            onTap: {}
+                        )
+                        MostVisitedPage(
+                            number: 4,
+                            title: "도로 점수 계산하기",
+                            subtitle: "게임 진행 - 도로",
+                            onTap: {}
+                        )
+                        MostVisitedPage(
+                            number: 5,
+                            title: "도로 점수 계산하기",
+                            subtitle: "게임 진행 - 도로",
+                            onTap: {}
+                        )
+                    }
+
+                    Spacer()
+                }
+                .padding()
+            }
+            .sheet(item: $selectedContent) { content in
+                /// 대분류가 없는 경우, 다이렉트로 content표시
+                SubRuleModalView(content: content)
+            }
+
+            .ignoresSafeArea(.keyboard)
+        }
+        .navigationTitle("설명서 검색")
+        .navigationBarBackButtonHidden(true)
+        .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarLeading) {
+                Button(action: {
+                    dismiss()
+                }) {
+                    backButtonToolbarIcon
                 }
             }
+        }
 
     }
 }
@@ -124,8 +201,10 @@ struct MostVisitedPage: View {
     let subtitle: String
     let onTap: () -> Void
     var body: some View {
-        HStack {
-            Text(number.formatted()).font(.lgRegular).padding()
+        HStack(spacing: 16) {
+            Text(number.formatted()).font(.lgRegular).foregroundColor(
+                .primaryNormal
+            )
             VStack(alignment: .leading) {
                 Text(subtitle)
                     .font(.mdRegular)

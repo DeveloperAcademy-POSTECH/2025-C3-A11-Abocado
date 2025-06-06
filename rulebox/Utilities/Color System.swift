@@ -27,6 +27,13 @@ extension Color {
     static let opacity20 = 20
     static let opacity25 = 25
     static let opacity85 = 85
+    
+    //MARK: - Opacity
+    static let atomicOpacity5 = Color.white.opacity(0.05)
+    static let atomicOpacity10 = Color.white.opacity(0.1)
+    static let atomicOpacity20 = Color.white.opacity(0.2)
+    static let atomicOpacity25 = Color.white.opacity(0.25)
+    static let atomicOpacity85 = Color.white.opacity(0.85)
 
     //MARK: - Others
     static let backGround: Color = Color(hex: "#1D1E20")

@@ -8,8 +8,6 @@
 import Foundation
 import SwiftData
 
-
-
 @MainActor
 class MainRuleBookVM: ObservableObject {
     @Published var selectedParty: String? = nil
@@ -27,13 +25,13 @@ class MainRuleBookVM: ObservableObject {
             selectedExtensions = ["basic"]
         }
     }
-    
-    
+
     func partyValues(from filterTags: [FilterTag]) -> [String] {
         Set(filterTags.filter { $0.type == "party" }.map { $0.value }).sorted()
     }
     func extensionValues(from filterTags: [FilterTag]) -> [String] {
-        Set(filterTags.filter { $0.type == "extension" }.map { $0.value }).sorted()
+        Set(filterTags.filter { $0.type == "extension" }.map { $0.value })
+            .sorted()
     }
 
     func toggleExtension(_ ext: String) {
@@ -44,16 +42,18 @@ class MainRuleBookVM: ObservableObject {
         }
     }
 
-    func filteredContents(for cat: MajorCat, from contents: [Content]) -> [Content] {
+    func filteredContents(for cat: MajorCat, from contents: [Content])
+        -> [Content]
+    {
         contents.filter { content in
             content.majorCat.id == cat.id &&
             (selectedParty == nil || contentHasFilter(content, type: "party", value: selectedParty!)) &&
             (selectedExtensions.isEmpty || contentHasAnyExtension(content))
-        }.sorted { $0.name < $1.name }
+        }.sorted { $0.name > $1.name }
     }
     
     /// 대분류가 필요없는 경우바로 상세보기를 띄운다
-    func ifNoMajCat (
+    func ifDirectContent (
         cat: MajorCat,
         from contents: [Content]
     ){
@@ -67,8 +67,12 @@ class MainRuleBookVM: ObservableObject {
         }
     }
 
-    private func contentHasFilter(_ content: Content, type: String, value: String) -> Bool {
-        content.filterTable?.filtertags.contains { $0.type == type && $0.value == value } ?? false
+    private func contentHasFilter(
+        _ content: Content, type: String, value: String
+    ) -> Bool {
+        content.filterTable?.filtertags.contains {
+            $0.type == type && $0.value == value
+        } ?? false
     }
 
     private func contentHasAnyExtension(_ content: Content) -> Bool {

@@ -19,6 +19,7 @@ struct ContentItem: Decodable {
     let majorCat: String
     let name: String
     let texts: [String]
+    let words: [String]?
     let images: [String]?
     let filterTags: [FilterTagItem]
 }
@@ -105,6 +106,7 @@ struct JSONParser {
             let content = Content(
                 name: item.name,
                 texts: item.texts,
+                words: item.words,
                 images: nil,
                 gameName: game,
                 majorCat: majorCat

@@ -10,21 +10,28 @@ import SwiftUI
 /// 최근 검색어 표시 캡슐
 struct SearchedCapsule: View {
     let title: String
+    let onTap: () -> Void
+    let onDelete: () -> Void
+
     var body: some View {
         HStack {
-            Button(action: {}) {
-                Text(title).font(.mdMedium).foregroundStyle(.gray)  // 색변경 필요
+            Button(action: { onTap() }) {
+                Text(title).font(.mdMedium).foregroundColor(.grayNeutral99)
             }.padding(.vertical, 6).padding(.leading, 12)
-            Button(action: {}) {
-                Image(systemName: "multiply").foregroundColor(.gray)  // TODO: 아이콘 변경해야함
+            Button(action: {
+                onDelete()
+            }) {
+                crossIcon
             }.frame(width: 24, height: 24).padding(.vertical, 6)
 
         }
-        .overlay(Capsule().stroke(.gray, lineWidth: 1)).frame(height: 34)
+        .overlay(Capsule().stroke(Color.grayNeutral30, lineWidth: 1)).frame(
+            height: 34
+        )
         .padding(.vertical)
     }
 }
 
 #Preview {
-    SearchedCapsule(title: "하마")
+    SearchedCapsule(title: "하마",onTap: {}, onDelete: {})
 }
