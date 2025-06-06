@@ -1,10 +1,10 @@
 {
-    "gameName": "바퀴벌레포커",
+    "gameName": "보난자",
     "genres": [
         "카드",
         "파티"
     ],
-    "imageFile": "image_02.png",
+    "imageFile": "image_05.png",
     "contents": [
         {
             "majorCat": "게임 구성",
