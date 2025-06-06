@@ -13,12 +13,11 @@ struct GameSearchView: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(\.modelContext) var modelContext
 
-
     @State private var searchText: String = ""
 
     @Query var GameNames: [GameName]
-
     @State var searchedGames: [GameName] = []
+    @Query private var searchGames: [SearchGames]
 
     var body: some View {
         NavigationStack {
@@ -73,12 +72,13 @@ struct GameSearchView: View {
                     ScrollView(.horizontal, showsIndicators: false) {
                         HStack(spacing: 10) {
                             ForEach(
-                                searchedGames.sorted(by: { $0.date > $1.date }),
+                                searchGames.sorted(by: { $0.date > $1.date }),
                                 id: \.self
                             ) {
                                 game in
                                 SearchedCapsule(
                                     title: game.name,
+                                    onTap: {},
                                     onDelete: {
                                         modelContext.delete(game)
                                     }
@@ -86,6 +86,26 @@ struct GameSearchView: View {
                             }
                         }
                     }.frame(height: 40)
+
+                    //TODO: 다듬기 필요
+                    HStack {
+                        Text("검색된 게임").font(.lgSemiBold)
+                        Spacer()
+
+                    }.padding()
+                    ScrollView(.horizontal, showsIndicators: false) {
+                        HStack(spacing: 10) {
+                            ForEach(
+                                searchedGames,
+                                id: \.self
+                            ) { game in
+                                GameCardView(game: game).frame(
+                                    width: 240,
+                                    height: 360
+                                )
+                            }
+                        }
+                    }.frame(height: 400)
 
                     Spacer()
                 }

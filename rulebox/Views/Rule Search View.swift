@@ -69,7 +69,7 @@ struct SearchView: View {
                                     rules.sorted(by: { $0.date > $1.date }),
                                     id: \.self
                                 ) { rule in
-                                    SearchedCapsule(title: rule.name) {
+                                    SearchedCapsule(title: rule.name, onTap: {}) {
                                         modelContext.delete(rule)
                                     }
                                 }
