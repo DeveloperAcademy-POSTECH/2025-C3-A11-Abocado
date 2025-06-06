@@ -10,6 +10,22 @@ struct SubRuleModalView: View {
     @State private var isBookmarked = false
 
     var content: Content
+    /* var allContents: [Content]  // 전체 콘텐츠 배열
+    
+    // 현재 인덱스 계산
+    var currentIndex: Int? {
+        allContents.firstIndex(where: { $0.id == content.id })
+    }
+    
+    var previousContent: Content? {
+        guard let index = currentIndex, index > 0 else { return nil }
+        return allContents[index - 1]
+    }
+
+    var nextContent: Content? {
+        guard let index = currentIndex, index < allContents.count - 1 else { return nil }
+        return allContents[index + 1]
+    } */
 
     var body: some View {
         NavigationStack {
@@ -95,17 +111,19 @@ struct SubRuleModalView: View {
                 isBookmarked = newValue.contains { $0.content?.id == content.id }
             }
             .safeAreaInset(edge: .bottom) {
+                
+                
                 HStack {
-                    NavigationLink(destination: SearchView()) {
+                    NavigationLink(destination: SubRuleModalView(content: content)) {
                         HStack {
                             Image("caret.left").tint(.white)
-                            Text("이전 페이지").font(.lgRegular)
+                            Text("이전페이지").font(.lgRegular)
                         }
                     }
                     Spacer()
-                    NavigationLink(destination: SearchView()) {
+                    NavigationLink(destination: SubRuleModalView(content: content)) {
                         HStack {
-                            Text("다음 페이지").font(.lgRegular)
+                            Text("다음페이지").font(.lgRegular)
                             Image("caret.left").rotationEffect(.degrees(180)).tint(.white)
                         }
                     }
@@ -115,6 +133,34 @@ struct SubRuleModalView: View {
                 .padding(.bottom, 40)
                 .frame(width: 393, alignment: .trailing)
                 .background(Color.backGround.opacity(0.5).blur(radius: 25))
+                
+                /* if previousContent != nil || nextContent != nil {
+                    HStack {
+                        if let previous = previousContent {
+                            NavigationLink(destination: SubRuleModalView(content: previous, allContents: allContents)) {
+                                HStack {
+                                    Image("caret.left").tint(.white)
+                                    Text(previous.name).font(.lgRegular)
+                                }
+                            }
+                        }
+                        Spacer()
+                        if let next = nextContent {
+                            NavigationLink(destination: SubRuleModalView(content: next, allContents: allContents)) {
+                                HStack {
+                                    Text(next.name).font(.lgRegular)
+                                    Image("caret.left").rotationEffect(.degrees(180)).tint(.white)
+                                }
+                            }
+                        }
+                    }
+                    .padding(.horizontal, 10)
+                    .padding(.top, 10)
+                    .padding(.bottom, 40)
+                    .frame(width: 393, alignment: .trailing)
+                    .background(Color.backGround.opacity(0.5).blur(radius: 25))
+                } */
+                
             }
         }
     }

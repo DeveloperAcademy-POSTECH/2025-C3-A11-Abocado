@@ -18,6 +18,7 @@ struct BookmarkView: View {
     
     var body: some View {
         
+        //최근 추가된 북마크와 같은 gameName.id를 가진 북마크들을 한번에 모음
         let reorderedBookmarks: [Bookmark] = {
                 guard let lastGameId = bookmarks.last?.content?.gameName.id else {
                     return bookmarks
@@ -27,7 +28,6 @@ struct BookmarkView: View {
                 let previousBookmarkGame = bookmarks.filter { $0.content?.gameName.id != lastGameId }
                 return previousBookmarkGame + lastBookmarkGame
             }()
-        
             
         ScrollView{ //navigationView
             

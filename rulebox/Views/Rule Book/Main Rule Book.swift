@@ -132,7 +132,7 @@ struct MainRuleBook: View {
                                                 .padding(.vertical, 8)
                                                 .padding(.horizontal, 14)
                                                 .sheet(item: $selectedContent) { content in
-                                                    SubRuleModalView(content: content)
+                                                    SubRuleModalView(content: content /*, allContents: filteredContents*/)
                                                 }
 
                                             }
