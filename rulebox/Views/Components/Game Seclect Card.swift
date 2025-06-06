@@ -14,27 +14,6 @@ struct GameCardView: View {
     @State private var showToolTip = false
 
     var body: some View {
-<<<<<<< HEAD
-        //NavigationLink(destination: MainRuleBook(game: game)) {
-        NavigationLink(
-            destination: {
-//                if game.name != "카르카손" {
-//                    Text("아직 공사중인 페이지입니다.")
-//                } else {
-                    MainRuleBook(game: game)
-//                }
-            }
-        ) {
-            VStack {
-                HStack(alignment: .top) {
-                    ForEach(game.genres, id: \.self) { genre in
-                        GenreCapsule(
-                            title: genre,
-                            isSelected: true,
-                            verticalPadding: 4,
-                            horizontalPadding: 8
-                        )
-=======
         VStack {
             if game.name == "카르카손" {
                 // ✅ NavigationLink → 정상 이동
@@ -68,7 +47,6 @@ struct GameCardView: View {
                                 .foregroundColor(.white)
                             Spacer()
                         }
->>>>>>> origin/dev
                     }
                 }
                 .padding(.horizontal, 22)
