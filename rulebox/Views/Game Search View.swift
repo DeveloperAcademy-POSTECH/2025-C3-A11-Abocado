@@ -5,6 +5,7 @@
 //  Created by Ken on 5/29/25.
 //
 
+import SwiftData
 import SwiftUI
 
 struct GameSearchView: View {
@@ -12,6 +13,10 @@ struct GameSearchView: View {
     @Environment(\.dismiss) private var dismiss
 
     @State private var searchText: String = ""
+
+    @Query var GameNames: [GameName]
+
+    @State var searchedGames: [GameName] = []
 
     var body: some View {
         NavigationStack {
@@ -26,6 +31,18 @@ struct GameSearchView: View {
                         TextField("검색어를 입력하세요", text: $searchText)
                             .onSubmit {
                                 // 검색하기
+                                let keyword = searchText.trimmingCharacters(
+                                    in: .whitespacesAndNewlines
+                                ).lowercased()
+                                searchedGames = GameNames.filter {
+                                    $0.name.lowercased().contains(keyword)
+                                        || $0.name.lowercased().hasPrefix(
+                                            keyword
+                                        )
+                                }
+                                
+                                
+
                             }
 
                         if !searchText.isEmpty {
@@ -50,19 +67,21 @@ struct GameSearchView: View {
                             .grayNeutral40
                         )
                     }.padding()
-
                     ScrollView(.horizontal, showsIndicators: false) {
-                        SearchedCapsule(title: "검색어1")
-                        SearchedCapsule(title: "검색어2")
-                        SearchedCapsule(title: "검색어3")
-                        SearchedCapsule(title: "검색어4")
-                        SearchedCapsule(title: "검색어5")
+                        HStack {
+
+                            ForEach(searchedGames, id: \.self) {
+                                game in
+                                SearchedCapsule(title: game.name)
+                            }
+                        }
+
                     }
                     Spacer()
                 }
                 .padding()
             }
-            .ignoresSafeArea(.keyboard) 
+            .ignoresSafeArea(.keyboard)
         }
         .navigationTitle("게임 검색")
         .navigationBarBackButtonHidden(true)

@@ -15,11 +15,11 @@ struct GameCardView: View {
         //NavigationLink(destination: MainRuleBook(game: game)) {
         NavigationLink(
             destination: {
-                if game.name != "카르카손" {
-                    Text("아직 공사중인 페이지입니다.")
-                } else {
+//                if game.name != "카르카손" {
+//                    Text("아직 공사중인 페이지입니다.")
+//                } else {
                     MainRuleBook(game: game)
-                }
+//                }
             }
         ) {
             VStack {
