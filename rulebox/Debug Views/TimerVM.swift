@@ -5,31 +5,33 @@
 //  Created by POS on 6/5/25.
 //
 
-import Foundation
-import SwiftUI
+import AudioToolbox
 import Combine
+import SwiftUI
 
 class TimerViewModel: ObservableObject {
-    @Published var selectedMinutes: Int = 1
-    @Published var selectedSeconds: Int = 0
-    @Published var remainingTime: Int = 60 // default 1분
+    @Published var selectedMinutes: Int = 0 { didSet { updateTimeFromSelection() }}
+    @Published var selectedSeconds: Int = 40 { didSet { updateTimeFromSelection() }}
+
+    @Published var remainingTime: Int
     @Published var isRunning: Bool = false
 
+    private(set) var lastSetTime: Int
     
-    private(set) var originalTime: Int = 60
-
     private var timer: AnyCancellable?
+
+    init() {
+        self.remainingTime = 40
+        self.lastSetTime = 40
+    }
 
     func startPause() {
         if isRunning {
             pause()
         } else {
-            if remainingTime == 0 {
-                originalTime = selectedMinutes * 60 + selectedSeconds
-                remainingTime = originalTime
-            } else if remainingTime == originalTime {
-                // 타이머를 처음 시작하는 경우
-                originalTime = selectedMinutes * 60 + selectedSeconds
+            lastSetTime = selectedMinutes * 60 + selectedSeconds
+            if remainingTime == 0 || remainingTime == lastSetTime {
+                remainingTime = lastSetTime
             }
             start()
         }
@@ -44,9 +46,22 @@ class TimerViewModel: ObservableObject {
                 if self.remainingTime > 0 {
                     self.remainingTime -= 1
                 } else {
-                    self.reset()
+                    self.pause()
+                    self.playEndSound()
                 }
             }
+    }
+
+    private func playEndSound() {
+        // 시스템 사운드 코드 사용
+        AudioServicesPlaySystemSound(1005)
+    }
+
+    private func updateTimeFromSelection() {
+        guard !isRunning else { return }
+        let total = selectedMinutes * 60 + selectedSeconds
+        lastSetTime = total
+        remainingTime = total
     }
 
     func pause() {
@@ -55,8 +70,7 @@ class TimerViewModel: ObservableObject {
     }
 
     func reset() {
-        pause()
-        remainingTime = originalTime
+        remainingTime = lastSetTime
     }
 
     func formattedTime() -> String {
@@ -65,7 +79,7 @@ class TimerViewModel: ObservableObject {
         return String(format: "%02d:%02d", minutes, seconds)
     }
 
-    var isTimeSet: Bool {
-        selectedMinutes > 0 || selectedSeconds > 0
+    var isInitialState: Bool {
+        !isRunning && remainingTime == lastSetTime
     }
 }
