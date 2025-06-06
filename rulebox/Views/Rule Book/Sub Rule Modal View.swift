@@ -79,11 +79,6 @@ struct SubRuleModalView: View {
             
                     ForEach(0..<content.texts.count, id: \.self) { index in
                         let parts = content.texts[index].split(separator: "*", maxSplits: 2, omittingEmptySubsequences: false)
-                        // split 결과가 ["image.png", "", "", "텍스트내용"]이니까 ***를 3번 split하기 위해 maxSplits: 2로 했어.
-                        
-                        // imageFileName은 parts[0], 텍스트 내용은 parts[3] (3번째 인덱스)인데 Swift split은 연속 *는 빈 문자열 포함해서 나눠지니까 좀 까다로워.
-                        // 그래서 ***는 separator 3개 연속. 하나로 split하려면 components(separatedBy:)를 쓰는게 편함.
-                        
                         let separated = content.texts[index].components(separatedBy: "***")
                         let imageFileName = separated.first ?? ""
                         let textContent = separated.count > 1 ? separated[1] : content.texts[index]
@@ -92,7 +87,7 @@ struct SubRuleModalView: View {
                             if !imageFileName.isEmpty {
                                 LottieView(filename: imageFileName)
                                     .frame(width: 353, height: 275)
-                                    .clipped() // 자를 수 있게
+                                    .clipped()
                                         .fixedSize()
                             }
                             Text(textContent)
@@ -101,17 +96,6 @@ struct SubRuleModalView: View {
                                 .padding(.bottom, 34)
                         }
                     }
-
-//                    ForEach(0..<content.texts.count, id: \.self) { index in
-//                        VStack(alignment: .leading) {
-//                            Text("\n이미지가 들어가주면 좋을거에요. 인덱스: \(index)\n")
-//
-//                            Text(content.texts[index])
-//                                .foregroundColor(.grayNeutral99)
-//                                .font(.lgRegular)
-//                                .padding(.bottom, 34)
-//                        }
-//                    }
                 }
                 .padding(.horizontal, 20)
                 .padding(.top, 50)
