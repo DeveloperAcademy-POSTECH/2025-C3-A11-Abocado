@@ -10,12 +10,16 @@ import SwiftUI
 /// 최근 검색어 표시 캡슐
 struct SearchedCapsule: View {
     let title: String
+    let onDelete: () -> Void
+
     var body: some View {
         HStack {
             Button(action: {}) {
                 Text(title).font(.mdMedium).foregroundColor(.grayNeutral99)
             }.padding(.vertical, 6).padding(.leading, 12)
-            Button(action: {}) {
+            Button(action: {
+                onDelete()
+            }) {
                 crossIcon
             }.frame(width: 24, height: 24).padding(.vertical, 6)
 
@@ -28,5 +32,5 @@ struct SearchedCapsule: View {
 }
 
 #Preview {
-    SearchedCapsule(title: "하마")
+    SearchedCapsule(title: "하마", onDelete: {})
 }

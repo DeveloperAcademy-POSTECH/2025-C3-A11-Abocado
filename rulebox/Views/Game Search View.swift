@@ -11,6 +11,8 @@ import SwiftUI
 struct GameSearchView: View {
 
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.modelContext) private var modelContext
+    @Query private var games: [SearchGames]
 
     @State private var searchText: String = ""
 
@@ -30,6 +32,7 @@ struct GameSearchView: View {
 
                         TextField("검색어를 입력하세요", text: $searchText)
                             .onSubmit {
+<<<<<<< HEAD
                                 // 검색하기
                                 let keyword = searchText.trimmingCharacters(
                                     in: .whitespacesAndNewlines
@@ -43,6 +46,14 @@ struct GameSearchView: View {
                                 
                                 
 
+=======
+                                let trimmedText = searchText.trimmingCharacters(
+                                    in: .whitespacesAndNewlines
+                                )
+                                guard !trimmedText.isEmpty else { return }
+                                let newSearch = SearchGames(name: trimmedText)
+                                modelContext.insert(newSearch)
+>>>>>>> origin/dev
                             }
 
                         if !searchText.isEmpty {
@@ -60,6 +71,7 @@ struct GameSearchView: View {
                     .clipShape(.capsule)
 
                     // 최근 검색어
+<<<<<<< HEAD
                     HStack {
                         Text("최근 검색어").font(.lgSemiBold)
                         Spacer()
@@ -77,6 +89,37 @@ struct GameSearchView: View {
                         }
 
                     }
+=======
+                    VStack(spacing: 16) {
+                        HStack {
+                            Text("최근 검색어").font(.lgSemiBold)
+                            Spacer()
+                            Text("전체 삭제").font(.mdRegular)
+                                .foregroundColor(.grayNeutral70).onTapGesture {
+                                    for game in games {
+                                        modelContext.delete(game)
+                                    }
+                                }
+                        }.padding(.horizontal, 0)
+
+                        ScrollView(.horizontal, showsIndicators: false) {
+                            HStack(spacing: 10) {
+                                ForEach(
+                                    games.sorted(by: { $0.date > $1.date }),
+                                    id: \.self
+                                ) {
+                                    game in
+                                    SearchedCapsule(
+                                        title: game.name,
+                                        onDelete: {
+                                            modelContext.delete(game)
+                                        }
+                                    )
+                                }
+                            }
+                        }.frame(height: 40)
+                    }.padding(.vertical, 14)
+>>>>>>> origin/dev
                     Spacer()
                 }
                 .padding()
@@ -100,5 +143,5 @@ struct GameSearchView: View {
 
 #Preview {
     SearchView()
-        .modelContainer(for: Item.self, inMemory: true)
+        .modelContainer(for: SearchGames.self, inMemory: true)
 }
