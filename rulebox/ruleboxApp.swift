@@ -21,7 +21,7 @@ struct ruleboxApp: App {
             FilterTag.self,
             FilterTable.self,
             SearchGames.self,
-            SearchRules.self
+            SearchRules.self,
             Bookmark.self
         ])
 

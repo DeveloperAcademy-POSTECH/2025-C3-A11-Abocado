@@ -75,8 +75,19 @@ struct SubRuleModalView: View {
                     ForEach(0..<content.texts.count, id: \.self) { index in
                         VStack(alignment: .leading) {
                             HStack {
+//                                if let imageData = content.images?[index],
+//                                               let uiImage = UIImage(data: imageData) {
+//                                                Image(uiImage: uiImage)
+//                                                    .resizable()
+//                                                    .scaledToFit()
+//                                                    .frame(height: 200)
+//                                                    .clipped()
+//                                            } else {
+//                                                Color.gray
+//                                                    .frame(height: 200)
+//                                            }
                                 Spacer()
-                                Text("이미지가 들어갈 거에요")
+                                Text("이미지들어가야함")
                                 Spacer()
                             }
                             .padding(.bottom, 12)
@@ -110,58 +121,60 @@ struct SubRuleModalView: View {
             .onChange(of: bookmarks) { newValue in
                 isBookmarked = newValue.contains { $0.content?.id == content.id }
             }
-            .safeAreaInset(edge: .bottom) {
-                
-                
-                HStack {
-                    NavigationLink(destination: SubRuleModalView(content: content)) {
-                        HStack {
-                            Image("caret.left").tint(.white)
-                            Text("이전페이지").font(.lgRegular)
-                        }
-                    }
-                    Spacer()
-                    NavigationLink(destination: SubRuleModalView(content: content)) {
-                        HStack {
-                            Text("다음페이지").font(.lgRegular)
-                            Image("caret.left").rotationEffect(.degrees(180)).tint(.white)
-                        }
-                    }
-                }
-                .padding(.horizontal, 10)
-                .padding(.top, 10)
-                .padding(.bottom, 40)
-                .frame(width: 393, alignment: .trailing)
-                .background(Color.backGround.opacity(0.5).blur(radius: 25))
-                
-                /* if previousContent != nil || nextContent != nil {
-                    HStack {
-                        if let previous = previousContent {
-                            NavigationLink(destination: SubRuleModalView(content: previous, allContents: allContents)) {
-                                HStack {
-                                    Image("caret.left").tint(.white)
-                                    Text(previous.name).font(.lgRegular)
-                                }
-                            }
-                        }
-                        Spacer()
-                        if let next = nextContent {
-                            NavigationLink(destination: SubRuleModalView(content: next, allContents: allContents)) {
-                                HStack {
-                                    Text(next.name).font(.lgRegular)
-                                    Image("caret.left").rotationEffect(.degrees(180)).tint(.white)
-                                }
-                            }
-                        }
-                    }
-                    .padding(.horizontal, 10)
-                    .padding(.top, 10)
-                    .padding(.bottom, 40)
-                    .frame(width: 393, alignment: .trailing)
-                    .background(Color.backGround.opacity(0.5).blur(radius: 25))
-                } */
-                
-            }
+            
+            // 하단 페이지이동버튼 주석
+//            .safeAreaInset(edge: .bottom) {
+//                
+//                HStack {
+//                    NavigationLink(destination: SubRuleModalView(content: content)) {
+//                        HStack {
+//                            Image("caret.left").tint(.white)
+//                            Text("이전페이지").font(.lgRegular)
+//                        }
+//                    }
+//                    Spacer()
+//                    NavigationLink(destination: SubRuleModalView(content: content)) {
+//                        HStack {
+//                            Text("다음페이지").font(.lgRegular)
+//                            Image("caret.left").rotationEffect(.degrees(180)).tint(.white)
+//                        }
+//                    }
+//                }
+//                .padding(.horizontal, 10)
+//                .padding(.top, 10)
+//                .padding(.bottom, 40)
+//                .frame(width: 393, alignment: .trailing)
+//                .background(Color.backGround.opacity(0.5).blur(radius: 25))
+//                
+//                /* if previousContent != nil || nextContent != nil {
+//                    HStack {
+//                        if let previous = previousContent {
+//                            NavigationLink(destination: SubRuleModalView(content: previous, allContents: allContents)) {
+//                                HStack {
+//                                    Image("caret.left").tint(.white)
+//                                    Text(previous.name).font(.lgRegular)
+//                                }
+//                            }
+//                        }
+//                        Spacer()
+//                        if let next = nextContent {
+//                            NavigationLink(destination: SubRuleModalView(content: next, allContents: allContents)) {
+//                                HStack {
+//                                    Text(next.name).font(.lgRegular)
+//                                    Image("caret.left").rotationEffect(.degrees(180)).tint(.white)
+//                                }
+//                            }
+//                        }
+//                    }
+//                    .padding(.horizontal, 10)
+//                    .padding(.top, 10)
+//                    .padding(.bottom, 40)
+//                    .frame(width: 393, alignment: .trailing)
+//                    .background(Color.backGround.opacity(0.5).blur(radius: 25))
+//                } */
+//                
+//            }
+            
         }
     }
 }
