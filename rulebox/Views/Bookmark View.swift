@@ -13,52 +13,81 @@ struct BookmarkView: View {
     @Environment(\.modelContext) var context
     
     @Query var bookmarks: [Bookmark] // 북마크 불러오기
+    
     var content: Content?
     
     var body: some View {
+        
+        let reorderedBookmarks: [Bookmark] = {
+                guard let lastGameId = bookmarks.last?.content?.gameName.id else {
+                    return bookmarks
+                }
+
+                let lastBookmarkGame = bookmarks.filter { $0.content?.gameName.id == lastGameId }
+                let previousBookmarkGame = bookmarks.filter { $0.content?.gameName.id != lastGameId }
+                return previousBookmarkGame + lastBookmarkGame
+            }()
+        
             
         ScrollView{ //navigationView
-                HStack{//북마크시 게임이름
-                    Text("GameName").font(.smHeading)
+            
+            if bookmarks.isEmpty {
+                VStack{
+                    Spacer()
+                    Text("추가된 북마크가 없습니다.")
+                        .foregroundColor(.white)
+                        .font(.lgMedium)
+                        .opacity(0.4)
+                    Spacer()
+                }
+            } else {
+                HStack{
+                    Text("카르카손")
+                        .font(.smHeading)
                     Spacer()
                 }
                 .padding(.bottom, 14)
+            }
             
-            ForEach(bookmarks, id: \.self) { bookmark in
+            // 최근 추가된 북마크와 같은 gameName.id를 가진 북마크들을 한번에 모으는건 되긴했는데,,
+            ForEach(reorderedBookmarks, id: \.self) { bookmark in
                 if let content = bookmark.content {
-                    HStack{ // 북마크 블럭
-                        NavigationLink(destination: SubRuleModalView(content: content)){ // 이동페이지
-                            HStack{
-                                //content images 중 첫번째
-                                RoundedRectangle(cornerSize: .init(width:8, height: 8))
-                                //Image(content.images[0])
-                                    .frame(width:56, height:56)
-                                    .padding(.trailing, 16)
-                                    
-                                VStack(alignment: .leading){
-                                    Text(content.majorCat.name)// 중분류
-                                        .font(.mdRegular)
-                                        //.foregroundColor(.white)
-                                        .opacity(0.46)
-                                    Text(content.name) //소분류
-                                        .font(.lgMedium)
-                                }
-                            }
-                            Spacer()
-                        } // SubRuleModalView()로 이동하는 NavigationLink 영역
-                        
-                        Button(action:{
-                            context.delete(bookmark)
-                            try? context.save()
-                        }, label:{
-                            bookmarkFilledIcon // 북마크아이콘
-                                .frame(width:40, height:40)
-                                //.padding(.leading, 16)
-                        })
+            
+            
+            // 북마크 블럭
+            HStack{
+                NavigationLink(destination: SubRuleModalView(content: content)){ // 이동페이지
+                    HStack{
+                        //content images 중 첫번째
+                        RoundedRectangle(cornerSize: .init(width:8, height: 8))
+                        //Image(content.images[0])
+                            .frame(width:56, height:56)
+                            .padding(.trailing, 16)
                             
-                    } // 북마크 블럭
-                }
+                        VStack(alignment: .leading){
+                            Text(content.majorCat.name)// 중분류
+                                .font(.mdRegular)
+                                //.foregroundColor(.white)
+                                .opacity(0.46)
+                            Text(content.name) //소분류
+                                .font(.lgMedium)
+                        }
+                    }
+                    Spacer()
+                } // SubRuleModalView()로 이동하는 NavigationLink 영역
+                
+                Button(action:{
+                    context.delete(bookmark)
+                    try? context.save()
+                }, label:{
+                    bookmarkFilledIcon // 북마크아이콘
+                        .frame(width:40, height:40)
+                        //.padding(.leading, 16)
+                })
                     
+            } // 북마크 블럭
+                }
+            
             }
                 
                 
@@ -68,6 +97,7 @@ struct BookmarkView: View {
             
         .padding(.horizontal, 20)
         .padding(.top, 12)
+        
         Spacer()
             
         
