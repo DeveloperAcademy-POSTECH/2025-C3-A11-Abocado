@@ -68,6 +68,7 @@ struct MainRuleBook: View {
 
                             // view body
                             FilterSection(filterTags: gameFilterTags, vm: vm)
+                                .padding(.horizontal, 18).padding(.top, 24)
 
                             ForEach(filteredMajorCats, id: \.id) { cat in
                                 let filtered = vm.filteredContents(
@@ -113,6 +114,19 @@ struct MainRuleBook: View {
                                             .padding(.vertical, 0)
                                             .padding(.horizontal, 16)
                                             .contentShape(Rectangle())
+                                            .background(
+                                                RoundedCorner(
+                                                    radius: 14,
+                                                    corners: [
+                                                        .topLeft, .topRight,
+                                                    ]
+                                                )
+                                                .fill(
+                                                    Color.primaryNormal.opacity(
+                                                        expanded ? 0.1 : 0
+                                                    )
+                                                )
+                                            )
                                         }.buttonStyle(.plain)
 
                                         if expanded {
@@ -123,7 +137,9 @@ struct MainRuleBook: View {
                                                         selectedContent = content
                                                     },
                                                     label: {
-                                                        HStack {
+                                                        HStack(
+                                                            alignment: .center
+                                                        ) {
                                                             Text(content.name)
                                                             Spacer()
                                                         }
@@ -131,11 +147,38 @@ struct MainRuleBook: View {
                                                 )
                                                 .padding(.vertical, 8)
                                                 .padding(.horizontal, 14)
-                                                .sheet(item: $selectedContent) { content in
-                                                    SubRuleModalView(content: content /*, allContents: filteredContents*/)
+                                                .background(
+                                                    RoundedCorner(
+                                                        radius: 14,
+                                                        corners: [
+                                                            //TODO: 가운데는 코너라운드 없애기 
+                                                            .topLeft, .topRight,
+                                                            .bottomLeft,
+                                                            .bottomRight,
+                                                        ]
+                                                    )
+                                                    .fill(
+                                                        Color.primaryNormal
+                                                            .opacity(
+                                                                expanded
+                                                                    ? 0.1 : 0
+                                                            )
+                                                    )
+                                                )
+                                                .sheet(
+                                                    isPresented:
+                                                        $onSubRuleModalView
+                                                ) {
+                                                    SubRuleModalView(
+                                                        content: content
+                                                    )
                                                 }
 
                                             }
+                                        } else {
+                                            Divider().foregroundStyle(
+                                                Color.white
+                                            ).padding(.horizontal, 18)
                                         }
                                     }.background(
                                         Group {
@@ -208,52 +251,17 @@ struct ScrollOffsetKey: PreferenceKey {
     }
 }
 
-struct FilterSection: View {
-    var filterTags: [FilterTag]
-    @ObservedObject var vm: MainRuleBookVM
+// Custom shape for rounding specific corners
+struct RoundedCorner: Shape {
+    var radius: CGFloat = .infinity
+    var corners: UIRectCorner = .allCorners
 
-    var body: some View {
-        HStack {
-            // 나중에 하프모달로 뜨게 수정해야돼 엉엉
-            let partyValues = vm.partyValues(from: filterTags)
-            let extensionValues = vm.extensionValues(from: filterTags)
-
-            DisclosureGroup("확장 추가: \(vm.selectedExtensions.count)개") {
-                ForEach(extensionValues, id: \.self) { value in
-                    Button(action: { vm.toggleExtension(value) }) {
-                        HStack {
-                            Text(value)
-                            if vm.selectedExtensions.contains(value) {
-                                Image(systemName: "checkmark")
-                            }
-                        }
-                    }
-                }
-            }
-            .background(
-                Color.atomicOpacity20
-            )
-            .clipShape(
-                RoundedRectangle(cornerRadius: 10)
-            )
-            DisclosureGroup("인원수 필터") {
-                ForEach(partyValues, id: \.self) { value in
-                    Button(action: { vm.selectedParty = value }) {
-                        HStack {
-                            Text(value)
-                            if vm.selectedParty == value {
-                                Image(systemName: "checkmark")
-                            }
-                        }
-
-                    }
-                }
-            }.background(
-                Color.atomicOpacity20
-            )
-            .clipShape(
-                RoundedRectangle(cornerRadius: 10)
-            )
-        }
+    func path(in rect: CGRect) -> Path {
+        let path = UIBezierPath(
+            roundedRect: rect,
+            byRoundingCorners: corners,
+            cornerRadii: CGSize(width: radius, height: radius)
+        )
+        return Path(path.cgPath)
     }
 }

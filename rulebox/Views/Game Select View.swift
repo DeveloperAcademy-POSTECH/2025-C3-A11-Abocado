@@ -60,8 +60,7 @@ struct GameSelectView: View {
                         Rectangle().frame(width: 6).foregroundColor(.clear)
                         ForEach(vm.filterGames(from: games)) { game in
                             GameCardView(
-                                game: game,
-                                selectedGenre: vm.selectedGenre
+                                game: game
                             )
                         }
                     }

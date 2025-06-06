@@ -14,6 +14,7 @@ class Content {
     @Attribute(.unique) var id: UUID
     var name: String
     var texts: [String]
+    var words: [String]?
     var images: [Data]?
     var bookmarkedState: Bool
 
@@ -25,6 +26,7 @@ class Content {
         id: UUID = UUID(),
         name: String,
         texts: [String],
+        words: [String]? = nil,
         images: [Data]? = nil,
         gameName: GameName,
         majorCat: MajorCat,
@@ -34,6 +36,7 @@ class Content {
         self.id = id
         self.name = name
         self.texts = texts
+        self.words = words
         self.images = images
         self.gameName = gameName
         self.majorCat = majorCat
