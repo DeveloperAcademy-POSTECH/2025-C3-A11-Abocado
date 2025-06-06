@@ -21,17 +21,16 @@ struct GameSelectView: View {
                 HStack {
                     Text("RuleBox").font(.xlHeading)
                     Spacer()
-
                     NavigationLink(destination: GameSearchView()) {
                         searchToolbarIcon
                     }
-
+                    
                     NavigationLink(destination: BookmarkView()) {
                         bookmarkToolbarIcon
                     }
                 }
                 .padding()
-
+                
                 // Genre filter part
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack(spacing: 8) {
@@ -49,9 +48,9 @@ struct GameSelectView: View {
                     }
                 }
                 .frame(height: 40)
-
+                
                 Spacer(minLength: 20)
-
+                
                 // Page Body part
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack(spacing: 12) {
@@ -64,9 +63,19 @@ struct GameSelectView: View {
                     }
                 }
                 .frame(height: 520)
-
+                
                 Spacer()
             }
+            
+            
+            NavigationLink(destination: AbocadoTimer()) {
+                Circle()
+                    .fill(.clear)
+                    .frame(width: 44, height: 44)
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+
+            
         }
     }
 }
