@@ -12,22 +12,22 @@ import SwiftData
 struct BookmarkView: View {
     @Environment(\.modelContext) var context
     
-    @Query var bookmarks: [Bookmark] // 북마크 불러오기
+    @Query(sort: \Bookmark.createdAt, order: .reverse) var bookmarks: [Bookmark] // 북마크 불러오기
     
     var content: Content?
     
     var body: some View {
         
         //최근 추가된 북마크와 같은 gameName.id를 가진 북마크들을 한번에 모음
-        let reorderedBookmarks: [Bookmark] = {
-                guard let lastGameId = bookmarks.last?.content?.gameName.id else {
-                    return bookmarks
-                }
-
-                let lastBookmarkGame = bookmarks.filter { $0.content?.gameName.id == lastGameId }
-                let previousBookmarkGame = bookmarks.filter { $0.content?.gameName.id != lastGameId }
-                return previousBookmarkGame + lastBookmarkGame
-            }()
+//        let reorderedBookmarks: [Bookmark] = {
+//                guard let lastGameId = bookmarks.last?.content?.gameName.id else {
+//                    return bookmarks
+//                }
+//
+//                let lastBookmarkGame = bookmarks.filter { $0.content?.gameName.id == lastGameId }
+//                let previousBookmarkGame = bookmarks.filter { $0.content?.gameName.id != lastGameId }
+//                return previousBookmarkGame + lastBookmarkGame
+//            }()
             
         ScrollView{ //navigationView
             
@@ -50,7 +50,7 @@ struct BookmarkView: View {
             }
             
             // 최근 추가된 북마크와 같은 gameName.id를 가진 북마크들을 한번에 모으는건 되긴했는데,,
-            ForEach(reorderedBookmarks, id: \.self) { bookmark in
+            ForEach(/*reorderedBookmarks*/ bookmarks, id: \.self) { bookmark in
                 if let content = bookmark.content {
             
             
