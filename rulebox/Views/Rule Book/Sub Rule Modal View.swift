@@ -78,25 +78,12 @@ struct SubRuleModalView: View {
 
                     ForEach(0..<content.texts.count, id: \.self) { index in
                         VStack(alignment: .leading) {
-                            HStack {
-                                if let imageData = content.images?[index],
-                                    let uiImage = UIImage(data: imageData)
-                                {
-                                    Spacer()
-                                    Image(uiImage: uiImage)
-                                        .resizable()
-                                        .scaledToFit()
-                                        .frame(height: 200)
-                                        .clipped()
-                                    Spacer()
-                                } else {
-                                    Spacer()
-                                    Color.gray
-                                        .frame(height: 200)
-                                    Spacer()
-                                }
+                            
+                            if let imageData = content.images?[index] /* != nil */ {
+                                Text("이미지가 들어가주면 좋을거에요. 인덱스: \(index)")
+                                LottieView(filename: imageData)
+                                    .frame(width: 706, height: 550)
                             }
-                            .padding(.bottom, 12)
 
                             Text(content.texts[index])
                                 .foregroundColor(.grayNeutral99)

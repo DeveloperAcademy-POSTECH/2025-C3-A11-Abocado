@@ -61,20 +61,20 @@ struct BookmarkView: View {
                         //content images 중 첫번째
                         //RoundedRectangle(cornerSize: .init(width:8, height: 8))
                         //Image(content.images[0])
-                        
-                        if let imageData = content.images?[0],
-                                       let uiImage = UIImage(data: imageData) {
-                                        Image(uiImage: uiImage)
-                                            .resizable()
-                                            .scaledToFit()
-                                            .frame(width:56, height:56)
-                                            .padding(.trailing, 16)
-                                            .clipShape(RoundedRectangle(cornerRadius: 8))
-                                    } else {
-                                        Color.gray
-                                            .frame(width:56, height:56)
-                                            .clipShape(RoundedRectangle(cornerRadius: 8))
-                                    }
+//                        
+//                        if let imageData = content.images?[0],
+//                                       let uiImage = UIImage(data: imageData) {
+//                                        Image(uiImage: uiImage)
+//                                            .resizable()
+//                                            .scaledToFit()
+//                                            .frame(width:56, height:56)
+//                                            .padding(.trailing, 16)
+//                                            .clipShape(RoundedRectangle(cornerRadius: 8))
+//                                    } else {
+//                                        Color.gray
+//                                            .frame(width:56, height:56)
+//                                            .clipShape(RoundedRectangle(cornerRadius: 8))
+//                                    }
                             
                             
                         VStack(alignment: .leading){

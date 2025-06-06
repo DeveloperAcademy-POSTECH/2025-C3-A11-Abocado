@@ -15,7 +15,7 @@ class Content {
     var name: String
     var texts: [String]
     var words: [String]?
-    var images: [Data]?
+    var images: [String]?
     var bookmarkedState: Bool
 
     @Relationship var gameName: GameName
@@ -27,7 +27,7 @@ class Content {
         name: String,
         texts: [String],
         words: [String]? = nil,
-        images: [Data]? = nil,
+        images: [String]? = nil,
         gameName: GameName,
         majorCat: MajorCat,
         filterTable: FilterTable? = nil,
