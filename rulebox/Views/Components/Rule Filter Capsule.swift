@@ -8,7 +8,7 @@
 import Foundation
 import SwiftUI
 
-struct FilterSection: View {
+struct MainFilterSection: View {
     var filterTags: [FilterTag]
     @ObservedObject var vm: MainRuleBookVM
 
@@ -38,6 +38,45 @@ struct FilterSection: View {
             }
         }
     }
+}
+
+struct PreFilterSection: View{
+    var filterTags: [FilterTag]
+    @ObservedObject var vm: MainRuleBookVM
+
+    @State private var showEFModal = false
+    @State private var showPFModal = false
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 14) {
+            Text("버전")
+            
+            Button {
+                showEFModal = true
+            } label: {
+                EFCapsule(count: vm.selectedExtensions.count)
+            }
+            .sheet(isPresented: $showEFModal) {
+                ExtensionFilterView(filterTags: filterTags, vm: vm)
+                    .presentationDetents([.medium, .large])
+            }
+            
+            Text("인원수")
+            
+            Button {
+                showPFModal = true
+            } label: {
+                PFCapsule(selectedValue: vm.selectedParty ?? "선택되지 않음")
+            }
+            .sheet(isPresented: $showPFModal) {
+                PartyFilterView(vm: vm)
+                    .presentationDetents([.medium, .large])
+            }
+        }
+        .padding(0)
+        .frame(width: 357, alignment: .topLeading)
+    }
+
 }
 
 /// Extension Filter Capsule
