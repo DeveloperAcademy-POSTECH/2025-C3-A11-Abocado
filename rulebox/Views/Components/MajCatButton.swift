@@ -5,7 +5,8 @@
 //  Created by POS on 6/9/25.
 //
 // Main Rule Book, 소분류 항목이 여러개라면 +버튼이 있고 아니라면 비어있게구성. +버튼 누르면 아코디온 열림
-// hasChildren으로 조건관리
+// onContent로 sheet띄워야하는지 관리
+// hasChildren으로 expand 조건관리
 
 import SwiftUI
 
@@ -14,12 +15,11 @@ struct MajCatButtonView: View {
     let contents: [Content]
     @Binding var isExpanded: Bool
     @Binding var selectedContent: Content?
-    
-    var hasChildren: Bool {
-        contents.contains { $0.name != cat.name }
-    }
-    
+    @Binding var onSubRuleModalView: Bool
+
     var body: some View {
+        let hasChildren = contents.contains { $0.name != cat.name }
+
         VStack(alignment: .leading, spacing: 0) {
             Button(action: {
                 if hasChildren {
@@ -27,7 +27,7 @@ struct MajCatButtonView: View {
                         isExpanded.toggle()
                     }
                 }
-                
+
                 if let direct = contents.first(where: { $0.name == cat.name }) {
                     selectedContent = direct
                 }
@@ -35,42 +35,80 @@ struct MajCatButtonView: View {
                 HStack(spacing: 8) {
                     Text(cat.name)
                         .font(.smHeading)
-                        .foregroundColor(
-                            isExpanded ? .primaryNormal : .white
-                        )
-                    
+                        .foregroundColor(isExpanded ? .primaryNormal : .white)
+
                     Spacer()
-                    
+
                     if hasChildren {
-                        if isExpanded {
-                            Image("minusi")
-                                .renderingMode(.template)
-                                .foregroundColor(.white)
-                        } else {
-                            Image("plusi")
-                                .renderingMode(.template)
-                                .foregroundColor(.white)
-                        }
+                        Image(isExpanded ? "minusi" : "plusi")
+                            .renderingMode(.template)
+                            .foregroundColor(.white)
                     }
                 }
+                .padding(.vertical, 12)
+                .padding(.horizontal, 16)
+                .contentShape(Rectangle())
+                .background(
+                    RoundedCorner(
+                        radius: 14,
+                        corners: [.topLeft, .topRight]
+                    )
+                    .fill(
+                        Color.primaryNormal.opacity(
+                            isExpanded ? 0.1 : 0
+                        )
+                    )
+                )
             }
-            
-            if isExpanded && hasChildren {
-                VStack(alignment: .leading, spacing: 8) {
-                    ForEach(contents.filter { $0.name != cat.name }, id: \.id) { content in
-                        Button(action: {
-                            selectedContent = content
-                        }) {
+            .buttonStyle(.plain)
+
+            if isExpanded {
+                ForEach(contents, id: \.id) { content in
+                    Button(action: {
+                        selectedContent = content
+                        onSubRuleModalView = true
+                    }) {
+                        HStack(alignment: .center) {
                             Text(content.name)
-                                .font(.body)
-                                .foregroundColor(.primary)
-                                .padding(.leading, 16)
+                            Spacer()
                         }
                     }
-                    .padding(.top, 8)
+                    .padding(.vertical, 8)
+                    .padding(.horizontal, 14)
+                    .background(
+                        RoundedCorner(
+                            radius: 14,
+                            corners: [
+                                .topLeft, .topRight,
+                                .bottomLeft, .bottomRight,
+                            ]
+                        )
+                        .fill(
+                            Color.primaryNormal.opacity(
+                                isExpanded ? 0.1 : 0
+                            )
+                        )
+                    )
+                    .sheet(isPresented: $onSubRuleModalView) {
+                        SubRuleModalView(content: content)
+                    }
                 }
+            } else {
+                Divider()
+                    .foregroundStyle(Color.white)
+                    .padding(.horizontal, 18)
             }
         }
+        .background(
+            Group {
+                if isExpanded {
+                    RoundedRectangle(cornerRadius: 20)
+                        .stroke(
+                            Color.primaryNormal,
+                            lineWidth: 1
+                        )
+                }
+            }
+        )
     }
 }
-
