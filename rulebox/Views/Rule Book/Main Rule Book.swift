@@ -47,17 +47,6 @@ struct MainRuleBook: View {
             GeometryReader { outerGeo in
                 ScrollView {
                     VStack(spacing: 0) {
-
-                        Color.clear
-                            .frame(height: 1)
-                            .background(
-                                GeometryReader { geo in
-                                    Color.clear.preference(
-                                        key: ScrollOffsetKey.self,
-                                        value: geo.frame(in: .global).minY
-                                    )
-                                }
-                            )
                         //TODO: 타이틀 사이즈 변경 필요
 //                        if showCompactHeader {
 //                            LargeToolbarView(game: game)
@@ -65,135 +54,34 @@ struct MainRuleBook: View {
                         LargeToolbarView(game: game)
 //                        }
                         VStack(alignment: .leading, spacing: 12) {
-
+                            Color.clear
+                                .frame(height: 1)
+                                .background(
+                                    GeometryReader { geo in
+                                        Color.clear.preference(
+                                            key: ScrollOffsetKey.self,
+                                            value: geo.frame(in: .global).minY
+                                        )
+                                    }
+                                )
                             // view body
                             FilterSection(filterTags: gameFilterTags, vm: vm)
                                 .padding(.horizontal, 18).padding(.top, 24)
-
+                            
                             ForEach(filteredMajorCats, id: \.id) { cat in
-                                let filtered = vm.filteredContents(
-                                    for: cat,
-                                    from: filteredContents
+                                let filtered = vm.filteredContents(for: cat, from: filteredContents)
+
+                                MajCatButtonView(
+                                    cat: cat,
+                                    contents: filtered,
+                                    isExpanded: Binding( //Binding value를 raw하게 넘기니까 compile불가하다고 뜸. 
+                                                get: { isExpandedMap[cat.id, default: false] },
+                                                set: { isExpandedMap[cat.id] = $0 }
+                                            ),
+                                    selectedContent: $selectedContent,
+                                    onSubRuleModalView: $onSubRuleModalView
                                 )
-
-                                if !filtered.isEmpty {
-                                    let expanded = isExpandedMap[
-                                        cat.id,
-                                        default: false
-                                    ]
-
-                                    VStack(alignment: .leading, spacing: 0) {
-                                        Button(action: {
-                                            withAnimation {
-                                                isExpandedMap[cat.id] =
-                                                    !expanded
-                                            }
-
-                                            if let direct = filtered.first(
-                                                where: { $0.name == cat.name })
-                                            {
-                                                selectedContent = direct
-                                            }
-                                        }) {
-                                            HStack(spacing: 8) {
-                                                Text(cat.name)
-                                                    .font(.smHeading)
-                                                    .foregroundColor(
-                                                        expanded
-                                                            ? .primaryNormal
-                                                            : .white
-                                                    )
-
-                                                Spacer()
-
-                                                (expanded
-                                                    ? AnyView(minusIcon)
-                                                    : AnyView(plusIcon))
-
-                                            }
-                                            .padding(.vertical, 0)
-                                            .padding(.horizontal, 16)
-                                            .contentShape(Rectangle())
-                                            .background(
-                                                RoundedCorner(
-                                                    radius: 14,
-                                                    corners: [
-                                                        .topLeft, .topRight,
-                                                    ]
-                                                )
-                                                .fill(
-                                                    Color.primaryNormal.opacity(
-                                                        expanded ? 0.1 : 0
-                                                    )
-                                                )
-                                            )
-                                        }.buttonStyle(.plain)
-
-                                        if expanded {
-                                            ForEach(filtered, id: \.id) {
-                                                content in
-                                                Button(
-                                                    action: {
-                                                        selectedContent = content
-                                                    },
-                                                    label: {
-                                                        HStack(
-                                                            alignment: .center
-                                                        ) {
-                                                            Text(content.name)
-                                                            Spacer()
-                                                        }
-                                                    }
-                                                )
-                                                .padding(.vertical, 8)
-                                                .padding(.horizontal, 14)
-                                                .background(
-                                                    RoundedCorner(
-                                                        radius: 14,
-                                                        corners: [
-                                                            //TODO: 가운데는 코너라운드 없애기 
-                                                            .topLeft, .topRight,
-                                                            .bottomLeft,
-                                                            .bottomRight,
-                                                        ]
-                                                    )
-                                                    .fill(
-                                                        Color.primaryNormal
-                                                            .opacity(
-                                                                expanded
-                                                                    ? 0.1 : 0
-                                                            )
-                                                    )
-                                                )
-                                                .sheet(
-                                                    isPresented:
-                                                        $onSubRuleModalView
-                                                ) {
-                                                    SubRuleModalView(
-                                                        content: content
-                                                    )
-                                                }
-
-                                            }
-                                        } else {
-                                            Divider().foregroundStyle(
-                                                Color.white
-                                            ).padding(.horizontal, 18)
-                                        }
-                                    }.background(
-                                        Group {
-                                            if expanded {
-                                                RoundedRectangle(
-                                                    cornerRadius: 20
-                                                )
-                                                .stroke(
-                                                    Color.primaryNormal,
-                                                    lineWidth: 1
-                                                )
-                                            }
-                                        }
-                                    )
-                                }
+                                
                             }
                         }
                     }

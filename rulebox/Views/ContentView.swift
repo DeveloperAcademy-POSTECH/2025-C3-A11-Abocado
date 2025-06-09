@@ -14,6 +14,9 @@ struct ContentView: View {
 
     var body: some View {
         GameSelectView()
+            //TODO: global background colour 설정 왜안되는걸까요
+            .background(Color.backGroundCol)
+            .ignoresSafeArea()
     }
 }
 

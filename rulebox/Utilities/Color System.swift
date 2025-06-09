@@ -36,7 +36,7 @@ extension Color {
     static let atomicOpacity85 = Color.white.opacity(0.85)
 
     //MARK: - Others
-    static let backGround: Color = Color(hex: "#1D1E20")
+    static let backGroundCol: Color = Color(hex: "#1D1E20")
 
     //MARK: - Semantic Color
     static let primaryNormal: Color = Color(hex: "#FF6200")
