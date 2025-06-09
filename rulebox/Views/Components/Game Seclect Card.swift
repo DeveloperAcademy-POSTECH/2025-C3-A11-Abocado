@@ -16,7 +16,8 @@ struct GameCardView: View {
         VStack {
             if game.name == "카르카손" {
                 // ✅ NavigationLink → 정상 이동
-                NavigationLink(destination: MainRuleBook(game: game)) {
+//                NavigationLink(destination: MainRuleBook(game: game)) {
+                NavigationLink(destination: FilterView(game: game)) {
                     VStack {
                         HStack(alignment: .top) {
                             ForEach(game.genres, id: \.self) { genre in
