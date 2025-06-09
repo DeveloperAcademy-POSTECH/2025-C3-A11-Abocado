@@ -9,7 +9,6 @@ import SwiftUI
 
 struct GameCardView: View {
     let game: GameName
-    let selectedGenre: String
 
     @State private var showToolTip = false
 

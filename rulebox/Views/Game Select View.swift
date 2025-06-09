@@ -14,6 +14,8 @@ struct GameSelectView: View {
     @Query(sort: \GameName.name) private var games: [GameName]
     @StateObject private var vm = GameSelectVM()
 
+//    @Query var bookmarks: [Bookmark]?
+
     var body: some View {
         NavigationStack {
             VStack {
@@ -21,17 +23,16 @@ struct GameSelectView: View {
                 HStack {
                     Text("RuleBox").font(.xlHeading)
                     Spacer()
-
                     NavigationLink(destination: GameSearchView()) {
                         searchToolbarIcon
                     }
-
+                    
                     NavigationLink(destination: BookmarkView()) {
                         bookmarkToolbarIcon
                     }
                 }
                 .padding()
-
+                
                 // Genre filter part
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack(spacing: 8) {
@@ -49,30 +50,39 @@ struct GameSelectView: View {
                     }
                 }
                 .frame(height: 40)
-
+                
                 Spacer(minLength: 20)
-
+                
                 // Page Body part
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack(spacing: 12) {
                         Rectangle().frame(width: 6).foregroundColor(.clear)
                         ForEach(vm.filterGames(from: games)) { game in
                             GameCardView(
-                                game: game,
-                                selectedGenre: vm.selectedGenre
+                                game: game
                             )
                         }
                     }
                 }
                 .frame(height: 520)
-
+                
                 Spacer()
             }
+            
+            
+            NavigationLink(destination: AbocadoTimer()) {
+                Circle()
+                    .fill(.clear)
+                    .frame(width: 44, height: 44)
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+
+            
         }
     }
 }
 
-#Preview {
-    GameSelectView()
-        .modelContainer(for: GameName.self, inMemory: true)
-}
+//#Preview {
+//    GameSelectView()
+//        .modelContainer(for: GameName.self, inMemory: true)
+//}

@@ -11,10 +11,13 @@ import SwiftUI
 struct GameSearchView: View {
 
     @Environment(\.dismiss) private var dismiss
-    @Environment(\.modelContext) private var modelContext
-    @Query private var games: [SearchGames]
+    @Environment(\.modelContext) var modelContext
 
     @State private var searchText: String = ""
+
+    @Query var GameNames: [GameName]
+    @State var searchedGames: [GameName] = []
+    @Query private var searchGames: [SearchGames]
 
     var body: some View {
         NavigationStack {
@@ -28,11 +31,18 @@ struct GameSearchView: View {
 
                         TextField("검색어를 입력하세요", text: $searchText)
                             .onSubmit {
-                                let trimmedText = searchText.trimmingCharacters(
+                                // 검색하기
+                                let keyword = searchText.trimmingCharacters(
                                     in: .whitespacesAndNewlines
-                                )
-                                guard !trimmedText.isEmpty else { return }
-                                let newSearch = SearchGames(name: trimmedText)
+                                ).lowercased()
+                                guard !keyword.isEmpty else { return }
+                                searchedGames = GameNames.filter {
+                                    $0.name.lowercased().contains(keyword)
+                                        || $0.name.lowercased().hasPrefix(
+                                            keyword
+                                        )
+                                }
+                                let newSearch = SearchGames(name: keyword)
                                 modelContext.insert(newSearch)
                             }
 
@@ -51,40 +61,56 @@ struct GameSearchView: View {
                     .clipShape(.capsule)
 
                     // 최근 검색어
-                    VStack(spacing: 16) {
-                        HStack {
-                            Text("최근 검색어").font(.lgSemiBold)
-                            Spacer()
-                            Text("전체 삭제").font(.mdRegular)
-                                .foregroundColor(.grayNeutral70).onTapGesture {
-                                    for game in games {
+                    HStack {
+                        Text("최근 검색어").font(.lgSemiBold)
+                        Spacer()
+                        Text("전체 삭제").font(.mdRegular).foregroundColor(
+                            .grayNeutral40
+                        )
+                    }.padding()
+
+                    ScrollView(.horizontal, showsIndicators: false) {
+                        HStack(spacing: 10) {
+                            ForEach(
+                                searchGames.sorted(by: { $0.date > $1.date }),
+                                id: \.self
+                            ) {
+                                game in
+                                SearchedCapsule(
+                                    title: game.name,
+                                    onTap: {},
+                                    onDelete: {
                                         modelContext.delete(game)
                                     }
-                                }
-                        }.padding(.horizontal, 0)
-
-                        ScrollView(.horizontal, showsIndicators: false) {
-                            HStack(spacing: 10) {
-                                ForEach(
-                                    games.sorted(by: { $0.date > $1.date }),
-                                    id: \.self
-                                ) {
-                                    game in
-                                    SearchedCapsule(
-                                        title: game.name,
-                                        onDelete: {
-                                            modelContext.delete(game)
-                                        }
-                                    )
-                                }
+                                )
                             }
-                        }.frame(height: 40)
-                    }.padding(.vertical, 14)
+                        }
+                    }.frame(height: 40)
+
+                    //TODO: 다듬기 필요
+                    HStack {
+                        Text("검색된 게임").font(.lgSemiBold)
+                        Spacer()
+
+                    }.padding()
+                    ScrollView(.horizontal, showsIndicators: false) {
+                        HStack(spacing: 10) {
+                            ForEach(
+                                searchedGames,
+                                id: \.self
+                            ) { game in
+                                GameCardView(game: game).frame(
+                                    width: 240,
+                                    height: 360
+                                )
+                            }
+                        }
+                    }.frame(height: 400)
+
                     Spacer()
                 }
-                .padding()
-            }
-            .ignoresSafeArea(.keyboard)
+            }.padding(.vertical, 14)
+                .ignoresSafeArea(.keyboard)
         }
         .navigationTitle("게임 검색")
         .navigationBarBackButtonHidden(true)
@@ -103,5 +129,5 @@ struct GameSearchView: View {
 
 #Preview {
     SearchView()
-        .modelContainer(for: SearchGames.self, inMemory: true)
+        .modelContainer(for: Item.self, inMemory: true)
 }
