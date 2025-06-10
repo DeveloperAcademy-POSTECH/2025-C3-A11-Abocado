@@ -136,59 +136,6 @@ struct SubRuleModalView: View {
                 }
             }
 
-            // 하단 페이지이동버튼 주석
-            //            .safeAreaInset(edge: .bottom) {
-            //
-            //                HStack {
-            //                    NavigationLink(destination: SubRuleModalView(content: content)) {
-            //                        HStack {
-            //                            Image("caret.left").tint(.white)
-            //                            Text("이전페이지").font(.lgRegular)
-            //                        }
-            //                    }
-            //                    Spacer()
-            //                    NavigationLink(destination: SubRuleModalView(content: content)) {
-            //                        HStack {
-            //                            Text("다음페이지").font(.lgRegular)
-            //                            Image("caret.left").rotationEffect(.degrees(180)).tint(.white)
-            //                        }
-            //                    }
-            //                }
-            //                .padding(.horizontal, 10)
-            //                .padding(.top, 10)
-            //                .padding(.bottom, 40)
-            //                .frame(width: 393, alignment: .trailing)
-            //                .background(Color.backGround.opacity(0.5).blur(radius: 25))
-            //
-            //                /* if previousContent != nil || nextContent != nil {
-            //                    HStack {
-            //                        if let previous = previousContent {
-            //                            NavigationLink(destination: SubRuleModalView(content: previous, allContents: allContents)) {
-            //                                HStack {
-            //                                    Image("caret.left").tint(.white)
-            //                                    Text(previous.name).font(.lgRegular)
-            //                                }
-            //                            }
-            //                        }
-            //                        Spacer()
-            //                        if let next = nextContent {
-            //                            NavigationLink(destination: SubRuleModalView(content: next, allContents: allContents)) {
-            //                                HStack {
-            //                                    Text(next.name).font(.lgRegular)
-            //                                    Image("caret.left").rotationEffect(.degrees(180)).tint(.white)
-            //                                }
-            //                            }
-            //                        }
-            //                    }
-            //                    .padding(.horizontal, 10)
-            //                    .padding(.top, 10)
-            //                    .padding(.bottom, 40)
-            //                    .frame(width: 393, alignment: .trailing)
-            //                    .background(Color.backGround.opacity(0.5).blur(radius: 25))
-            //                } */
-            //
-            //            }
-
         }
     }
 }
