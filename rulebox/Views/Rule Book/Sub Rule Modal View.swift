@@ -26,14 +26,14 @@ struct SubRuleModalView: View {
                             .multilineTextAlignment(.leading)
                     
                     // 한 majorCat 페이지에 모든 content 불러오는건 성공
-                    ForEach(contents.filter{$0.majorCat.id == content.majorCat.id}) {currentContent in
+                    ForEach(contents.filter{$0.majorCat.id == content.majorCat.id}) {content in
                         HStack {
                             Text(content.name)
                                 .font(.mdHeading)
                                 .foregroundColor(.white)
                             Spacer()
 
-                            // 북마크 버튼
+                            // 북마크 버튼x
                             Button(action: {
                                 if isBookmarked {
                                     // 북마크 제거

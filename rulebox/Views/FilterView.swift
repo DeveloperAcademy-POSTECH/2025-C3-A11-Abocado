@@ -57,7 +57,7 @@ struct FilterView: View {
             .padding(0)
             .frame(width: 257, alignment: .topLeading)
             
-            PreFilterSection(filterTags: gameFilterTags, vm: vm)
+            //PreFilterSection(filterTags: gameFilterTags, vm: vm)
             
             Spacer()
             
