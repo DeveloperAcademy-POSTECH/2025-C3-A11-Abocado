@@ -66,7 +66,9 @@ struct PreFilterSection: View{
             Button {
                 showPFModal = true
             } label: {
-                PFCapsule(selectedValue: vm.selectedParty ?? "선택되지 않음")
+//                PFCapsule(selectedValue: vm.selectedParty ?? "선택되지 않음")
+                PFCapsule(selectedValue: vm.selectedParty.map { "\($0)명" } ?? "선택되지 않음")
+
             }
             .sheet(isPresented: $showPFModal) {
                 PartyFilterView(vm: vm)
@@ -90,8 +92,10 @@ struct EFCapsule: View {
                     .mdMedium
                 )
                 .foregroundColor(.white)
-
-            Text("\(count)개")
+            
+            let count_ = count - 1
+            
+            Text("\(count_)개") //기본판은 카운트에 포함하지 않음
                 .font(
                     .mdMedium
                 )
@@ -119,7 +123,7 @@ struct PFCapsule: View {
 
     var body: some View {
         HStack(alignment: .center, spacing: 4) {
-            Text("\(selectedValue)명")
+            Text("\(selectedValue)")
                 .font(.mdMedium)
                 .foregroundColor(.white)
 

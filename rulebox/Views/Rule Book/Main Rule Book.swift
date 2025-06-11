@@ -11,11 +11,12 @@ import UIKit
 
 struct MainRuleBook: View {
     var game: GameName
+    @ObservedObject var vm: MainRuleBookVM
 
     @Query var allContents: [Content]
     @Query var filterTags: [FilterTag]
 
-    @StateObject private var vm = MainRuleBookVM()
+    //@StateObject private var vm = MainRuleBookVM()
     @Environment(\.dismiss) private var dismiss
     @State private var isExpandedMap: [UUID: Bool] = [:]
 
