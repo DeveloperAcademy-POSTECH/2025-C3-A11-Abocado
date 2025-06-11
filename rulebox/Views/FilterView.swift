@@ -36,11 +36,6 @@ struct FilterView: View {
     var body: some View {
         
         VStack(alignment: .leading, spacing: 50) {
-            Button(action: { dismiss() }) {
-                backButtonToolbarIcon
-            }
-            .padding(.top, 17)
-            
             VStack(alignment: .leading, spacing: 14) {
                 Text("보드게임의 버전과\n인원수를 선택해주세요")
                     .font(
@@ -53,7 +48,7 @@ struct FilterView: View {
                     .font(Font.custom("SF Pro", size: 17))
                     .foregroundColor(Color.grayNeutral80)
             }
-            .padding(0)
+            .padding(.top, 30)
             .frame(width: 257, alignment: .topLeading)
             
             PreFilterSection(filterTags: gameFilterTags, vm: vm)
@@ -74,5 +69,14 @@ struct FilterView: View {
         }
         .padding(.horizontal, 24)
         .navigationBarBackButtonHidden()
+        .navigationTitle(game.name)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarLeading) {
+                    Button(action: { dismiss() }) {
+                        backButtonToolbarIcon
+                    }
+                    .padding(.top, 17)
+            }
+        }
     }
 }
