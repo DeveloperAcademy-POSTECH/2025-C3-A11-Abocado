@@ -22,7 +22,6 @@ struct MainRuleBook: View {
 
     @State private var showCompactHeader: Bool = false
 
-    
     //SubRuleModalView() modal sheet
     @State private var selectedContent: Content? = nil
     @State private var onSubRuleModalView = false
@@ -60,16 +59,19 @@ struct MainRuleBook: View {
                                 }
                             )
                         //TODO: 타이틀 사이즈 변경 필요
-//                        if showCompactHeader {
-//                            LargeToolbarView(game: game)
-//                        } else {
+                        //                        if showCompactHeader {
+                        //                            LargeToolbarView(game: game)
+                        //                        } else {
                         LargeToolbarView(game: game)
-//                        }
+                        //                        }
                         VStack(alignment: .leading, spacing: 12) {
 
                             // view body
-                            MainFilterSection(filterTags: gameFilterTags, vm: vm)
-                                .padding(.horizontal, 18).padding(.top, 24)
+                            MainFilterSection(
+                                filterTags: gameFilterTags,
+                                vm: vm
+                            )
+                            .padding(.horizontal, 18).padding(.top, 24)
 
                             ForEach(filteredMajorCats, id: \.id) { cat in
                                 let filtered = vm.filteredContents(
@@ -135,7 +137,8 @@ struct MainRuleBook: View {
                                                 content in
                                                 Button(
                                                     action: {
-                                                        selectedContent = content
+                                                        selectedContent =
+                                                            content
                                                     },
                                                     label: {
                                                         HStack(
@@ -152,7 +155,7 @@ struct MainRuleBook: View {
                                                     RoundedCorner(
                                                         radius: 14,
                                                         corners: [
-                                                            //TODO: 가운데는 코너라운드 없애기 
+                                                            //TODO: 가운데는 코너라운드 없애기
                                                             .topLeft, .topRight,
                                                             .bottomLeft,
                                                             .bottomRight,
@@ -207,12 +210,6 @@ struct MainRuleBook: View {
                         .easeInOut(duration: 0.25),
                         value: showCompactHeader
                     )
-                    .onAppear {
-                        vm.setupDefaults(from: gameFilterTags)
-                    }
-                }
-                .onAppear {
-                    vm.setupDefaults(from: gameFilterTags)
                 }
             }
         }
