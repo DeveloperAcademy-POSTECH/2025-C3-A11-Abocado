@@ -14,6 +14,8 @@ struct GameSelectView: View {
     @Query(sort: \GameName.name) private var games: [GameName]
     @StateObject private var vm = GameSelectVM()
 
+    //    @Query var bookmarks: [Bookmark]?
+
     var body: some View {
         NavigationStack {
             VStack {
@@ -21,7 +23,6 @@ struct GameSelectView: View {
                 HStack {
                     Text("RuleBox").font(.xlHeading)
                     Spacer()
-
                     NavigationLink(destination: GameSearchView()) {
                         searchToolbarIcon
                     }
@@ -66,12 +67,21 @@ struct GameSelectView: View {
                 .frame(height: 520)
 
                 Spacer()
+            }.background(Color.backGround)
+
+            NavigationLink(destination: AbocadoTimer()) {
+                Circle()
+                    .fill(.clear)
+                    .frame(width: 44, height: 44)
             }
+            .frame(maxWidth: .infinity, alignment: .leading).background(
+                Color.backGround
+            )
         }
     }
 }
 
-#Preview {
-    GameSelectView()
-        .modelContainer(for: GameName.self, inMemory: true)
-}
+//#Preview {
+//    GameSelectView()
+//        .modelContainer(for: GameName.self, inMemory: true)
+//}

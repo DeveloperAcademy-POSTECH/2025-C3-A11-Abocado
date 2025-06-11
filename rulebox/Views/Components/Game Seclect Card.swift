@@ -11,12 +11,14 @@ struct GameCardView: View {
     let game: GameName
 
     @State private var showToolTip = false
+    @StateObject private var vm = MainRuleBookVM()
 
     var body: some View {
         VStack {
             if game.name == "카르카손" {
                 // ✅ NavigationLink → 정상 이동
-                NavigationLink(destination: MainRuleBook(game: game)) {
+//                NavigationLink(destination: MainRuleBook(game: game)) {
+                NavigationLink(destination: FilterView(game: game, vm: vm)) {
                     VStack {
                         HStack(alignment: .top) {
                             ForEach(game.genres, id: \.self) { genre in

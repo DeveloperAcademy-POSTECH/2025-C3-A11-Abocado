@@ -11,19 +11,20 @@ import UIKit
 
 struct MainRuleBook: View {
     var game: GameName
+    @ObservedObject var vm: MainRuleBookVM
 
     @Query var allContents: [Content]
     @Query var filterTags: [FilterTag]
 
-    @StateObject private var vm = MainRuleBookVM()
+    //@StateObject private var vm = MainRuleBookVM()
     @Environment(\.dismiss) private var dismiss
     @State private var isExpandedMap: [UUID: Bool] = [:]
 
     @State private var showCompactHeader: Bool = false
 
     //SubRuleModalView() modal sheet
-    @State private var onSubRuleModalView = false
     @State private var selectedContent: Content? = nil
+    @State private var onSubRuleModalView = false
 
     // get tags for selected game
     var gameFilterTags: [FilterTag] {
@@ -57,16 +58,20 @@ struct MainRuleBook: View {
                                     )
                                 }
                             )
-                        if showCompactHeader {
-                            SmallToolbarView(game: game)
-                        } else {
-                            LargeToolbarView(game: game)
-                        }
+                        //TODO: 타이틀 사이즈 변경 필요
+                        //                        if showCompactHeader {
+                        //                            LargeToolbarView(game: game)
+                        //                        } else {
+                        LargeToolbarView(game: game)
+                        //                        }
                         VStack(alignment: .leading, spacing: 12) {
 
                             // view body
-                            FilterSection(filterTags: gameFilterTags, vm: vm)
-                                .padding(.horizontal, 18).padding(.top, 24)
+                            MainFilterSection(
+                                filterTags: gameFilterTags,
+                                vm: vm
+                            )
+                            .padding(.horizontal, 18).padding(.top, 24)
 
                             ForEach(filteredMajorCats, id: \.id) { cat in
                                 let filtered = vm.filteredContents(
@@ -128,29 +133,22 @@ struct MainRuleBook: View {
                                         }.buttonStyle(.plain)
 
                                         if expanded {
-                                            ForEach(filtered, id: \.id) {
-                                                content in
-                                                Button(
-                                                    action: {
-                                                        onSubRuleModalView =
-                                                            true
-                                                    },
-                                                    label: {
-                                                        HStack(
-                                                            alignment: .center
-                                                        ) {
-                                                            Text(content.name)
-                                                            Spacer()
-                                                        }
+                                            ForEach(filtered, id: \.id) { content in
+                                                NavigationLink(destination: SubRuleModalView(content: content)) {
+                                                    HStack(
+                                                        alignment: .center
+                                                    ) {
+                                                        Text(content.name)
+                                                        Spacer()
                                                     }
-                                                )
+                                                }
                                                 .padding(.vertical, 8)
                                                 .padding(.horizontal, 14)
                                                 .background(
                                                     RoundedCorner(
                                                         radius: 14,
                                                         corners: [
-                                                            //TODO: 가운데는 코너라운드 없애기 
+                                                            //TODO: 가운데는 코너라운드 없애기
                                                             .topLeft, .topRight,
                                                             .bottomLeft,
                                                             .bottomRight,
@@ -164,14 +162,47 @@ struct MainRuleBook: View {
                                                             )
                                                     )
                                                 )
-                                                .sheet(
-                                                    isPresented:
-                                                        $onSubRuleModalView
-                                                ) {
-                                                    SubRuleModalView(
-                                                        content: content
-                                                    )
-                                                }
+//                                                Button(
+//                                                    action: {
+//                                                        selectedContent = content
+//                                                    },
+//                                                    label: {
+//                                                        HStack(
+//                                                            alignment: .center
+//                                                        ) {
+//                                                            Text(content.name)
+//                                                            Spacer()
+//                                                        }
+//                                                    }
+//                                                )
+//                                                .padding(.vertical, 8)
+//                                                .padding(.horizontal, 14)
+//                                                .background(
+//                                                    RoundedCorner(
+//                                                        radius: 14,
+//                                                        corners: [
+//                                                            //TODO: 가운데는 코너라운드 없애기 
+//                                                            .topLeft, .topRight,
+//                                                            .bottomLeft,
+//                                                            .bottomRight,
+//                                                        ]
+//                                                    )
+//                                                    .fill(
+//                                                        Color.primaryNormal
+//                                                            .opacity(
+//                                                                expanded
+//                                                                    ? 0.1 : 0
+//                                                            )
+//                                                    )
+//                                                )
+//                                                .sheet(
+//                                                    isPresented:
+//                                                        $onSubRuleModalView
+//                                                ) {
+//                                                    SubRuleModalView(
+//                                                        content: content
+//                                                    )
+//                                                }
 
                                             }
                                         } else {
@@ -205,20 +236,14 @@ struct MainRuleBook: View {
                         .easeInOut(duration: 0.25),
                         value: showCompactHeader
                     )
-                    .onAppear {
-                        vm.setupDefaults(from: gameFilterTags)
-                    }
-                }
-                .onAppear {
-                    vm.setupDefaults(from: gameFilterTags)
                 }
             }
-        }
-        .navigationBarHidden(true)
-        .sheet(item: $selectedContent) { content in
-            /// 대분류가 없는 경우, 다이렉트로 content표시
-            SubRuleModalView(content: content)
-        }
+        }.background(Color.backGround)
+            .navigationBarHidden(true)
+            .sheet(item: $selectedContent) { content in
+                /// 대분류가 없는 경우, 다이렉트로 content표시
+                SubRuleModalView(content: content)
+            }
 
         // get contents belong to current game
         var filteredContents: [Content] {
