@@ -131,6 +131,38 @@ struct SmallToolbarView: View {
 
 }
 
+struct ContentToolbarView: View {
+    @Environment(\.dismiss) private var dismiss
+    var content: Content
+    
+    var body: some View {
+        VStack(alignment: .leading) {
+            ZStack{
+                Color.white.opacity(0.2)
+                    .blur(radius: 50)
+                    .ignoresSafeArea(edges: .top)
+                HStack {
+                    Button(action: { dismiss() }) {
+                        backButtonToolbarIcon
+                    }
+                    Spacer()
+                    NavigationLink(destination: SearchView()) {
+                        searchToolbarIcon
+                    }
+                    NavigationLink(destination: BookmarkView()) {
+                        bookmarkToolbarIcon
+                    }
+                }.padding(.horizontal, 18).padding(.vertical, 14)
+                
+                Text(content.majorCat.name)
+                    .font(.lgMedium)
+                    .foregroundColor(.white)
+            }.frame(height: 68)
+        }
+        
+    }
+}
+
 //#Preview {
 //    LargeToolbarView(
 //        game: GameName(name: "ad", genres: ["asdas", "asd"])
