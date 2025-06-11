@@ -45,6 +45,7 @@ struct ExtensionFilterView: View {
                         .padding(.vertical, 12)
                     }
                 }
+                Spacer()
             }.frame(maxHeight: .infinity)
 
             Button(action: {
@@ -64,9 +65,6 @@ struct ExtensionFilterView: View {
         .padding(.top, 50)
         .padding(.bottom, 12)
         .frame(maxWidth: .infinity, alignment: .top)
-
-        Divider()
-            .background(Color.atomicOpacity25)
     }
 }
 
@@ -126,16 +124,13 @@ struct PartyFilterView: View {
                     .cornerRadius(12)
             }
             .padding(.horizontal, 12)
-
         }
         .padding(.horizontal, 0)
         .padding(.top, 50)
         .padding(.bottom, 12)
         .frame(maxWidth: .infinity, alignment: .top)
 
-        Divider()
-            .background(Color.atomicOpacity25)
-
+        
     }
 }
 
