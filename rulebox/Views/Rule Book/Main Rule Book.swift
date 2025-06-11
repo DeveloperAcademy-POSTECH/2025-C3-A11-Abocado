@@ -133,22 +133,15 @@ struct MainRuleBook: View {
                                         }.buttonStyle(.plain)
 
                                         if expanded {
-                                            ForEach(filtered, id: \.id) {
-                                                content in
-                                                Button(
-                                                    action: {
-                                                        selectedContent =
-                                                            content
-                                                    },
-                                                    label: {
-                                                        HStack(
-                                                            alignment: .center
-                                                        ) {
-                                                            Text(content.name)
-                                                            Spacer()
-                                                        }
+                                            ForEach(filtered, id: \.id) { content in
+                                                NavigationLink(destination: SubRuleModalView(content: content)) {
+                                                    HStack(
+                                                        alignment: .center
+                                                    ) {
+                                                        Text(content.name)
+                                                        Spacer()
                                                     }
-                                                )
+                                                }
                                                 .padding(.vertical, 8)
                                                 .padding(.horizontal, 14)
                                                 .background(
@@ -169,14 +162,47 @@ struct MainRuleBook: View {
                                                             )
                                                     )
                                                 )
-                                                .sheet(
-                                                    isPresented:
-                                                        $onSubRuleModalView
-                                                ) {
-                                                    SubRuleModalView(
-                                                        content: content
-                                                    )
-                                                }
+//                                                Button(
+//                                                    action: {
+//                                                        selectedContent = content
+//                                                    },
+//                                                    label: {
+//                                                        HStack(
+//                                                            alignment: .center
+//                                                        ) {
+//                                                            Text(content.name)
+//                                                            Spacer()
+//                                                        }
+//                                                    }
+//                                                )
+//                                                .padding(.vertical, 8)
+//                                                .padding(.horizontal, 14)
+//                                                .background(
+//                                                    RoundedCorner(
+//                                                        radius: 14,
+//                                                        corners: [
+//                                                            //TODO: 가운데는 코너라운드 없애기 
+//                                                            .topLeft, .topRight,
+//                                                            .bottomLeft,
+//                                                            .bottomRight,
+//                                                        ]
+//                                                    )
+//                                                    .fill(
+//                                                        Color.primaryNormal
+//                                                            .opacity(
+//                                                                expanded
+//                                                                    ? 0.1 : 0
+//                                                            )
+//                                                    )
+//                                                )
+//                                                .sheet(
+//                                                    isPresented:
+//                                                        $onSubRuleModalView
+//                                                ) {
+//                                                    SubRuleModalView(
+//                                                        content: content
+//                                                    )
+//                                                }
 
                                             }
                                         } else {
