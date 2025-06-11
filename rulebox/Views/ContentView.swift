@@ -16,8 +16,6 @@ struct ContentView: View {
 
         SplashView()
 
-        GameSelectView()
-
     }
 }
 
