@@ -60,13 +60,13 @@ struct MainRuleBook: View {
                             )
                         //TODO: 타이틀 사이즈 변경 필요
                         VStack(alignment: .leading, spacing: 12) {
-                            ZStack{
+                            ZStack {
                                 ImageConverter.imageConvert(game.image)
                                     .resizable()
                                     .scaledToFill()
-                                    .frame(width: 393, height: 312, alignment: .top)
+                                    .ignoresSafeArea()
                                     .clipped()
-                                
+
                                 LinearGradient(
                                     gradient: Gradient(colors: [
                                         Color.black.opacity(0.0),  // 시작은 어둡게
@@ -75,33 +75,19 @@ struct MainRuleBook: View {
                                     startPoint: .top,
                                     endPoint: .bottom
                                 )
-                                
-                                VStack{
-                                    LargeToolbarView(game: game)
-                                    
-                                    VStack(alignment: .leading, spacing: 12) {
-                                        HStack(spacing: 5) {
-                                            ForEach(
-                                                game.genres,
-                                                id: \.self
-                                            ) { genre in
-                                                GenreCapsule(title: genre, isSelected: true)
-                                            }
-                                        }
-                                        Text(game.name).font(.lgHeading)
-                                            .padding(.bottom, 18)
-                                    }.padding(.horizontal, 20)
-                                }
+
+                                LargeToolbarView(game: game)
                             }
-                            
+
                             // view body
                             MainFilterSection(
                                 filterTags: gameFilterTags,
                                 vm: vm
                             )
                             .padding(.horizontal, 18).padding(.top, 24)
-                            
-                            ForEach(filteredMajorCats, id: \.id) { cat in
+
+                            ForEach(filteredMajorCats, id: \.id) {
+                                cat in
                                 let filtered = vm.filteredContents(
                                     for: cat,
                                     from: filteredContents
@@ -113,15 +99,22 @@ struct MainRuleBook: View {
                                         default: false
                                     ]
 
-                                    VStack(alignment: .leading, spacing: 0) {
+                                    VStack(
+                                        alignment: .leading,
+                                        spacing: 0
+                                    ) {
                                         Button(action: {
                                             withAnimation {
                                                 isExpandedMap[cat.id] =
                                                     !expanded
                                             }
 
-                                            if let direct = filtered.first(
-                                                where: { $0.name == cat.name })
+                                            if let direct =
+                                                filtered.first(
+                                                    where: {
+                                                        $0.name
+                                                            == cat.name
+                                                    })
                                             {
                                                 selectedContent = direct
                                             }
@@ -149,44 +142,64 @@ struct MainRuleBook: View {
                                                 RoundedCorner(
                                                     radius: 14,
                                                     corners: [
-                                                        .topLeft, .topRight,
+                                                        .topLeft,
+                                                        .topRight,
                                                     ]
                                                 )
                                                 .fill(
-                                                    Color.primaryNormal.opacity(
-                                                        expanded ? 0.1 : 0
-                                                    )
+                                                    Color.primaryNormal
+                                                        .opacity(
+                                                            expanded
+                                                                ? 0.1
+                                                                : 0
+                                                        )
                                                 )
                                             )
                                         }.buttonStyle(.plain)
 
                                         if expanded {
-                                            ForEach(filtered, id: \.id) { content in
-                                                NavigationLink(destination: SubRuleModalView(content: content)) {
+                                            ForEach(filtered, id: \.id) {
+                                                content in
+                                                NavigationLink(
+                                                    destination:
+                                                        SubRuleModalView(
+                                                            content:
+                                                                content
+                                                        )
+                                                ) {
                                                     HStack(
-                                                        alignment: .center
+                                                        alignment:
+                                                            .center
                                                     ) {
-                                                        Text(content.name)
+                                                        Text(
+                                                            content.name
+                                                        )
                                                         Spacer()
                                                     }
                                                 }
                                                 .padding(.vertical, 8)
-                                                .padding(.horizontal, 14)
+                                                .padding(
+                                                    .horizontal,
+                                                    14
+                                                )
                                                 .background(
                                                     RoundedCorner(
                                                         radius: 14,
                                                         corners: [
                                                             //TODO: 가운데는 코너라운드 없애기
-                                                            .topLeft, .topRight,
+                                                            .topLeft,
+                                                            .topRight,
                                                             .bottomLeft,
                                                             .bottomRight,
                                                         ]
                                                     )
                                                     .fill(
-                                                        Color.primaryNormal
+                                                        Color
+                                                            .primaryNormal
                                                             .opacity(
                                                                 expanded
-                                                                    ? 0.1 : 0
+                                                                    ? 0.1
+                                                                    : 0
                                                             )
                                                     )
                                                 )
@@ -213,16 +226,17 @@ struct MainRuleBook: View {
                             }
                         }
                     }
-                    .onPreferenceChange(ScrollOffsetKey.self) { value in
-                        showCompactHeader =
-                            value < outerGeo.safeAreaInsets.top - 50
-                        print("Scroll offset: \(value)")
-                    }
-                    .animation(
-                        .easeInOut(duration: 0.25),
-                        value: showCompactHeader
-                    )
                 }
+                .onPreferenceChange(ScrollOffsetKey.self) { value in
+                    showCompactHeader =
+                        value < outerGeo.safeAreaInsets.top - 50
+                    print("Scroll offset: \(value)")
+                }
+                .animation(
+                    .easeInOut(duration: 0.25),
+                    value: showCompactHeader
+                )
+
             }
         }.background(Color.backGround)
             .navigationBarHidden(true)
