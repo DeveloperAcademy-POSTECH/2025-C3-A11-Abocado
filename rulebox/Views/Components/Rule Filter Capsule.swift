@@ -75,12 +75,7 @@ struct PreFilterSection: View {
             Button {
                 showPFModal = true
             } label: {
-                //                PFCapsule(selectedValue: vm.selectedParty ?? "선택되지 않음")
-                PFCapsule(
-                    selectedValue: vm.selectedParty.map { "\($0)명" }
-                        ?? "선택되지 않음"
-                )
-
+                PFCapsule(selectedValue: vm.selectedParty ?? "선택되지 않음")
             }
             .sheet(isPresented: $showPFModal) {
                 ZStack {
