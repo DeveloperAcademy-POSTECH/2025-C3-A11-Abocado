@@ -5,22 +5,21 @@
 //  Created by Ken on 5/29/25.
 //
 
-import SwiftData
 import SwiftUI
+import SwiftData
 import Lottie
-
 
 // TODO: 디자인 - 하마, 개발 - 닉스
 struct BookmarkView: View {
+    @Environment(\.modelContext) var context
     @Environment(\.dismiss) private var dismiss
     
     @Query(sort: \Bookmark.createdAt, order: .reverse) var bookmarks: [Bookmark] // 북마크 불러오기
     
-    
     var content: Content?
-
+    
     var body: some View {
-
+        
         //최근 추가된 북마크와 같은 gameName.id를 가진 북마크들을 한번에 모음
 //        let reorderedBookmarks: [Bookmark] = {
 //                guard let lastGameId = bookmarks.last?.content?.gameName.id else {
@@ -66,6 +65,7 @@ struct BookmarkView: View {
                             //content images 중 첫번째
                             //RoundedRectangle(cornerSize: .init(width:8, height: 8))
                             //Image(content.images[0])
+
 
                                 let separated = content.texts[0].components(separatedBy: "***")
                                 let imageFileName = separated.first ?? ""

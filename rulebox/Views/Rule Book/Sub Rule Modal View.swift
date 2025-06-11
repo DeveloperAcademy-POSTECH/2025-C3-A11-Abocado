@@ -73,7 +73,8 @@ struct SubRuleModalView: View {
                                         .clipped()
                                             .fixedSize()
                                 }
-                                Text(content.texts[index])
+                                //Text(content.texts[index])
+                                Text(textContent)
                                     .foregroundColor(.grayNeutral99)
                                     .font(.lgRegular)
                                     .padding(.bottom, 34)
