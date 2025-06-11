@@ -9,7 +9,7 @@ import SwiftUI
 
 struct LargeToolbarView: View {
     @Environment(\.dismiss) private var dismiss
-    
+
     let game: GameName
 
     var body: some View {
@@ -19,11 +19,11 @@ struct LargeToolbarView: View {
                 .scaledToFill()
                 .frame(width: 393, height: 312, alignment: .top)
                 .clipped()
-            
+
             LinearGradient(
                 gradient: Gradient(colors: [
-                    Color.black.opacity(0.0), // 시작은 어둡게
-                    Color.black.opacity(0.7)  // 끝은 투명하게
+                    Color.black.opacity(0.0),  // 시작은 어둡게
+                    Color.black.opacity(0.7),  // 끝은 투명하게
                 ]),
                 startPoint: .top,
                 endPoint: .bottom
@@ -61,9 +61,31 @@ struct LargeToolbarView: View {
     }
 }
 
+struct FilterToolbarView: View {
+    @Environment(\.dismiss) private var dismiss
+    let game: GameName
+    
+    var body: some View {
+        ZStack {
+            Text(game.name)
+                .font(Font.custom("Wanted Sans", size: 17).weight(.semibold))
+                .foregroundColor(.white)
+
+            HStack {
+                Button(action: { dismiss() }) {
+                    backButtonToolbarIcon
+                }
+                Spacer()
+            }
+        }
+        .frame(height: 44)
+        .padding(.top, 10)
+    }
+}
+
 struct SmallToolbarView: View {
     @Environment(\.dismiss) private var dismiss
-    
+
     var content: Content
 
     let game: GameName

@@ -35,6 +35,8 @@ struct FilterView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 50) {
+            FilterToolbarView(game: game)
+            
             VStack(alignment: .leading, spacing: 14) {
                 Text("보드게임의 버전과\n인원수를 선택해주세요")
                     .font(
@@ -73,15 +75,15 @@ struct FilterView: View {
         }
         .padding(.horizontal, 24)
         .navigationBarBackButtonHidden()
-        .navigationTitle(game.name)
-        .toolbar {
-            ToolbarItem(placement: .navigationBarLeading) {
-                Button(action: { dismiss() }) {
-                    backButtonToolbarIcon
-                }
-                .padding(.top, 17)
-            }
-        }
+//        .navigationTitle(game.name)
+//        .toolbar {
+//            ToolbarItem(placement: .navigationBarLeading) {
+//                Button(action: { dismiss() }) {
+//                    backButtonToolbarIcon
+//                }
+//                .padding(.top, 17)
+//            }
+//        }
         .onAppear {
             vm.setupDefaults(from: gameFilterTags)
         }.background(Color.backGround)
