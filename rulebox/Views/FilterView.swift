@@ -6,12 +6,13 @@
 //
 // TODO: Filter 선택된 내용 main rule book으로 넘길 수 있게 해야해
 
+
 import SwiftData
 import SwiftUI
 
 struct FilterView: View {
     @Environment(\.dismiss) private var dismiss
-    
+  
     var game: GameName
     @ObservedObject var vm: MainRuleBookVM // 필터상태 유지를 위한 vm 받아오기
     
@@ -54,8 +55,9 @@ struct FilterView: View {
             PreFilterSection(filterTags: gameFilterTags, vm: vm)
             
             Spacer()
-            
+
             NavigationLink(destination: MainRuleBook(game: game, vm: vm)) {
+
                 Text("선택 완료")
                     .font(Font.custom("Wanted Sans", size: 17))
                     .multilineTextAlignment(.center)
