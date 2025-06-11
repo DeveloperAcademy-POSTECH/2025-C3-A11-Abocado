@@ -67,7 +67,7 @@ struct MainRuleBook: View {
                         VStack(alignment: .leading, spacing: 12) {
 
                             // view body
-                            FilterSection(filterTags: gameFilterTags, vm: vm)
+                            MainFilterSection(filterTags: gameFilterTags, vm: vm)
                                 .padding(.horizontal, 18).padding(.top, 24)
 
                             ForEach(filteredMajorCats, id: \.id) { cat in
