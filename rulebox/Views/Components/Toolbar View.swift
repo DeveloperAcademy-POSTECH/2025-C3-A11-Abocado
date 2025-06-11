@@ -14,20 +14,21 @@ struct LargeToolbarView: View {
 
     var body: some View {
         ZStack {
-            ImageConverter.imageConvert(game.image)
-                .resizable()
-                .scaledToFill()
-                .frame(width: 393, height: 312, alignment: .top)
-                .clipped()
-
-            LinearGradient(
-                gradient: Gradient(colors: [
-                    Color.black.opacity(0.0),  // 시작은 어둡게
-                    Color.black.opacity(0.7),  // 끝은 투명하게
-                ]),
-                startPoint: .top,
-                endPoint: .bottom
-            )
+//            ImageConverter.imageConvert(game.image)
+//                .resizable()
+//                .scaledToFill()
+//                .frame(width: 393, height: 312, alignment: .top)
+//                .clipped()
+//                .ignoresSafeArea()
+//            
+//            LinearGradient(
+//                gradient: Gradient(colors: [
+//                    Color.black.opacity(0.0),  // 시작은 어둡게
+//                    Color.black.opacity(0.7),  // 끝은 투명하게
+//                ]),
+//                startPoint: .top,
+//                endPoint: .bottom
+//            )
 
             VStack(alignment: .leading) {
                 HStack {
@@ -41,21 +42,21 @@ struct LargeToolbarView: View {
                     NavigationLink(destination: BookmarkView()) {
                         bookmarkToolbarIcon
                     }
-                }.padding(.horizontal, 18).padding(.vertical, 14)
+                }.padding(.horizontal, 18).padding(.bottom, 14)
 
                 Spacer()
-                VStack {
-                    HStack(spacing: 5) {
-                        ForEach(
-                            game.genres,
-                            id: \.self
-                        ) { genre in
-                            GenreCapsule(title: genre, isSelected: true)
-                        }
-                    }
-                    Text(game.name).font(.lgHeading)
-                        .padding(.bottom, 18)
-                }.padding(.horizontal, 20)
+//                VStack {
+//                    HStack(spacing: 5) {
+//                        ForEach(
+//                            game.genres,
+//                            id: \.self
+//                        ) { genre in
+//                            GenreCapsule(title: genre, isSelected: true)
+//                        }
+//                    }
+//                    Text(game.name).font(.lgHeading)
+//                        .padding(.bottom, 18)
+//                }.padding(.horizontal, 20)
             }
         }
     }
@@ -138,7 +139,8 @@ struct ContentToolbarView: View {
     var body: some View {
         VStack(alignment: .leading) {
             ZStack{
-                Color.white.opacity(0.2)
+                //Color.white.opacity(0.2)
+                Color.backGround
                     .blur(radius: 50)
                     .ignoresSafeArea(edges: .top)
                 HStack {

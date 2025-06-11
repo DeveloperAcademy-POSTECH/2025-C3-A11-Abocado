@@ -25,7 +25,7 @@ struct MainRuleBook: View {
 
     //SubRuleModalView() modal sheet
     @State private var selectedContent: Content? = nil
-    @State private var onSubRuleModalView = false
+    //    @State private var onSubRuleModalView = false
 
     // get tags for selected game
     var gameFilterTags: [FilterTag] {
@@ -45,208 +45,126 @@ struct MainRuleBook: View {
 
     var body: some View {
         NavigationStack {
-            GeometryReader { outerGeo in
-                ScrollView {
-                    VStack(spacing: 0) {
+            ZStack {
+                GeometryReader { outerGeo in
+                    ScrollView {
+                        ZStack {
+                            //.ignoresSafeArea()는 ScrollView 안에서 적용이 안돼서 게임이미지 Toolbar에서 분리하고 여기 넣었습니다 - Nyx
+                            //뒷배경 게임이미지
+                            ImageConverter.imageConvert(game.image)
+                                .resizable()
+                                .scaledToFill()
+                                .frame(width: 393, height: 282, alignment: .top)
+                                .clipped()
+                            //게임이미지 그라디언트
+                            LinearGradient(
+                                gradient: Gradient(colors: [
+                                    Color.black.opacity(0.0),  // 시작은 어둡게
+                                    Color.black.opacity(0.7),  // 끝은 투명하게
+                                ]),
+                                startPoint: .top,
+                                endPoint: .bottom
+                            )
 
-                        Color.clear
-                            .frame(height: 1)
-                            .background(
-                                GeometryReader { geo in
-                                    Color.clear.preference(
-                                        key: ScrollOffsetKey.self,
-                                        value: geo.frame(in: .global).minY
-                                    )
+                            VStack(alignment: .leading) {
+                                Spacer()
+                                HStack(spacing: 5) {
+                                    ForEach(
+                                        game.genres,
+                                        id: \.self
+                                    ) { genre in
+                                        GenreCapsule(
+                                            title: genre, isSelected: true)
+                                    }
+                                    Spacer()
                                 }
-                            )
-                        //TODO: 타이틀 사이즈 변경 필요
-                        //                        if showCompactHeader {
-                        //                            LargeToolbarView(game: game)
-                        //                        } else {
-                        LargeToolbarView(game: game)
-                        //                        }
-                        VStack(alignment: .leading, spacing: 12) {
+                                Text(game.name).font(.lgHeading)
+                                    .padding(.bottom, 18)
+                            }.padding(.horizontal, 20)
+                        }//.ignoresSafeArea(edges: .horizontal)
 
-                            // view body
-                            MainFilterSection(
-                                filterTags: gameFilterTags,
-                                vm: vm
-                            )
-                            .padding(.horizontal, 18).padding(.top, 24)
-
-                            ForEach(filteredMajorCats, id: \.id) { cat in
-                                let filtered = vm.filteredContents(
-                                    for: cat,
-                                    from: filteredContents
+                        VStack(spacing: 0) {
+                            Color.clear
+                                .frame(height: 1)
+                                .background(
+                                    GeometryReader { geo in
+                                        Color.clear.preference(
+                                            key: ScrollOffsetKey.self,
+                                            value: geo.frame(in: .global).minY
+                                        )
+                                    }
                                 )
+                            VStack(alignment: .leading, spacing: 12) {
 
-                                if !filtered.isEmpty {
-                                    let expanded = isExpandedMap[
-                                        cat.id,
-                                        default: false
-                                    ]
+                                // view body
+                                MainFilterSection(
+                                    filterTags: gameFilterTags,
+                                    vm: vm
+                                )
+                                .padding(.horizontal, 18).padding(.top, 24).padding(.bottom, 12)
 
-                                    VStack(alignment: .leading, spacing: 0) {
-                                        Button(action: {
-                                            withAnimation {
-                                                isExpandedMap[cat.id] =
-                                                    !expanded
-                                            }
+                                ForEach(filteredMajorCats, id: \.id) { cat in
+                                    let filtered = vm.filteredContents(
+                                        for: cat,
+                                        from: filteredContents
+                                    )
 
+                                    if !filtered.isEmpty {
+                                        let expanded = isExpandedMap[
+                                            cat.id,
+                                            default: false
+                                        ]
+
+                                        VStack(spacing: 0) {
                                             if let direct = filtered.first(
                                                 where: { $0.name == cat.name })
+                                                ?? filtered.first
                                             {
-                                                selectedContent = direct
-                                            }
-                                        }) {
-                                            HStack(spacing: 8) {
-                                                Text(cat.name)
-                                                    .font(.smHeading)
-                                                    .foregroundColor(
-                                                        expanded
-                                                            ? .primaryNormal
-                                                            : .white
-                                                    )
-
-                                                Spacer()
-
-                                                (expanded
-                                                    ? AnyView(minusIcon)
-                                                    : AnyView(plusIcon))
-
-                                            }
-                                            .padding(.vertical, 0)
-                                            .padding(.horizontal, 16)
-                                            .contentShape(Rectangle())
-                                            .background(
-                                                RoundedCorner(
-                                                    radius: 14,
-                                                    corners: [
-                                                        .topLeft, .topRight,
-                                                    ]
-                                                )
-                                                .fill(
-                                                    Color.primaryNormal.opacity(
-                                                        expanded ? 0.1 : 0
-                                                    )
-                                                )
-                                            )
-                                        }.buttonStyle(.plain)
-
-                                        if expanded {
-                                            ForEach(filtered, id: \.id) { content in
-                                                NavigationLink(destination: SubRuleModalView(content: content)) {
-                                                    HStack(
-                                                        alignment: .center
-                                                    ) {
-                                                        Text(content.name)
+                                                NavigationLink(
+                                                    destination:
+                                                        SubRuleModalView(
+                                                            content: direct)
+                                                ) {
+                                                    HStack(spacing: 8) {
+                                                        Text(cat.name)
+                                                            .font(.smHeading)
+                                                            .foregroundColor(
+                                                                .white)
                                                         Spacer()
                                                     }
+                                                    .padding(.vertical, 10)
+                                                    .padding(.bottom, 10)
+                                                    .padding(.horizontal, 18)
                                                 }
-                                                .padding(.vertical, 8)
-                                                .padding(.horizontal, 14)
-                                                .background(
-                                                    RoundedCorner(
-                                                        radius: 14,
-                                                        corners: [
-                                                            //TODO: 가운데는 코너라운드 없애기
-                                                            .topLeft, .topRight,
-                                                            .bottomLeft,
-                                                            .bottomRight,
-                                                        ]
-                                                    )
-                                                    .fill(
-                                                        Color.primaryNormal
-                                                            .opacity(
-                                                                expanded
-                                                                    ? 0.1 : 0
-                                                            )
-                                                    )
-                                                )
-//                                                Button(
-//                                                    action: {
-//                                                        selectedContent = content
-//                                                    },
-//                                                    label: {
-//                                                        HStack(
-//                                                            alignment: .center
-//                                                        ) {
-//                                                            Text(content.name)
-//                                                            Spacer()
-//                                                        }
-//                                                    }
-//                                                )
-//                                                .padding(.vertical, 8)
-//                                                .padding(.horizontal, 14)
-//                                                .background(
-//                                                    RoundedCorner(
-//                                                        radius: 14,
-//                                                        corners: [
-//                                                            //TODO: 가운데는 코너라운드 없애기 
-//                                                            .topLeft, .topRight,
-//                                                            .bottomLeft,
-//                                                            .bottomRight,
-//                                                        ]
-//                                                    )
-//                                                    .fill(
-//                                                        Color.primaryNormal
-//                                                            .opacity(
-//                                                                expanded
-//                                                                    ? 0.1 : 0
-//                                                            )
-//                                                    )
-//                                                )
-//                                                .sheet(
-//                                                    isPresented:
-//                                                        $onSubRuleModalView
-//                                                ) {
-//                                                    SubRuleModalView(
-//                                                        content: content
-//                                                    )
-//                                                }
-
                                             }
-                                        } else {
-                                            Divider().foregroundStyle(
-                                                Color.white
-                                            ).padding(.horizontal, 18)
-                                        }
-                                    }.background(
-                                        Group {
-                                            if expanded {
-                                                RoundedRectangle(
-                                                    cornerRadius: 20
+                                            Divider()
+                                                .ignoresSafeArea()
+                                                .foregroundStyle(
+                                                    Color.white.opacity(0.1)
                                                 )
-                                                .stroke(
-                                                    Color.primaryNormal,
-                                                    lineWidth: 1
-                                                )
-                                            }
                                         }
-                                    )
+                                    }
                                 }
                             }
                         }
-                    }
-                    .onPreferenceChange(ScrollOffsetKey.self) { value in
-                        showCompactHeader =
-                            value < outerGeo.safeAreaInsets.top - 50
-                        print("Scroll offset: \(value)")
-                    }
-                    .animation(
-                        .easeInOut(duration: 0.25),
-                        value: showCompactHeader
-                    )
-                }
-            }
-        }.background(Color.backGround)
-            .navigationBarHidden(true)
-            .sheet(item: $selectedContent) { content in
-                /// 대분류가 없는 경우, 다이렉트로 content표시
-                SubRuleModalView(content: content)
-            }
 
-        // get contents belong to current game
+                        .onPreferenceChange(ScrollOffsetKey.self) { value in
+                            showCompactHeader =
+                                value < outerGeo.safeAreaInsets.top - 50
+                            print("Scroll offset: \(value)")
+                        }
+                        .animation(
+                            .easeInOut(duration: 0.25),
+                            value: showCompactHeader
+                        )
+                    }
+                    .ignoresSafeArea()
+                }
+                LargeToolbarView(game: game)
+            }.background(Color.backGround)
+                .navigationBarHidden(true)
+
+        }  // get contents belong to current game
         var filteredContents: [Content] {
             allContents.filter { $0.gameName.name == game.name }
         }
