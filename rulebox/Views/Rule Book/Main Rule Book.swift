@@ -24,7 +24,8 @@ struct MainRuleBook: View {
 
     //SubRuleModalView() modal sheet
     @State private var selectedContent: Content? = nil
-    @State private var onSubRuleModalView = false
+//    @State private var onSubRuleModalView = false
+    
 
     // get tags for selected game
     var gameFilterTags: [FilterTag] {
@@ -58,12 +59,9 @@ struct MainRuleBook: View {
                                     )
                                 }
                             )
-                        //TODO: 타이틀 사이즈 변경 필요
-                        //                        if showCompactHeader {
-                        //                            LargeToolbarView(game: game)
-                        //                        } else {
+                        
                         LargeToolbarView(game: game)
-                        //                        }
+                        
                         VStack(alignment: .leading, spacing: 12) {
 
                             // view body
@@ -86,143 +84,20 @@ struct MainRuleBook: View {
                                     ]
 
                                     VStack(alignment: .leading, spacing: 0) {
-                                        Button(action: {
-                                            withAnimation {
-                                                isExpandedMap[cat.id] =
-                                                    !expanded
-                                            }
-
-                                            if let direct = filtered.first(
-                                                where: { $0.name == cat.name })
-                                            {
-                                                selectedContent = direct
-                                            }
-                                        }) {
-                                            HStack(spacing: 8) {
-                                                Text(cat.name)
-                                                    .font(.smHeading)
-                                                    .foregroundColor(
-                                                        expanded
-                                                            ? .primaryNormal
-                                                            : .white
-                                                    )
-
-                                                Spacer()
-
-                                                (expanded
-                                                    ? AnyView(minusIcon)
-                                                    : AnyView(plusIcon))
-
-                                            }
-                                            .padding(.vertical, 0)
-                                            .padding(.horizontal, 16)
-                                            .contentShape(Rectangle())
-                                            .background(
-                                                RoundedCorner(
-                                                    radius: 14,
-                                                    corners: [
-                                                        .topLeft, .topRight,
-                                                    ]
-                                                )
-                                                .fill(
-                                                    Color.primaryNormal.opacity(
-                                                        expanded ? 0.1 : 0
-                                                    )
-                                                )
-                                            )
-                                        }.buttonStyle(.plain)
-
-                                        if expanded {
-                                            ForEach(filtered, id: \.id) { content in
-                                                NavigationLink(destination: SubRuleModalView(content: content)) {
-                                                    HStack(
-                                                        alignment: .center
-                                                    ) {
-                                                        Text(content.name)
+                                        
+                                            if let direct = filtered.first(where: { $0.name == cat.name }) ?? filtered.first {
+                                                NavigationLink(destination: SubRuleModalView(content: direct)) {
+                                                    HStack(spacing: 8) {
+                                                        Text(cat.name)
+                                                            .font(.smHeading)
+                                                            .foregroundColor(.white)
                                                         Spacer()
                                                     }
+                                                    .padding(.vertical, 10)
+                                                    .padding(.horizontal, 16)
                                                 }
-                                                .padding(.vertical, 8)
-                                                .padding(.horizontal, 14)
-                                                .background(
-                                                    RoundedCorner(
-                                                        radius: 14,
-                                                        corners: [
-                                                            //TODO: 가운데는 코너라운드 없애기
-                                                            .topLeft, .topRight,
-                                                            .bottomLeft,
-                                                            .bottomRight,
-                                                        ]
-                                                    )
-                                                    .fill(
-                                                        Color.primaryNormal
-                                                            .opacity(
-                                                                expanded
-                                                                    ? 0.1 : 0
-                                                            )
-                                                    )
-                                                )
-//                                                Button(
-//                                                    action: {
-//                                                        selectedContent = content
-//                                                    },
-//                                                    label: {
-//                                                        HStack(
-//                                                            alignment: .center
-//                                                        ) {
-//                                                            Text(content.name)
-//                                                            Spacer()
-//                                                        }
-//                                                    }
-//                                                )
-//                                                .padding(.vertical, 8)
-//                                                .padding(.horizontal, 14)
-//                                                .background(
-//                                                    RoundedCorner(
-//                                                        radius: 14,
-//                                                        corners: [
-//                                                            //TODO: 가운데는 코너라운드 없애기 
-//                                                            .topLeft, .topRight,
-//                                                            .bottomLeft,
-//                                                            .bottomRight,
-//                                                        ]
-//                                                    )
-//                                                    .fill(
-//                                                        Color.primaryNormal
-//                                                            .opacity(
-//                                                                expanded
-//                                                                    ? 0.1 : 0
-//                                                            )
-//                                                    )
-//                                                )
-//                                                .sheet(
-//                                                    isPresented:
-//                                                        $onSubRuleModalView
-//                                                ) {
-//                                                    SubRuleModalView(
-//                                                        content: content
-//                                                    )
-//                                                }
-
                                             }
-                                        } else {
-                                            Divider().foregroundStyle(
-                                                Color.white
-                                            ).padding(.horizontal, 18)
-                                        }
-                                    }.background(
-                                        Group {
-                                            if expanded {
-                                                RoundedRectangle(
-                                                    cornerRadius: 20
-                                                )
-                                                .stroke(
-                                                    Color.primaryNormal,
-                                                    lineWidth: 1
-                                                )
-                                            }
-                                        }
-                                    )
+                                    }
                                 }
                             }
                         }
