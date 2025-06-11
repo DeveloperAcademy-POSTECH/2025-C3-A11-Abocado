@@ -76,8 +76,6 @@ struct GameSelectView: View {
                     .frame(width: 44, height: 44)
             }
             .frame(maxWidth: .infinity, alignment: .leading)
-
-            
         }
     }
 }
