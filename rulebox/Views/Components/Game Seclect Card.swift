@@ -11,13 +11,14 @@ struct GameCardView: View {
     let game: GameName
 
     @State private var showToolTip = false
+    @StateObject private var vm = MainRuleBookVM()
 
     var body: some View {
         VStack {
             if game.name == "카르카손" {
                 // ✅ NavigationLink → 정상 이동
 //                NavigationLink(destination: MainRuleBook(game: game)) {
-                NavigationLink(destination: FilterView(game: game)) {
+                NavigationLink(destination: FilterView(game: game, vm: vm)) {
                     VStack {
                         HStack(alignment: .top) {
                             ForEach(game.genres, id: \.self) { genre in
@@ -54,7 +55,17 @@ struct GameCardView: View {
                 .padding(.bottom, 32)
                 .frame(width: 324, height: 520)
                 .background(
-                    ImageConverter.imageConvert(game.image)
+                    ZStack{
+                        ImageConverter.imageConvert(game.image)
+                        LinearGradient(
+                            stops: [
+                                Gradient.Stop(color: .black.opacity(0.9), location: 0.00),
+                                Gradient.Stop(color: .black.opacity(0), location: 1.00),
+                            ],
+                            startPoint: UnitPoint(x: 0.5, y: 1),
+                            endPoint: UnitPoint(x: 0.5, y: 0)
+                        )
+                    }
                 )
                 .cornerRadius(28)
 
@@ -98,7 +109,17 @@ struct GameCardView: View {
                     .padding(.bottom, 32)
                     .frame(width: 324, height: 520)
                     .background(
-                        ImageConverter.imageConvert(game.image)
+                        ZStack{
+                            ImageConverter.imageConvert(game.image)
+                            LinearGradient(
+                                stops: [
+                                    Gradient.Stop(color: .black.opacity(0.9), location: 0.00),
+                                    Gradient.Stop(color: .black.opacity(0), location: 1.00),
+                                ],
+                                startPoint: UnitPoint(x: 0.5, y: 1),
+                                endPoint: UnitPoint(x: 0.5, y: 0)
+                            )
+                        }
                     )
                     .cornerRadius(28)
                 }

@@ -40,7 +40,7 @@ struct MainFilterSection: View {
     }
 }
 
-struct PreFilterSection: View{
+struct PreFilterSection: View {
     var filterTags: [FilterTag]
     @ObservedObject var vm: MainRuleBookVM
 
@@ -50,7 +50,7 @@ struct PreFilterSection: View{
     var body: some View {
         VStack(alignment: .leading, spacing: 14) {
             Text("버전")
-            
+
             Button {
                 showEFModal = true
             } label: {
@@ -60,9 +60,9 @@ struct PreFilterSection: View{
                 ExtensionFilterView(filterTags: filterTags, vm: vm)
                     .presentationDetents([.medium, .large])
             }
-            
+
             Text("인원수")
-            
+
             Button {
                 showPFModal = true
             } label: {
@@ -91,7 +91,9 @@ struct EFCapsule: View {
                 )
                 .foregroundColor(.white)
 
-            Text("\(count)개")
+            let count_ = count - 1
+
+            Text("\(count_)개")  //기본판은 카운트에 포함하지 않음
                 .font(
                     .mdMedium
                 )
@@ -118,10 +120,15 @@ struct PFCapsule: View {
     var selectedValue: String
 
     var body: some View {
+
         HStack(alignment: .center, spacing: 4) {
-            Text("\(selectedValue)명")
-                .font(.mdMedium)
-                .foregroundColor(.white)
+            Text(
+                selectedValue == "선택되지 않음"
+                    ? "선택되지 않음"
+                    : "\(selectedValue)명"
+            )
+            .font(.mdMedium)
+            .foregroundColor(.white)
 
             Image("caret.down")
                 .renderingMode(.template)

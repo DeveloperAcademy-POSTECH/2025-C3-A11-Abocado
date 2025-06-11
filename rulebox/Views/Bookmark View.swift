@@ -5,21 +5,22 @@
 //  Created by Ken on 5/29/25.
 //
 
-import SwiftUI
 import SwiftData
+import SwiftUI
 import Lottie
+
 
 // TODO: 디자인 - 하마, 개발 - 닉스
 struct BookmarkView: View {
-    @Environment(\.modelContext) var context
     @Environment(\.dismiss) private var dismiss
     
     @Query(sort: \Bookmark.createdAt, order: .reverse) var bookmarks: [Bookmark] // 북마크 불러오기
     
-    var content: Content?
     
+    var content: Content?
+
     var body: some View {
-        
+
         //최근 추가된 북마크와 같은 gameName.id를 가진 북마크들을 한번에 모음
 //        let reorderedBookmarks: [Bookmark] = {
 //                guard let lastGameId = bookmarks.last?.content?.gameName.id else {
