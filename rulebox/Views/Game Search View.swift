@@ -42,8 +42,14 @@ struct GameSearchView: View {
                                             keyword
                                         )
                                 }
-                                let newSearch = SearchGames(name: keyword)
-                                modelContext.insert(newSearch)
+
+                                // 중복 검색어 방지
+                                let isAlreadySaved = searchGames.contains { $0.name.lowercased() == keyword }
+
+                                if !isAlreadySaved {
+                                    let newSearch = SearchGames(name: keyword)
+                                    modelContext.insert(newSearch)
+                                }
                             }
 
                         if !searchText.isEmpty {
@@ -101,10 +107,8 @@ struct GameSearchView: View {
                                 searchedGames,
                                 id: \.self
                             ) { game in
-                                GameCardView(game: game).frame(
-                                    width: 240,
-                                    height: 360
-                                )
+                                GameCardView(game: game)
+                                    .aspectRatio(167 / 260, contentMode: .fit)
                             }
                         }
                     }.frame(height: 400)
