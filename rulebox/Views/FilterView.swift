@@ -79,6 +79,6 @@ struct FilterView: View {
                     }
                     .padding(.top, 17)
             }
-        }
+        }.background(Color.backGround)
     }
 }
