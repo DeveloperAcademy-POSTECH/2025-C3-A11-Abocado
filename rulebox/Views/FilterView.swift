@@ -87,6 +87,8 @@ struct FilterView: View {
         //        }
         .onAppear {
             vm.setupDefaults(from: gameFilterTags)
-        }.background(Color.backGround)
+        }
+        .background(Color.backGround)
     }
 }
+

@@ -11,13 +11,12 @@ struct GameCardView: View {
     let game: GameName
 
     @State private var showToolTip = false
+    @State private var path = NavigationPath()
     @StateObject private var vm = MainRuleBookVM()
 
     var body: some View {
         VStack {
             if game.name == "카르카손" {
-                // ✅ NavigationLink → 정상 이동
-//                NavigationLink(destination: MainRuleBook(game: game)) {
                 NavigationLink(destination: FilterView(game: game, vm: vm)) {
                     VStack {
                         HStack(alignment: .top) {
@@ -70,7 +69,6 @@ struct GameCardView: View {
                 .cornerRadius(28)
 
             } else {
-                // ✅ Button → 현재 페이지 유지 + showToolTip 처리
                 Button {
                     showToolTip = true
                 } label: {
@@ -88,7 +86,6 @@ struct GameCardView: View {
                         }.padding(.all, 0)
                         
                         Spacer()
-                        // 가나다순 이슈로 카르카손 카드가 뒤에 생기는건 일단 넘어가죠
                         HStack {
                             Text(game.name)
                                 .font(.lgHeading)
@@ -98,7 +95,7 @@ struct GameCardView: View {
                         }
                         
                         HStack {
-                            Text("2~5인")  // 아 여기도 나중에 바꿔야되네 filterTag가 contents에 있으니까 이걸 ..... ... ... ... 가져와? 어디서 계산해서 매핑해두면 안되려나
+                            Text("2~5인")
                                 .font(.lgRegular)
                                 .foregroundColor(.white)
                             Spacer()
