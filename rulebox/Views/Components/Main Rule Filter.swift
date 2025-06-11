@@ -21,7 +21,7 @@ struct ExtensionFilterView: View {
             Text("게임 버전").font(.smHeading)
             Text("기본판은 필수 선택입니다").font(.mdRegular).foregroundColor(
                 .grayNeutral70
-            )
+            ).padding(.bottom, 18)
             Divider()
                 .background(Color.atomicOpacity25)
 
@@ -29,7 +29,10 @@ struct ExtensionFilterView: View {
                 ForEach(extensionValues, id: \.self) { value in
                     Button(action: { vm.toggleExtension(value) }) {
                         HStack {
-                            Image(systemName: "checkmark.square.fill")
+
+                            (vm.selectedExtensions.contains(value)
+                                ? AnyView(CheckboxSelectedIcon)
+                                : AnyView(CheckboxUnSelectedIcon))
                                 .frame(width: 24, height: 24)
                                 .foregroundStyle(
                                     vm.selectedExtensions.contains(value)
@@ -45,6 +48,7 @@ struct ExtensionFilterView: View {
                         .padding(.vertical, 12)
                     }
                 }
+                Spacer()
             }.frame(maxHeight: .infinity)
 
             Button(action: {
@@ -64,9 +68,6 @@ struct ExtensionFilterView: View {
         .padding(.top, 50)
         .padding(.bottom, 12)
         .frame(maxWidth: .infinity, alignment: .top)
-
-        Divider()
-            .background(Color.atomicOpacity25)
     }
 }
 
@@ -85,17 +86,31 @@ struct PartyFilterView: View {
             Text("게임 인원").font(.smHeading)
             Text("플레이 인원을 선택해주세요").font(.mdRegular).foregroundColor(
                 .grayNeutral70
-            )
+            ).padding(.bottom, 18)
             Divider()
                 .background(Color.atomicOpacity25)
 
             VStack(alignment: .leading, spacing: 12) {
-                ForEach(1...4, id: \.self) { index in
+                ForEach(2...5, id: \.self) { index in
                     Button(action: {
                         selected = index
                     }) {
                         HStack {
-                            Image(systemName: "checkmark.square.fill")
+                            (selected == index
+                                ? AnyView(
+                                    ZStack {
+                                        Image("radio.base").renderingMode(
+                                            .template
+                                        )
+                                        .foregroundStyle(
+                                            Color.primaryNormal
+                                        )
+                                        .padding(.vertical, 5)
+                                        .padding(.horizontal, 2)
+                                        radioEllipseIcon
+                                    }
+                                )
+                                : AnyView(radioBaseIcon))
                                 .frame(width: 24, height: 24)
                                 .foregroundStyle(
                                     selected == index
@@ -126,15 +141,11 @@ struct PartyFilterView: View {
                     .cornerRadius(12)
             }
             .padding(.horizontal, 12)
-
         }
         .padding(.horizontal, 0)
         .padding(.top, 50)
         .padding(.bottom, 12)
         .frame(maxWidth: .infinity, alignment: .top)
-
-        Divider()
-            .background(Color.atomicOpacity25)
 
     }
 }
@@ -145,6 +156,8 @@ func optionLabel(for index: Int) -> String {
     case 2: return "2명"
     case 3: return "3명"
     case 4: return "4명"
+    case 5: return "5명"
+    case 6: return "6명"
     default: return ""
     }
 }

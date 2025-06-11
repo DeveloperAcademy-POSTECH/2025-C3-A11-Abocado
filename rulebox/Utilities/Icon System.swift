@@ -86,3 +86,35 @@ var crossIcon: some View =
     .foregroundColor(.grayNeutral60)
     .padding(.vertical, 5)
     .padding(.horizontal, 2)
+    
+/// Checkbox Base Icon
+public var CheckboxSelectedIcon: some View =
+    Image("checkbox.selected")
+    //.renderingMode(.template)
+    //.foregroundColor(.grayNeutral95)
+    .padding()
+
+public var CheckboxUnSelectedIcon: some View =
+    Image("checkbox.unselected")
+    //.renderingMode(.template)
+    //.foregroundColor(.grayNeutral95)
+    .padding()
+
+/// Cross Icon
+var radioBaseIcon: some View =
+    Image("radio.base")
+    .renderingMode(.template)
+    .foregroundColor(.grayNeutral60)
+    .padding(.vertical, 5)
+    .padding(.horizontal, 2)
+    
+
+
+/// Cross Icon
+var radioEllipseIcon: some View =
+    Image("radio.ellipse")
+    .renderingMode(.template)
+    .foregroundColor(.primaryNormal)
+    .padding(.vertical, 5)
+    .padding(.horizontal, 2)
+    

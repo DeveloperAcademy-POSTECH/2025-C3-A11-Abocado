@@ -54,7 +54,17 @@ struct GameCardView: View {
                 .padding(.bottom, 32)
                 .frame(width: 324, height: 520)
                 .background(
-                    ImageConverter.imageConvert(game.image)
+                    ZStack{
+                        ImageConverter.imageConvert(game.image)
+                        LinearGradient(
+                            stops: [
+                                Gradient.Stop(color: .black.opacity(0.9), location: 0.00),
+                                Gradient.Stop(color: .black.opacity(0), location: 1.00),
+                            ],
+                            startPoint: UnitPoint(x: 0.5, y: 1),
+                            endPoint: UnitPoint(x: 0.5, y: 0)
+                        )
+                    }
                 )
                 .cornerRadius(28)
 
@@ -96,7 +106,17 @@ struct GameCardView: View {
                     .padding(.bottom, 32)
                     .frame(width: 324, height: 520)
                     .background(
-                        ImageConverter.imageConvert(game.image)
+                        ZStack{
+                            ImageConverter.imageConvert(game.image)
+                            LinearGradient(
+                                stops: [
+                                    Gradient.Stop(color: .black.opacity(0.9), location: 0.00),
+                                    Gradient.Stop(color: .black.opacity(0), location: 1.00),
+                                ],
+                                startPoint: UnitPoint(x: 0.5, y: 1),
+                                endPoint: UnitPoint(x: 0.5, y: 0)
+                            )
+                        }
                     )
                     .cornerRadius(28)
                 }
