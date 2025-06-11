@@ -19,7 +19,6 @@ struct SubRuleModalView: View {
             ContentToolbarView(content: content)
             ScrollView {
                     VStack(alignment: .leading) {
-                        
 //                            Text(content.majorCat.name)
 //                                .font(.lgRegular)
 //                                .foregroundColor(.grayNeutral70)
@@ -129,6 +128,7 @@ struct SubRuleModalView: View {
             }
 
         }
+        .background(Color.backGround)
         .navigationBarHidden(true)
 //        .safeAreaInset(edge: .top) {
 //            ContentToolbarView(content: content)

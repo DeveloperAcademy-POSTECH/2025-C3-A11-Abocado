@@ -32,6 +32,7 @@ struct BookmarkView: View {
 //            }()
             
         //북마크 본문 좌우에만 padding값으로 여백 주려고 .navigationTitle("북마크") 등등은 VStack으로 분리함
+        
         VStack{
             ScrollView{ //navigationView
                 
@@ -120,6 +121,7 @@ struct BookmarkView: View {
             
             Spacer()
         }
+        .background(Color.backGround)
         .navigationTitle("북마크")
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden()
