@@ -59,20 +59,48 @@ struct MainRuleBook: View {
                                 }
                             )
                         //TODO: 타이틀 사이즈 변경 필요
-                        //                        if showCompactHeader {
-                        //                            LargeToolbarView(game: game)
-                        //                        } else {
-                        LargeToolbarView(game: game)
-                        //                        }
                         VStack(alignment: .leading, spacing: 12) {
-
+                            ZStack{
+                                ImageConverter.imageConvert(game.image)
+                                    .resizable()
+                                    .scaledToFill()
+                                    .frame(width: 393, height: 312, alignment: .top)
+                                    .clipped()
+                                
+                                LinearGradient(
+                                    gradient: Gradient(colors: [
+                                        Color.black.opacity(0.0),  // 시작은 어둡게
+                                        Color.black.opacity(0.7),  // 끝은 투명하게
+                                    ]),
+                                    startPoint: .top,
+                                    endPoint: .bottom
+                                )
+                                
+                                VStack{
+                                    LargeToolbarView(game: game)
+                                    
+                                    VStack(alignment: .leading, spacing: 12) {
+                                        HStack(spacing: 5) {
+                                            ForEach(
+                                                game.genres,
+                                                id: \.self
+                                            ) { genre in
+                                                GenreCapsule(title: genre, isSelected: true)
+                                            }
+                                        }
+                                        Text(game.name).font(.lgHeading)
+                                            .padding(.bottom, 18)
+                                    }.padding(.horizontal, 20)
+                                }
+                            }
+                            
                             // view body
                             MainFilterSection(
                                 filterTags: gameFilterTags,
                                 vm: vm
                             )
                             .padding(.horizontal, 18).padding(.top, 24)
-
+                            
                             ForEach(filteredMajorCats, id: \.id) { cat in
                                 let filtered = vm.filteredContents(
                                     for: cat,
@@ -162,48 +190,6 @@ struct MainRuleBook: View {
                                                             )
                                                     )
                                                 )
-//                                                Button(
-//                                                    action: {
-//                                                        selectedContent = content
-//                                                    },
-//                                                    label: {
-//                                                        HStack(
-//                                                            alignment: .center
-//                                                        ) {
-//                                                            Text(content.name)
-//                                                            Spacer()
-//                                                        }
-//                                                    }
-//                                                )
-//                                                .padding(.vertical, 8)
-//                                                .padding(.horizontal, 14)
-//                                                .background(
-//                                                    RoundedCorner(
-//                                                        radius: 14,
-//                                                        corners: [
-//                                                            //TODO: 가운데는 코너라운드 없애기 
-//                                                            .topLeft, .topRight,
-//                                                            .bottomLeft,
-//                                                            .bottomRight,
-//                                                        ]
-//                                                    )
-//                                                    .fill(
-//                                                        Color.primaryNormal
-//                                                            .opacity(
-//                                                                expanded
-//                                                                    ? 0.1 : 0
-//                                                            )
-//                                                    )
-//                                                )
-//                                                .sheet(
-//                                                    isPresented:
-//                                                        $onSubRuleModalView
-//                                                ) {
-//                                                    SubRuleModalView(
-//                                                        content: content
-//                                                    )
-//                                                }
-
                                             }
                                         } else {
                                             Divider().foregroundStyle(
