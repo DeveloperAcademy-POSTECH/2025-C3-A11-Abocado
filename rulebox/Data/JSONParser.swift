@@ -28,7 +28,6 @@ struct FilterTagItem: Decodable {
     let value: String
 }
 
-
 struct JSONParser {
     static func loadGameRule(from jsonData: Data, context: ModelContext) throws {
         let decoder = JSONDecoder()
@@ -46,7 +45,6 @@ struct JSONParser {
             )
             game = try context.fetch(fetch).first!
         } else {
-            // Image로 변환하는걸 여기서 해버려도 되려나,, 근데 일단 Data type으로 받아오기
             guard let imageURL = Bundle.main.url(forResource: rule.imageFile, withExtension: nil),
                   let imageData = try? Data(contentsOf: imageURL) else {
                 throw NSError(
@@ -60,11 +58,18 @@ struct JSONParser {
             context.insert(game)
         }
 
+        var majorCatOrderMap: [String: Int] = [:]
+        for (idx, item) in rule.contents.enumerated() {
+            if majorCatOrderMap[item.majorCat] == nil {
+                majorCatOrderMap[item.majorCat] = idx
+            }
+        }
+
         // MajorCat: cache to prevent duplicate insert
         var majorCatCache: [String: MajorCat] = [:]
         let existingMajs = try DupChecker.existingMajCats(context: context)
 
-        func getOrCreateMajorCat(named name: String) -> MajorCat {
+        func getOrCreateMajorCat(named name: String, order: Int) -> MajorCat {
             if let cached = majorCatCache[name] {
                 return cached
             }
@@ -77,13 +82,13 @@ struct JSONParser {
                     return existing
                 }
             }
-            let newMajor = MajorCat(name: name)
+
+            let newMajor = MajorCat(name: name, order: order)
             context.insert(newMajor)
             majorCatCache[name] = newMajor
             return newMajor
         }
 
-        // Content: only insert if not already existing
         let existingContents = isExisting
             ? try DupChecker.existingContents(forGameName: gameName, context: context)
             : []
@@ -91,7 +96,8 @@ struct JSONParser {
         for item in rule.contents {
             guard !existingContents.contains(item.name) else { continue }
 
-            let majorCat = getOrCreateMajorCat(named: item.majorCat)
+            let order = majorCatOrderMap[item.majorCat] ?? 9999
+            let majorCat = getOrCreateMajorCat(named: item.majorCat, order: order)
 
             let tags = item.filterTags.map {
                 let tag = FilterTag(value: $0.value, type: $0.type)

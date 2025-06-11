@@ -237,7 +237,7 @@ struct MainRuleBook: View {
                     !vm.filteredContents(for: $0.key, from: $0.value).isEmpty
                 }
                 .map { $0.key }
-                .sorted { $0.name > $1.name }
+                .sorted { $0.order < $1.order }
         }
     }
 }
