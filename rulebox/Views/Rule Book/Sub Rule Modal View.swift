@@ -60,17 +60,6 @@ struct SubRuleModalView: View {
                                 }
                             }
                         
-    //                        ForEach(0..<content.texts.count, id: \.self) { index in
-    //                            ForEach(0..<content.images.count, id: \.self) { index in
-    //                                LottieView(content.images[index])
-    //                                    .frame(width: 353, height: 275)
-    //                                Text(content.texts[index])
-    //                                    .foregroundColor(.grayNeutral99)
-    //                                    .font(.lgRegular)
-    //                                    .padding(.bottom, 34)
-    //                            }
-    //                        }
-                        
                         ForEach(0..<content.texts.count, id: \.self) { index in
                             let parts = content.texts[index].split(separator: "*", maxSplits: 2, omittingEmptySubsequences: false)
                             let separated = content.texts[index].components(separatedBy: "***")
