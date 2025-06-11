@@ -4,6 +4,7 @@
 //
 //  Created by Ken on 5/29/25.
 //
+// TODO: 화면 양사이드에 불쾌한 패딩들어가있음 해결필요
 
 import SwiftData
 import SwiftUI
