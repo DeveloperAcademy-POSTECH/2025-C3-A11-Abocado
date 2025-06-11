@@ -57,7 +57,7 @@ struct GameSearchView: View {
                         }
                     }
                     .padding(8)
-                    .background(Color(.systemGray6))
+                    .background(Color.backGround)
                     .clipShape(.capsule)
 
                     // 최근 검색어
@@ -68,6 +68,7 @@ struct GameSearchView: View {
                             .grayNeutral40
                         )
                     }.padding()
+                        .background(Color.backGround)
 
                     ScrollView(.horizontal, showsIndicators: false) {
                         HStack(spacing: 10) {
@@ -86,6 +87,7 @@ struct GameSearchView: View {
                             }
                         }
                     }.frame(height: 40)
+                        .background(Color.backGround)
 
                     //TODO: 다듬기 필요
                     HStack {
@@ -106,8 +108,10 @@ struct GameSearchView: View {
                             }
                         }
                     }.frame(height: 400)
+                        .background(Color.backGround)
 
                     Spacer()
+                        .background(Color.backGround)
                 }
             }.padding(.vertical, 14)
                 .ignoresSafeArea(.keyboard)
@@ -123,7 +127,7 @@ struct GameSearchView: View {
                     backButtonToolbarIcon
                 }
             }
-        }
+        }.background(Color.backGround)
     }
 }
 
