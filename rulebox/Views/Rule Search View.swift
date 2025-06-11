@@ -186,6 +186,7 @@ struct SearchView: View {
                 }
             }
         }
+        .background(Color.backGround)
 
     }
 }

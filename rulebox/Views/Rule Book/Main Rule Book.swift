@@ -212,12 +212,12 @@ struct MainRuleBook: View {
                     )
                 }
             }
-        }
-        .navigationBarHidden(true)
-        .sheet(item: $selectedContent) { content in
-            /// 대분류가 없는 경우, 다이렉트로 content표시
-            SubRuleModalView(content: content)
-        }
+        }.background(Color.backGround)
+            .navigationBarHidden(true)
+            .sheet(item: $selectedContent) { content in
+                /// 대분류가 없는 경우, 다이렉트로 content표시
+                SubRuleModalView(content: content)
+            }
 
         // get contents belong to current game
         var filteredContents: [Content] {
