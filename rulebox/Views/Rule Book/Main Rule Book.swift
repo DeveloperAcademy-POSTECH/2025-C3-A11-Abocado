@@ -210,12 +210,6 @@ struct MainRuleBook: View {
                         .easeInOut(duration: 0.25),
                         value: showCompactHeader
                     )
-                    .onAppear {
-                        vm.setupDefaults(from: gameFilterTags)
-                    }
-                }
-                .onAppear {
-                    vm.setupDefaults(from: gameFilterTags)
                 }
             }
         }.background(Color.backGround)
