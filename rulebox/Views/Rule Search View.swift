@@ -34,26 +34,32 @@ struct SearchView: View {
 
                         TextField("검색어를 입력하세요", text: $searchText)
                             .onSubmit {
-                                let keyword = searchText.lowercased()
-                                    .trimmingCharacters(
-                                        in: .whitespacesAndNewlines
-                                    )
+                                
+                                let keyword = searchText
+                                    .lowercased()
+                                    .trimmingCharacters(in: .whitespacesAndNewlines)
+                                
                                 guard !keyword.isEmpty else { return }
-                                let newSearch = SearchRules(name: keyword)
-                                modelContext.insert(newSearch)
+
+                                // 중복 여부 검사
+                                let isAlreadySaved = rules.contains { $0.name.lowercased() == keyword }
+
+                                if !isAlreadySaved {
+                                    let newSearch = SearchRules(name: keyword)
+                                    modelContext.insert(newSearch)
+                                }
 
                                 print(keyword)
                                 print("전체 콘텐츠: \(allContents.map(\.words))")
 
-                                // Update searched content
+                                // 검색된 콘텐츠 필터링
                                 searchedContent = allContents.filter {
                                     ($0.words?.contains {
                                         $0.lowercased().contains(keyword)
-                                            || $0.lowercased().hasPrefix(
-                                                keyword
-                                            )
+                                        || $0.lowercased().hasPrefix(keyword)
                                     }) ?? false
                                 }
+
                                 print("검색된 콘텐츠: \(searchedContent.map(\.name))")
                             }
 
