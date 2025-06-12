@@ -1,10 +1,10 @@
 {
-    "gameName": "바퀴벌레포커",
+    "gameName": "아발론",
     "genres": [
         "카드",
-        "파티"
+        "마피아"
     ],
-    "imageFile": "image_02.png",
+    "imageFile": "image_04.png",
     "contents": [
         {
             "majorCat": "게임 구성",
@@ -17,22 +17,6 @@
                 ""
             ],
             "filterTags": [
-                { "type": "party", "value": "9" },
-                { "type": "extension", "value": "basic" }
-            ]
-        },
-        {
-            "majorCat": "게임 진행",
-            "name": "턴 진행",
-            "texts": [
-                "플레이어는 자신이 가진 카드 중 하나를 선택해 상대에게 뒤집어서 보여주지 않고 벌레 이름을 말합니다.",
-                "상대는 그 말이 진실인지 거짓인지 맞춰야 합니다."
-            ],
-            "images": [
-                ""
-            ],
-            "filterTags": [
-                { "type": "party", "value": "99" },
                 { "type": "party", "value": "9" },
                 { "type": "extension", "value": "basic" }
             ]
